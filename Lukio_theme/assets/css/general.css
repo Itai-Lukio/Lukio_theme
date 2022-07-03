@@ -1,0 +1,77 @@
+:root {
+    --lukio_green: #4aa896;
+    --lukio_black: #302d2e;
+    --header_z_index: 50;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+img {
+    display: block;
+    object-fit: cover;
+}
+
+ul {
+    list-style: none;
+}
+
+/****** Footer credit ******/
+#lukio_credit {
+    margin-top: 5px;
+    display: block;
+    direction: ltr;
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: #000000;
+}
+
+#lukio_credit.rtl {
+    direction: rtl;
+}
+
+#lukio_credit.dark_mode {
+    color: #ffffff;
+}
+
+#lukio_credit_svg {
+    display: inline-block;
+    width: 35px
+}
+
+#lukio_credit.ltr #lukio_credit_svg {
+    margin-left: 10px;
+}
+
+#lukio_credit.rtl #lukio_credit_svg {
+    margin-right: 10px;
+}
+
+.lukio_footer_svg_u {
+    fill: #4aa896;
+}
+
+.lukio_footer_svg_u_border {
+    fill: #302d2e;
+}
+
+.lukio_footer_svg_text {
+    fill: #302d2e;
+}
+
+#lukio_credit.dark_mode .lukio_footer_svg_u_border {
+    fill: transparent;
+}
+
+#lukio_credit.dark_mode .lukio_footer_svg_text {
+    fill: #ffffff;
+}
