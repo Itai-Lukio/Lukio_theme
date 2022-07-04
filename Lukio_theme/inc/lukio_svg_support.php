@@ -45,6 +45,16 @@ if (!function_exists('lukio_sanitize_svg_upload')) {
             $clean = $svg->saveSVG();
             // clean the xml tag
             $clean = trim(substr($clean, strpos($clean, '?>') + 2));
+
+            // clean php from the svg
+            $got_php = strpos($clean, '<?php');
+            while ($got_php !== false) {
+                $php_cleaning = trim(substr($clean, 0, $got_php));
+                $php_cleaning .= trim(substr($clean, strpos($clean, '?>') + 2));
+                $clean = $php_cleaning;
+                $got_php = strpos($clean, '<?php');
+            }
+
             // update the file
             file_put_contents($file['tmp_name'], $clean);
         }
