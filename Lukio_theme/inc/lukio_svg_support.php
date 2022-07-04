@@ -20,7 +20,17 @@ if (!function_exists('lukio_add_svg_file_types_to_uploads')) {
 }
 
 if (!function_exists('lukio_fix_mime_type_svg')) {
-    function lukio_fix_mime_type_svg($data = null, $file = null, $filename = null, $mimes = null)
+    /**
+     * fix mime type when missing
+     * 
+     * @param Array $data values for the extension, mime type, and corrected filename
+     * @param String $file full path to the file
+     * @param String $filename name of the file
+     * @return Array fixed file data
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_fix_mime_type_svg($data = null, $file = null, $filename = null)
     {
         $ext = isset($data['ext']) ? $data['ext'] : '';
         if (strlen($ext) < 1) {
@@ -38,10 +48,15 @@ if (!function_exists('lukio_fix_mime_type_svg')) {
         return $data;
     }
 
-    add_filter('wp_check_filetype_and_ext', 'lukio_fix_mime_type_svg', 75, 4);
+    add_filter('wp_check_filetype_and_ext', 'lukio_fix_mime_type_svg', 75, 3);
 }
 
 if (!function_exists('lukio_remove_parts_before_svg')) {
+    /**
+     * remove any thing before the svg tag
+     * 
+     * @author Itai Dotan
+     */
     function lukio_remove_parts_before_svg($svg)
     {
         return trim(substr($svg, strpos($svg, '<svg')));
