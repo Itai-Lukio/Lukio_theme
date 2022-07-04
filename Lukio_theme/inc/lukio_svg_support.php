@@ -1,12 +1,12 @@
 <?php
 
-if (!function_exists('add_file_types_to_uploads')) {
+if (!function_exists('lukio_add_svg_file_types_to_uploads')) {
     /**
      * add .svg to the allowed upload file extension
      * 
      * @author Itai Dotan
      */
-    function add_file_types_to_uploads($file_types)
+    function lukio_add_svg_file_types_to_uploads($file_types)
     {
 
         $new_filetypes = array();
@@ -15,7 +15,7 @@ if (!function_exists('add_file_types_to_uploads')) {
 
         return $file_types;
     }
-    add_action('upload_mimes', 'add_file_types_to_uploads');
+    add_action('upload_mimes', 'lukio_add_svg_file_types_to_uploads');
 }
 
 if (!function_exists('lukio_sanitize_svg_upload')) {
