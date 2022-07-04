@@ -11,11 +11,41 @@ if (!function_exists('lukio_add_svg_file_types_to_uploads')) {
 
         $new_filetypes = array();
         $new_filetypes['svg'] = 'image/svg';
+        $new_filetypes['svgz'] = 'image/svg';
         $file_types = array_merge($file_types, $new_filetypes);
 
         return $file_types;
     }
     add_action('upload_mimes', 'lukio_add_svg_file_types_to_uploads');
+}
+
+if (!function_exists('lukio_fix_mime_type_svg')) {
+    function lukio_fix_mime_type_svg($data = null, $file = null, $filename = null, $mimes = null)
+    {
+        $ext = isset($data['ext']) ? $data['ext'] : '';
+        if (strlen($ext) < 1) {
+            $exploded = explode('.', $filename);
+            $ext      = strtolower(end($exploded));
+        }
+        if ($ext === 'svg') {
+            $data['type'] = 'image/svg';
+            $data['ext']  = 'svg';
+        } elseif ($ext === 'svgz') {
+            $data['type'] = 'image/svg';
+            $data['ext']  = 'svgz';
+        }
+
+        return $data;
+    }
+
+    add_filter('wp_check_filetype_and_ext', 'lukio_fix_mime_type_svg', 75, 4);
+}
+
+if (!function_exists('lukio_remove_parts_before_svg')) {
+    function lukio_remove_parts_before_svg($svg)
+    {
+        return trim(substr($svg, strpos($svg, '<svg')));
+    }
 }
 
 if (!function_exists('lukio_sanitize_svg_upload')) {
@@ -38,13 +68,15 @@ if (!function_exists('lukio_sanitize_svg_upload')) {
         $type = !empty($wp_filetype['type']) ? $wp_filetype['type'] : '';
 
         if ($type === 'image/svg') {
+            file_put_contents($file['tmp_name'], lukio_remove_parts_before_svg(file_get_contents($file['tmp_name'])));
             $svg = new SvgSanitizer();
             $svg->load(($file['tmp_name']));
             $svg->sanitize();
 
             $clean = $svg->saveSVG();
+
             // clean the xml tag
-            $clean = trim(substr($clean, strpos($clean, '?>') + 2));
+            $clean = lukio_remove_parts_before_svg($clean);
 
             // clean php from the svg
             $got_php = strpos($clean, '<?php');
@@ -54,7 +86,6 @@ if (!function_exists('lukio_sanitize_svg_upload')) {
                 $clean = $php_cleaning;
                 $got_php = strpos($clean, '<?php');
             }
-
             // update the file
             file_put_contents($file['tmp_name'], $clean);
         }
@@ -154,7 +185,8 @@ class SvgSanitizer
                     // check if attribute isn't in whiltelist
                     if (!in_array($attrName, $whitelist_attr_arr)) {
                         $currentNode->removeAttribute($attrName);
-                        $x--;
+                        // comment out from original
+                        // $x--;
                     }
                 }
             }
@@ -163,7 +195,8 @@ class SvgSanitizer
             else {
 
                 $currentNode->parentNode->removeChild($currentNode);
-                $i--;
+                // comment out from original
+                // $i--;
             }
         }
     }
