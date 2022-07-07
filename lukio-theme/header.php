@@ -10,6 +10,11 @@
 // Exit if accessed directly.
 defined('ABSPATH') || exit;
 
+$acf_pixels_data = null;
+if (function_exists('get_field')) {
+    $acf_pixels_data = get_field('pixels', 'options');
+}
+
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -20,12 +25,12 @@ defined('ABSPATH') || exit;
     <link rel="profile" href="http://gmpg.org/xfn/11">
     <?php do_action('lukio_header_enqueue'); ?>
     <?php wp_head(); ?>
-    <?php echo get_field('head_scripts', 'options') != '' ? get_field('head_scripts', 'options') : ''; ?>
+    <?php echo ($acf_pixels_data && $acf_pixels_data['head_scripts'] != '') ? $acf_pixels_data['head_scripts'] : ''; ?>
 </head>
 
 <body <?php body_class(); ?>>
+    <?php echo ($acf_pixels_data && $acf_pixels_data['body_opening_scripts'] != '') != '' ? $acf_pixels_data['body_opening_scripts'] : ''; ?>
     <?php do_action('wp_body_open'); ?>
-    <?php echo get_field('body_opening_scripts', 'options') != '' ? get_field('body_opening_scripts', 'options') : ''; ?>
     <div id="page" class="site">
         <header id="site_header">
 
