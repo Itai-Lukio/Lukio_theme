@@ -61,7 +61,7 @@ Lukio PHP guide:
 
             use 'add_action('admin_bar_menu', 'disable_lukio_wp_admin_bar_branding_for_not_administrator')' in child theme to trigger
 
-        lukio_header_enqueue
+        lukio_head_enqueue
             action that triggers before wp_head() to allow enqueue in site head
 
-            use 'add_action('lukio_header_enqueue', your_function)' in child functions
+            use 'add_action('lukio_head_enqueue', your_function)' in child functions

@@ -251,17 +251,17 @@ if (!function_exists('disable_lukio_wp_admin_bar_branding_for_not_administrator'
     }
 }
 
-if (!function_exists('lukio_header_enqueue')) {
+if (!function_exists('lukio_head_enqueue')) {
     /**
      * setup to enqueue styles and scripts in the header
      * 
      * @author Itai Dotan
      */
-    function lukio_header_enqueue()
+    function lukio_head_enqueue()
     {
     }
 
-    add_action('lukio_header_enqueue', 'lukio_header_enqueue');
+    add_action('lukio_head_enqueue', 'lukio_head_enqueue');
 }
 
 // Add the Systems options pgae
