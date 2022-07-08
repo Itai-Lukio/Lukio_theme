@@ -8,6 +8,9 @@ if (!function_exists('lukio_theme_setup')) {
      */
     function lukio_theme_setup()
     {
+        // Load text domain
+        load_theme_textdomain('lukio-theme', get_template_directory() . '/languages');
+
         // Add default posts and comments RSS feed links to head.
         add_theme_support('automatic-feed-links');
 
@@ -192,22 +195,14 @@ if (!function_exists('lukio_wp_admin_bar_branding')) {
 
         $allowed_roles = array('administrator');
         if (count(array_intersect($allowed_roles, wp_get_current_user()->roles)) > 0) {
-
-            $guide = 'guide';
-            $guides = 'guides';
-            if (get_locale() == 'he_IL') {
-                $guide = 'מדריך';
-                $guides = 'מדריכים';
-            }
-
             $wp_admin_bar->add_node(array(
                 'id'    => 'lukio_guides',
-                'title' => "$svg $guides",
+                'title' => "$svg " . _n('guide', 'guides', 2, 'lukio-theme'),
             ));
 
             $wp_admin_bar->add_node(array(
                 'id' => 'lukio_guide_php',
-                'title' => "PHP $guide",
+                'title' => "PHP " .  _n('guide', 'guides', 1, 'lukio-theme'),
                 'parent' => 'lukio_guides',
                 'href' => get_template_directory_uri() . '/guides/php.txt',
                 'meta' => array(
@@ -217,7 +212,7 @@ if (!function_exists('lukio_wp_admin_bar_branding')) {
 
             $wp_admin_bar->add_node(array(
                 'id' => 'lukio_guide_js',
-                'title' => "JS $guide",
+                'title' => "JS " .  _n('guide', 'guides', 1, 'lukio-theme'),
                 'parent' => 'lukio_guides',
                 'href' => get_template_directory_uri() . '/guides/js.txt',
                 'meta' => array(
@@ -266,16 +261,18 @@ if (!function_exists('lukio_head_enqueue')) {
 
 // Add the Systems options pgae
 if (function_exists('acf_add_options_page')) {
+    add_action('after_setup_theme', function () {
 
-    acf_add_options_page(array(
-        'page_title'  => __('Theme Setup'),
-        'menu_title'  => __('Theme Setup'),
-        'menu_slug'   => 'theme-setup',
-        'capability'  => 'edit_posts',
-        'redirect'    => false,
-        'position'    => 2,
-        'icon_url'    => 'dashicons-shortcode'
-    ));
+        acf_add_options_page(array(
+            'page_title'  => __('Theme Setup', 'lukio-theme'),
+            'menu_title'  => __('Theme Setup', 'lukio-theme'),
+            'menu_slug'   => 'theme-setup',
+            'capability'  => 'edit_posts',
+            'redirect'    => false,
+            'position'    => 2,
+            'icon_url'    => 'dashicons-shortcode'
+        ));
+    });
 }
 
 if (!function_exists('lukio_load_base_acf_fields')) {
