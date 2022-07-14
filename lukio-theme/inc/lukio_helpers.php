@@ -1,30 +1,28 @@
 <?php
 if (!function_exists('lukio_enqueue')) {
     /**
-     * enqueue the given script or stylesheet. normal file for admin and min file for any one eles if exists.
+     * enqueue the given loacl script and stylesheet files or url. normal file for admin and min file for any one eles if exists.
      *
      * @param String $path full file path inside the theme folder.
      * @param String $name name to use in the enqueue, default null to use $path.
      * @param Array $deps an array of registered dependents.
-     * @param Array $user_extras 'parent' => for parent theme enqueue, default false. | 'in_footer' => for script enqueue in the footer, default false. 'media' => for style enqueue media type, default 'all'.
+     * @param Array $user_extras 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default false. 'media' => for style enqueue media type, default 'all'. 'version' version to set in the enqueue when its a url, default '1.0'.
      * 
      * @author Itai Dotan
      */
     function lukio_enqueue($path, $name = null, $deps = array(), $user_extras = array())
     {
-        global $lukio_enqueue_admin_status;
-        // set $lukio_enqueue_admin_status if not set yet
-        if (!isset($lukio_enqueue_admin_status)) {
-            $allowed_roles = array('administrator');
-            $lukio_enqueue_admin_status = count(array_intersect($allowed_roles, wp_get_current_user()->roles)) > 0;
+        $file_enqueue = true;
+        if (strpos($path, 'http') === 0) {
+            $file_enqueue = false;
         }
 
-        // get the file path and file type
+        // get the file extension offset and file type
         if (substr($path, -3) == '.js') {
-            $path = substr($path, 0, -3);
+            $path_sub_offset = -3;
             $file_type = '.js';
         } else {
-            $path = substr($path, 0, -4);
+            $path_sub_offset = -4;
             $file_type = '.css';
         }
 
@@ -32,35 +30,57 @@ if (!function_exists('lukio_enqueue')) {
             'parent' => false,
             'in_footer' => false,
             'media' => 'all',
+            'version' => 1.0,
         );
         $active_extras = array_merge($default_extras, $user_extras);
 
-        if ($active_extras['parent']) {
-            $directory = get_template_directory();
-            $directory_uri = get_template_directory_uri();
-        } else {
-            $directory = get_stylesheet_directory();
-            $directory_uri = get_stylesheet_directory_uri();
-        }
+        if ($file_enqueue) {
+            // setup for local file enqueue
 
-        $name = is_null($name) ? $path : $name;
-        // set the enqueue path
-        $enqueue = (!$lukio_enqueue_admin_status && file_exists($directory . $path . '.min' . $file_type)) ? $path . '.min' . $file_type : $path . $file_type;
+            global $lukio_enqueue_admin_status;
+            // set $lukio_enqueue_admin_status if not set yet
+            if (!isset($lukio_enqueue_admin_status)) {
+                $allowed_roles = array('administrator');
+                $lukio_enqueue_admin_status = count(array_intersect($allowed_roles, wp_get_current_user()->roles)) > 0;
+            }
+
+            // setup the file path and uri path
+            if ($active_extras['parent']) {
+                $directory = get_template_directory();
+                $directory_uri = get_template_directory_uri();
+            } else {
+                $directory = get_stylesheet_directory();
+                $directory_uri = get_stylesheet_directory_uri();
+            }
+
+            $name = is_null($name) ? $path : $name;
+
+            // remove file extension for min testing
+            $path = substr($path, 0, $path_sub_offset);
+
+            // set the enqueue path
+            $enqueue = (!$lukio_enqueue_admin_status && file_exists($directory . $path . '.min' . $file_type)) ? $path . '.min' . $file_type : $path . $file_type;
+            $path = $directory_uri . $enqueue;
+
+            $active_extras['version'] = filemtime($directory . $enqueue);
+        } else {
+            $name = array_slice(explode('/', $path), -1)[0];
+        }
 
         if ($file_type == '.css') {
             wp_enqueue_style(
                 $name,
-                $directory_uri . $enqueue,
+                $path,
                 $deps,
-                filemtime($directory . $enqueue),
+                $active_extras['version'],
                 $active_extras['media']
             );
         } else {
             wp_enqueue_script(
                 $name,
-                $directory_uri . $enqueue,
+                $path,
                 $deps,
-                filemtime($directory . $enqueue),
+                $active_extras['version'],
                 $active_extras['in_footer']
             );
         }
