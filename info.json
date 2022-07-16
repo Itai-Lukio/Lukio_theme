@@ -1,0 +1,7 @@
+{
+    "version": "1.0.1",
+    "details_url": "https://github.com/Itai-Lukio/Lukio_theme/releases/tag/v1.0.1",
+    "download_url": "http://127.0.0.1/update/lukio-theme.zip",
+    "requires": "5.0",
+    "requires_php": "7.0"
+}
