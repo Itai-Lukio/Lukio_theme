@@ -284,7 +284,7 @@ if (!function_exists('lukio_load_base_acf_fields')) {
     function lukio_load_base_acf_fields($paths)
     {
         if (get_template_directory() !== get_stylesheet_directory()) {
-            array_push($paths, get_template_directory() . '/acf-JSON');
+            array_push($paths, get_template_directory() . '/acf-json');
         }
         return $paths;
     }
