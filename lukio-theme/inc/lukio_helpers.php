@@ -64,7 +64,7 @@ if (!function_exists('lukio_enqueue')) {
 
             $active_extras['version'] = filemtime($directory . $enqueue);
         } else {
-            $name = array_slice(explode('/', $path), -1)[0];
+            $name = is_null($name) ? array_slice(explode('/', $path), -1)[0] : $name;
         }
 
         if ($file_type == '.css') {
