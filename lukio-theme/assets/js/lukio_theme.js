@@ -1,7 +1,7 @@
 /**
  * Lukio base helpers inclosed in a class for easy indexing and prevent conflicts
  */
-class Class_lukio_helpers {
+class class_lukio_helpers {
     /**
      * Scroll horizontally to the element with in its continer
      * the continer need to be positioned.
@@ -11,23 +11,24 @@ class Class_lukio_helpers {
      * @author Itai Dotan
      */
     scroll_horizontally(el, continer) {
+        let el_scroll;
         // check what is the continer direction
         if (continer.css('direction') == 'rtl') {
-            this.mark = new Date().getTime();
-            el.addClass('scroll_horizontally_el_' + this.mark);
+            let mark = new Date().getTime();
+            el.addClass('scroll_horizontally_el_' + mark);
             // clone the continer to get the offset with out visual effect on the original
-            continer.before(continer.clone().css('height', 0).css('direction', 'ltr').addClass('scroll_horizontally_continer_' + this.mark));
-            this.el_scroll = ((-1) * jQuery(`.scroll_horizontally_continer_${this.mark}`).find(`.scroll_horizontally_el_${this.mark}`).position()['left']) + parseFloat(continer.css('padding-left').replace('px', ''));
+            continer.before(continer.clone().css('height', 0).css('direction', 'ltr').addClass('scroll_horizontally_continer_' + mark));
+            el_scroll = ((-1) * jQuery(`.scroll_horizontally_continer_${mark}`).find(`.scroll_horizontally_el_${mark}`).position()['left']) + parseFloat(continer.css('padding-left').replace('px', ''));
             // clean up
-            jQuery(`.scroll_horizontally_continer_${this.mark}`).remove();
-            jQuery(`.scroll_horizontally_el_${this.mark}`).removeClass(`scroll_horizontally_el_${this.mark}`);
+            jQuery(`.scroll_horizontally_continer_${mark}`).remove();
+            jQuery(`.scroll_horizontally_el_${mark}`).removeClass(`scroll_horizontally_el_${mark}`);
         } else {
-            this.el_scroll = el.position()['left'];
+            el_scroll = el.position()['left'];
         }
 
         continer[0].scrollTo({
             top: 0,
-            left: this.el_scroll,
+            left: el_scroll,
             behavior: 'smooth'
         });
     }
@@ -45,12 +46,12 @@ class Class_lukio_helpers {
      * @author Itai Dotan
      */
     animate_size(el, direction, size, time, end, extra_options = {}, complete = null) {
-        this.options = {};
+        let options = {};
         Object.keys(extra_options).forEach(key => {
-            this.options[key] = extra_options[key];
+            options[key] = extra_options[key];
         });
-        this.options[direction] = size;
-        el.animate(this.options, time, function () {
+        options[direction] = size;
+        el.animate(options, time, function () {
             el.css(direction, end);
             if (complete) {
                 complete();
@@ -69,9 +70,9 @@ class Class_lukio_helpers {
      */
     get_size(el, direction = 'width', open_size = 'auto') {
         el.css(direction, open_size);
-        this.size = this.get_css_numeric_value(el, direction);
+        let size = this.get_css_numeric_value(el, direction);
         el.css(direction, '');
-        return this.size;
+        return size;
     }
 
     /**
@@ -102,9 +103,9 @@ class Class_lukio_helpers {
      */
     get_css_numeric_value_with_different_class(el, css, class_str) {
         el.addClass(class_str);
-        this.size = this.get_css_numeric_value(el, css);
+        let size = this.get_css_numeric_value(el, css);
         el.removeClass(class_str);
-        return this.size;
+        return size;
     }
 
     /**
@@ -127,4 +128,4 @@ class Class_lukio_helpers {
 }
 
 // variable to use the helper class easily
-const lukio_helpers = new Class_lukio_helpers;
+const lukio_helpers = new class_lukio_helpers;
