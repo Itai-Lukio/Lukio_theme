@@ -205,7 +205,7 @@ class SvgSanitizer
                     // check if attribute isn't in whiltelist
                     if (!in_array($attrName, $whitelist_attr_arr)) {
                         $currentNode->removeAttribute($attrName);
-                        $x--;
+                        // $x--;
                     }
                 }
             }
@@ -213,7 +213,7 @@ class SvgSanitizer
             // else remove element
             else {
                 $currentNode->parentNode->removeChild($currentNode);
-                $i--;
+                // $i--;
             }
         }
     }
