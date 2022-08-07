@@ -32,6 +32,9 @@ if (function_exists('get_field')) {
     <?php echo ($acf_pixels_data && $acf_pixels_data['body_opening_scripts'] != '') != '' ? $acf_pixels_data['body_opening_scripts'] : ''; ?>
     <?php do_action('wp_body_open'); ?>
     <div id="page" class="site">
+
+        <?php get_template_part('/template-parts/header/pre_header_content'); ?>
+
         <header id="site_header">
 
             <?php get_template_part('/template-parts/header/header_content'); ?>
