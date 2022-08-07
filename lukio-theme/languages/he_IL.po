@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-08 14:47+0300\n"
-"PO-Revision-Date: 2022-07-08 16:01+0300\n"
+"POT-Creation-Date: 2022-08-07 13:53+0200\n"
+"PO-Revision-Date: 2022-08-07 13:55+0300\n"
 "Last-Translator: Itai Dotan <itai@lukio.pro>\n"
 "Language-Team: \n"
 "Language: he_IL\n"
@@ -17,10 +17,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
 "2 : 3);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: inc/lukio_theme_setup.php:201 inc/lukio_theme_setup.php:206
-#: inc/lukio_theme_setup.php:216
+#: inc/lukio_theme_setup.php:55
+msgid "Header menu"
+msgstr "תפריט האדר"
+
+#: inc/lukio_theme_setup.php:56
+msgid "Footer menu"
+msgstr "תפריט פוטר"
+
+#: inc/lukio_theme_setup.php:200 inc/lukio_theme_setup.php:205
+#: inc/lukio_theme_setup.php:215
 msgid "guide"
 msgid_plural "guides"
 msgstr[0] "מדריך"

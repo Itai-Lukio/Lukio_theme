@@ -52,8 +52,8 @@ if (!function_exists('lukio_theme_setup')) {
          */
         register_nav_menus(
             array(
-                'header' => 'Header menu',
-                'footer'  => 'Footer menu',
+                'header' => __('Header menu', 'lukio-theme'),
+                'footer'  => __('Footer menu', 'lukio-theme'),
             )
         );
 
