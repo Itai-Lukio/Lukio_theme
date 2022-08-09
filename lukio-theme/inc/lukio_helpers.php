@@ -26,6 +26,26 @@ if (!function_exists('lukio_enqueue')) {
             $file_type = '.css';
         }
 
+        // setup $name when null
+        if (is_null($name)) {
+            if ($file_enqueue) {
+                $name =  $path;
+            } else {
+                $name =  array_slice(explode('/', $path), -1)[0];
+            }
+        }
+
+        // return if the file is already enqueue
+        if ($file_type == '.css') {
+            if (wp_style_is($name)) {
+                return;
+            }
+        } else {
+            if (wp_script_is($name)) {
+                return;
+            }
+        }
+
         $default_extras = array(
             'parent' => false,
             'in_footer' => false,
@@ -53,8 +73,6 @@ if (!function_exists('lukio_enqueue')) {
                 $directory_uri = get_stylesheet_directory_uri();
             }
 
-            $name = is_null($name) ? $path : $name;
-
             // remove file extension for min testing
             $path = substr($path, 0, $path_sub_offset);
 
@@ -63,8 +81,6 @@ if (!function_exists('lukio_enqueue')) {
             $path = $directory_uri . $enqueue;
 
             $active_extras['version'] = filemtime($directory . $enqueue);
-        } else {
-            $name = is_null($name) ? array_slice(explode('/', $path), -1)[0] : $name;
         }
 
         if ($file_type == '.css') {
