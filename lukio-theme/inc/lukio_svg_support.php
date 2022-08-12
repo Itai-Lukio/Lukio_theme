@@ -16,8 +16,8 @@ if (!function_exists('lukio_add_svg_file_types_to_uploads')) {
 
         return $file_types;
     }
-    add_action('upload_mimes', 'lukio_add_svg_file_types_to_uploads');
 }
+add_action('upload_mimes', 'lukio_add_svg_file_types_to_uploads');
 
 if (!function_exists('lukio_fix_mime_type_svg')) {
     /**
@@ -47,9 +47,8 @@ if (!function_exists('lukio_fix_mime_type_svg')) {
 
         return $data;
     }
-
-    add_filter('wp_check_filetype_and_ext', 'lukio_fix_mime_type_svg', 75, 3);
 }
+add_filter('wp_check_filetype_and_ext', 'lukio_fix_mime_type_svg', 75, 3);
 
 if (!function_exists('lukio_remove_parts_before_svg')) {
     /**
@@ -106,9 +105,8 @@ if (!function_exists('lukio_sanitize_svg_upload')) {
         }
         return $file;
     }
-
-    add_filter('wp_handle_upload_prefilter', 'lukio_sanitize_svg_upload');
 }
+add_filter('wp_handle_upload_prefilter', 'lukio_sanitize_svg_upload');
 
 /**
  *  SVGSantiizer

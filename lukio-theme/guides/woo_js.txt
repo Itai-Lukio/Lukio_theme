@@ -1,0 +1,14 @@
+Lukio woocommerce JS guide:
+
+    Events:
+        lukio_cart_num_refresh
+            target: body
+            trigger after mini cart refresh and get array parm with the updated cart counts.
+            $('body').on('lukio_cart_num_refresh', function(e, counts){})
+                counts['all'] = total items
+                counts['unique'] = unique items count
+
+        lukio_refresh_mini_cart_extra
+            target: body
+            trigger after mini cart refresh and get the parm added to the ajax using the filter 'lukio_woocommerce_refresh_mini_cart_extra'.
+            $('body').on('lukio_refresh_mini_cart_extra', function(e, counts){})

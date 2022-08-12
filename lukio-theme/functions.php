@@ -10,6 +10,8 @@ require_once __DIR__ . '/inc/lukio_svg_support.php';
 require_once __DIR__ . '/inc/lukio_theme_update.php';
 
 // add woocommerce related capabilities 
-if (is_plugin_active('woocommerce/woocommerce.php')) {
-    require_once __DIR__ . '/inc/lukio_woocommerce_setup.php';
+if (function_exists('is_plugin_active')) {
+    if (is_plugin_active('woocommerce/woocommerce.php')) {
+        require_once __DIR__ . '/inc/lukio_woocommerce_setup.php';
+    }
 }

@@ -100,9 +100,45 @@ if (!function_exists('lukio_theme_setup')) {
          */
         add_image_size('custom-size', 220, 180);
     }
-
-    add_action('after_setup_theme', 'lukio_theme_setup', 0);
 }
+add_action('after_setup_theme', 'lukio_theme_setup');
+
+if (!function_exists('lukio_custom_user_role')) {
+    /**
+     * create custom user role and update its capabilities when the theme is updated
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_custom_user_role()
+    {
+        $current_version = wp_get_theme(get_template())->get('Version');
+        if (get_option('lukio_custom_user_role_version') !== $current_version) {
+            $site_manager = add_role('site_manager', __('Site manager', 'lukio-theme'), []);
+            global $wp_roles;
+            if (is_null($site_manager)) {
+                $site_manager = $wp_roles->get_role('site_manager');
+            }
+
+            $admin_capabilities = $wp_roles->get_role('administrator')->capabilities;
+            // $admin_capabilities['promote_users'] = false;
+            $admin_capabilities['switch_themes'] = false;
+            $admin_capabilities['edit_themes'] = false;
+            $admin_capabilities['install_themes'] = false;
+            // $admin_capabilities['activate_plugins'] = false;
+            $admin_capabilities['edit_plugins'] = false;
+            $admin_capabilities['install_plugins'] = false;
+            // $admin_capabilities['update_plugins'] = false;
+            $admin_capabilities['delete_plugins'] = false;
+
+
+            foreach ($admin_capabilities as $cap => $grant) {
+                $site_manager->add_cap($cap, $grant);
+            }
+            update_option('lukio_custom_user_role_version', $current_version);
+        }
+    }
+}
+add_action('after_setup_theme', 'lukio_custom_user_role');
 
 if (!function_exists('lukio_theme_setup_enqueues')) {
     /**
@@ -116,9 +152,8 @@ if (!function_exists('lukio_theme_setup_enqueues')) {
         lukio_enqueue('/assets/css/general.css', 'lukio_main_theme_general_stylesheet', array(), array('parent' => true));
         lukio_enqueue('/assets/js/lukio_theme.js', 'lukio_main_theme_script', array('jquery'), array('parent' => true));
     }
-
-    add_action('wp_enqueue_scripts', 'lukio_theme_setup_enqueues', PHP_INT_MAX);
 }
+add_action('wp_enqueue_scripts', 'lukio_theme_setup_enqueues', PHP_INT_MAX);
 
 if (!function_exists('lukio_theme_admin_setup_enqueues')) {
     /**
@@ -130,9 +165,8 @@ if (!function_exists('lukio_theme_admin_setup_enqueues')) {
     {
         lukio_enqueue('/assets/css/lukio_admin.css', 'lukio_theme_admin_stylesheet', array(), array('parent' => true));
     }
-
-    add_action('wp_before_admin_bar_render', 'lukio_theme_admin_setup_enqueues');
 }
+add_action('wp_before_admin_bar_render', 'lukio_theme_admin_setup_enqueues');
 
 /**
  * add 'lukio' class to the body
@@ -163,9 +197,8 @@ if (!function_exists('lukio_classic_editor')) {
         // enable classic editor for wordpress
         add_filter('use_block_editor_for_post', '__return_false');
     }
-
-    add_action('lukio_classic_editor', 'lukio_classic_editor', 10);
 };
+add_action('lukio_classic_editor', 'lukio_classic_editor', 10);
 
 if (!function_exists('lukio_classic_editor_trigger')) {
     /**
@@ -179,9 +212,8 @@ if (!function_exists('lukio_classic_editor_trigger')) {
     {
         do_action('lukio_classic_editor');
     }
-
-    add_action('init', 'lukio_classic_editor_trigger', 10);
 }
+add_action('init', 'lukio_classic_editor_trigger', 10);
 
 if (!function_exists('lukio_wp_admin_bar_branding')) {
     /**
@@ -193,8 +225,10 @@ if (!function_exists('lukio_wp_admin_bar_branding')) {
     {
         $svg = '<svg id="lukio_guides_svg" xmlns="http://www.w3.org/2000/svg" width="35" viewBox="0 0 107.87 40.12"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path class="lukio_guides_svg_u" d="M24.14,29c-7.8,0-13-5-13-12.47V1h9.68V16.57c0,2.39,1.1,3.56,3.36,3.56s3.52-1.22,3.52-3.61V1h9.68V16.57C37.34,24,32,29,24.14,29Z"></path><path class="lukio_guides_svg_u_border" d="M36.34,2V16.57C36.34,23.29,31.73,28,24.15,28s-12-4.75-12-11.47V2h7.68V16.57c0,3,1.58,4.56,4.37,4.56s4.51-1.59,4.51-4.61V2h7.68m2-2H26.66V16.52c0,1.85-.73,2.61-2.51,2.61-1.43,0-2.37-.44-2.37-2.56V0H10.1V16.57C10.1,24.63,15.74,30,24.15,30s14.19-5.41,14.19-13.47V0Z"></path><path class="lukio_guides_svg_text" d="M93.93,12.18a13.55,13.55,0,0,0-14,14,13.95,13.95,0,1,0,27.89,0C107.87,17.86,101.84,12.2,93.93,12.18Zm0,19.9a5.93,5.93,0,0,1,0-11.86,5.93,5.93,0,1,1,0,11.86Z"></path><polygon class="lukio_guides_svg_text" points="76.7 12.81 69.02 12.81 69.02 39.4 76.7 39.4 76.7 39.4 76.7 39.4 76.7 12.81 76.7 12.81 76.7 12.81"></polygon><polygon class="lukio_guides_svg_text l" points="7.68 2.08 0 2.08 0 32.2 0 39.4 7.68 39.4 35.95 39.4 35.95 32.2 7.68 32.2 7.68 2.08"></polygon><polygon class="lukio_guides_svg_text" points="67.11 12.81 58.03 12.81 48.38 25 48.38 2.08 40.7 2.08 40.7 39.4 48.38 39.4 48.38 26.54 58.03 39.4 67.44 39.4 56.74 25.48 67.11 12.81"></polygon><path class="lukio_guides_svg_text" d="M72.89,10.3a4.15,4.15,0,1,0-4.23-4.17A4.14,4.14,0,0,0,72.89,10.3Z"></path></g></g></svg>';
 
-        $allowed_roles = array('administrator');
-        if (count(array_intersect($allowed_roles, wp_get_current_user()->roles)) > 0) {
+        global $lukio_admin_bar_guides_allowerd_roles;
+        $lukio_admin_bar_guides_allowerd_roles = array('administrator');
+
+        if (count(array_intersect($lukio_admin_bar_guides_allowerd_roles, wp_get_current_user()->roles)) > 0) {
             $wp_admin_bar->add_node(array(
                 'id'    => 'lukio_guides',
                 'title' => "$svg " . _n('guide', 'guides', 2, 'lukio-theme'),
@@ -226,9 +260,8 @@ if (!function_exists('lukio_wp_admin_bar_branding')) {
             ));
         }
     }
-
-    add_action('admin_bar_menu', 'lukio_wp_admin_bar_branding', 40);
 }
+add_action('admin_bar_menu', 'lukio_wp_admin_bar_branding', 40);
 
 if (!function_exists('disable_lukio_wp_admin_bar_branding_for_not_administrator')) {
     /**
@@ -244,19 +277,6 @@ if (!function_exists('disable_lukio_wp_admin_bar_branding_for_not_administrator'
             remove_action('admin_bar_menu', 'lukio_wp_admin_bar_branding', 40);
         }
     }
-}
-
-if (!function_exists('lukio_head_enqueue')) {
-    /**
-     * setup to enqueue styles and scripts in the header
-     * 
-     * @author Itai Dotan
-     */
-    function lukio_head_enqueue()
-    {
-    }
-
-    add_action('lukio_head_enqueue', 'lukio_head_enqueue');
 }
 
 // Add the Systems options pgae
@@ -288,6 +308,5 @@ if (!function_exists('lukio_load_base_acf_fields')) {
         }
         return $paths;
     }
-
-    add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');
 }
+add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');

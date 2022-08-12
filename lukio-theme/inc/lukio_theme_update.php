@@ -74,6 +74,5 @@ if (!function_exists('lukio_theme_update')) {
 
         return $transient;
     }
-
-    add_filter('site_transient_update_themes', 'lukio_theme_update');
 }
+add_filter('site_transient_update_themes', 'lukio_theme_update');

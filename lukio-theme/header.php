@@ -23,7 +23,6 @@ if (function_exists('get_field')) {
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
     <link rel="profile" href="http://gmpg.org/xfn/11">
-    <?php do_action('lukio_head_enqueue'); ?>
     <?php wp_head(); ?>
     <?php echo ($acf_pixels_data && $acf_pixels_data['head_scripts'] != '') ? $acf_pixels_data['head_scripts'] : ''; ?>
 </head>

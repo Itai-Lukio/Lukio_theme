@@ -3,10 +3,10 @@ if (!function_exists('lukio_enqueue')) {
     /**
      * enqueue the given loacl script and stylesheet files or url. normal file for admin and min file for any one eles if exists.
      *
-     * @param String $path full file path inside the theme folder.
-     * @param String $name name to use in the enqueue, default null to use $path.
-     * @param Array $deps an array of registered dependents.
-     * @param Array $user_extras 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default false. 'media' => for style enqueue media type, default 'all'. 'version' version to set in the enqueue when its a url, default '1.0'.
+     * @param String $path [requierd] full file path inside the theme folder.
+     * @param String $name [optional] name to use in the enqueue, default null to use $path.
+     * @param Array $deps [optional] an array of registered dependents.
+     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default false. 'media' => for style enqueue media type, default 'all'. 'version' version to set in the enqueue when its a url, default '1.0'.
      * 
      * @author Itai Dotan
      */
@@ -107,8 +107,8 @@ if (!function_exists('lukio_footer_credit')) {
     /**
      * echo the lukio credit.
      * 
-     * @param Bool $dark_mode to use dark mode. default false
-     * @param Bool $eng to use english text. default false
+     * @param Bool $dark_mode [optional] to use dark mode. default false
+     * @param Bool $eng [optional] to use english text. default false
      * 
      * @author Itai Dotan
      */
@@ -133,7 +133,7 @@ if (!function_exists('lukio_remove_p_tags')) {
     /**
      * Remove <p> tags from string
      * 
-     * @param String $string string to remove tags from
+     * @param String $string [requierd] string to remove tags from
      * @return String cleared string
      * 
      * @author Itai Dotan
@@ -148,7 +148,7 @@ if (!function_exists('lukio_remove_br_tags')) {
     /**
      * Remove <br> tags from string
      * 
-     * @param String $string string to remove tags from
+     * @param String $string [requierd] string to remove tags from
      * @return String cleared string
      * 
      * @author Itai Dotan
@@ -163,7 +163,7 @@ if (!function_exists('lukio_get_cf7_form')) {
     /**
      * Get and clean <p> and <br> tags from a CF7 contact form
      * 
-     * @param Number $form_id form id to get
+     * @param Number $form_id [requierd] form id to get
      * @return String clean cf7 form string
      * 
      * @author Itai Dotan
@@ -178,8 +178,8 @@ if (!function_exists('lukio_create_whatsapp_link_url')) {
     /**
      * Create a url for a whatsapp link
      * 
-     * @param Number|String $number international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
-     * @param String $text default text for the whatsapp message. default '' for no message
+     * @param Number|String $number [requierd] international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
+     * @param String $text [optional] default text for the whatsapp message. default '' for no message
      * @return String whatsapp link uri
      * 
      * @author Itai Dotan
