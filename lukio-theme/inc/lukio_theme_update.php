@@ -88,9 +88,7 @@ add_filter('site_transient_update_themes', 'lukio_theme_update');
 function wp_upe_upgrade_completed($upgrader_object, $options)
 {
     if ($options['action'] == 'update' && $options['type'] == 'theme' && $options['themes'] == [get_template()]) {
-        if (!wp_next_scheduled('lukio_custom_user_role_cron')) {
-            wp_schedule_event(time(), 'hourly', 'lukio_custom_user_role_cron');
-        }
+        wp_schedule_single_event(time(), 'lukio_custom_user_role_cron');
     }
 }
 add_action('upgrader_process_complete', 'wp_upe_upgrade_completed', 10, 2);

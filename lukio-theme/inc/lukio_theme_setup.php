@@ -133,9 +133,6 @@ if (!function_exists('lukio_custom_user_role')) {
         foreach ($admin_capabilities as $cap => $grant) {
             $site_manager->add_cap($cap, $grant);
         }
-
-        $timestamp = wp_next_scheduled('lukio_custom_user_role_cron');
-        wp_unschedule_event($timestamp, 'lukio_custom_user_role_cron');
     }
 }
 add_action('after_switch_theme', 'lukio_custom_user_role');
