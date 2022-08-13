@@ -2,7 +2,7 @@ Lukio woocommerce PHP guide:
 
     Shortcode:
         '[lukio_woocommerce_mini_cart]'
-            mini cart markup with woocommerce/cart/mini-cart.php ready for the ajax refresh.
+            mini cart markup with woocommerce/cart/mini-cart.php, ready for the ajax refresh.
 
     PHP functions:
         lukio_woocommerce_add_to_cart_button($product, $class_str = '', $btn_add_text = '', $btn_no_stock = '')

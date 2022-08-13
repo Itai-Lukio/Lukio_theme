@@ -76,3 +76,21 @@ if (!function_exists('lukio_theme_update')) {
     }
 }
 add_filter('site_transient_update_themes', 'lukio_theme_update');
+
+/**
+ * run when an update process is complete and when its for the update of the theme, schedule needed hooks
+ * 
+ * @param $upgrader_object Array
+ * @param $options Array
+ * 
+ * @author Itai Dotan
+ */
+function wp_upe_upgrade_completed($upgrader_object, $options)
+{
+    if ($options['action'] == 'update' && $options['type'] == 'theme' && $options['themes'] == [get_template()]) {
+        if (!wp_next_scheduled('lukio_custom_user_role_cron')) {
+            wp_schedule_event(time(), 'hourly', 'lukio_custom_user_role_cron');
+        }
+    }
+}
+add_action('upgrader_process_complete', 'wp_upe_upgrade_completed', 10, 2);

@@ -105,40 +105,42 @@ add_action('after_setup_theme', 'lukio_theme_setup');
 
 if (!function_exists('lukio_custom_user_role')) {
     /**
-     * create custom user role and update its capabilities when the theme is updated
+     * create custom user role and update its capabilities when the theme is activated or updated
      * 
      * @author Itai Dotan
      */
     function lukio_custom_user_role()
     {
-        $current_version = wp_get_theme(get_template())->get('Version');
-        if (get_option('lukio_custom_user_role_version') !== $current_version) {
-            $site_manager = add_role('site_manager', __('Site manager', 'lukio-theme'), []);
-            global $wp_roles;
-            if (is_null($site_manager)) {
-                $site_manager = $wp_roles->get_role('site_manager');
-            }
 
-            $admin_capabilities = $wp_roles->get_role('administrator')->capabilities;
-            // $admin_capabilities['promote_users'] = false;
-            $admin_capabilities['switch_themes'] = false;
-            $admin_capabilities['edit_themes'] = false;
-            $admin_capabilities['install_themes'] = false;
-            // $admin_capabilities['activate_plugins'] = false;
-            $admin_capabilities['edit_plugins'] = false;
-            $admin_capabilities['install_plugins'] = false;
-            // $admin_capabilities['update_plugins'] = false;
-            $admin_capabilities['delete_plugins'] = false;
-
-
-            foreach ($admin_capabilities as $cap => $grant) {
-                $site_manager->add_cap($cap, $grant);
-            }
-            update_option('lukio_custom_user_role_version', $current_version);
+        $site_manager = add_role('site_manager', __('Site manager', 'lukio-theme'), []);
+        global $wp_roles;
+        if (is_null($site_manager)) {
+            $site_manager = $wp_roles->get_role('site_manager');
         }
+
+        $admin_capabilities = $wp_roles->get_role('administrator')->capabilities;
+        // $admin_capabilities['promote_users'] = false;
+        $admin_capabilities['switch_themes'] = false;
+        $admin_capabilities['edit_themes'] = false;
+        $admin_capabilities['install_themes'] = false;
+        // $admin_capabilities['activate_plugins'] = false;
+        $admin_capabilities['edit_plugins'] = false;
+        $admin_capabilities['install_plugins'] = false;
+        // $admin_capabilities['update_plugins'] = false;
+        $admin_capabilities['delete_plugins'] = false;
+
+
+        foreach ($admin_capabilities as $cap => $grant) {
+            $site_manager->add_cap($cap, $grant);
+        }
+
+        $timestamp = wp_next_scheduled('lukio_custom_user_role_cron');
+        wp_unschedule_event($timestamp, 'lukio_custom_user_role_cron');
     }
 }
-add_action('after_setup_theme', 'lukio_custom_user_role');
+add_action('after_switch_theme', 'lukio_custom_user_role');
+// hook for cron on theme update
+add_action('lukio_custom_user_role_cron', 'lukio_custom_user_role');
 
 if (!function_exists('lukio_theme_setup_enqueues')) {
     /**
