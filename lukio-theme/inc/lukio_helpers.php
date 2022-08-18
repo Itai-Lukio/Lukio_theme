@@ -193,3 +193,31 @@ if (!function_exists('lukio_create_whatsapp_link_url')) {
         return $lukio_whatsapp_url;
     }
 }
+
+if (!function_exists('lukio_range_min_max')) {
+    /**
+     * Lukio number range input min and max.
+     * 
+     * @param String $target_class [requierd] class to add the all items
+     * @param String $inner_color [requierd] color to use in side the range
+     * @param String $outer_color [requierd] color to use put of the range
+     * @param String $name [requierd] name for the inputs to be grouped under
+     * @param Number $min [requierd] min value for the inputs
+     * @param Number $max [requierd] max value fot the inputs
+     * @param String $thumb_color [requierd] color of the range thumb
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thumb_color)
+    {
+        get_template_part('/template-parts/partials/lukio_range_min_max', '', array(
+            'target_class' => $target_class,
+            'inner_color' => $inner_color,
+            'outer_color' => $outer_color,
+            'name' => $name,
+            'min' => $min,
+            'max' => $max,
+            'thumb_color' => $thumb_color,
+        ));
+    }
+}
