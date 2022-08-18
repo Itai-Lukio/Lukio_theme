@@ -133,10 +133,11 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
      * @param String $class_str [optional] class string to add to the button
      * @param String $btn_add_text [optional] text when the item is purchasable and in stock
      * @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock
+     * @param String $html_tag [optional] html tag for the button output, default 'a'
      * 
      * @author Itai Dotan
      */
-    function lukio_woocommerce_add_to_cart_button($product, $class_str = '', $btn_add_text = '', $btn_no_stock = '')
+    function lukio_woocommerce_add_to_cart_button($product, $class_str = '', $btn_add_text = '', $btn_no_stock = '',  $html_tag = 'a')
     {
         // modified from includes/wc-template-functions.php -> woocommerce_template_loop_add_to_cart()
         if ($product) {
@@ -170,7 +171,8 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
 
             // modified from templates/loop/add-to-cart.php 
             echo sprintf(
-                '<a href="%s" data-quantity="%s" class="%s" %s>%s</a>',
+                '<%1$s href="%2$s" data-quantity="%3$s" class="%4$s" %5$s>%6$s</%1$s>',
+                $html_tag,
                 esc_url($product->add_to_cart_url()),
                 esc_attr(isset($args['quantity']) ? $args['quantity'] : 1),
                 esc_attr(isset($args['class']) ? $args['class'] : 'button'),
