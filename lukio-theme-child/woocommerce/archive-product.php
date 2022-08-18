@@ -27,6 +27,7 @@ get_header();
  * @hooked woocommerce_breadcrumb - 20
  * @hooked WC_Structured_Data::generate_website_data() - 30
  */
+remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
 do_action('woocommerce_before_main_content');
 
 ?>
@@ -94,6 +95,7 @@ if (woocommerce_product_loop()) {
  *
  * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
  */
+remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 do_action('woocommerce_after_main_content');
 
 /**
