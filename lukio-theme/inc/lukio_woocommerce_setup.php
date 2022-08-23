@@ -9,6 +9,10 @@ if (!function_exists('lukio_woocommerce_theme_support')) {
     function lukio_woocommerce_theme_support()
     {
         add_theme_support('woocommerce');
+
+        add_theme_support('wc-product-gallery-zoom');
+        add_theme_support('wc-product-gallery-lightbox');
+        add_theme_support('wc-product-gallery-slider');
     }
 }
 add_action('after_setup_theme', 'lukio_woocommerce_theme_support');
@@ -180,5 +184,31 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
                 $product->is_purchasable() && $product->is_in_stock() ? ($btn_add_text != '' ? $btn_add_text : esc_html($product->add_to_cart_text())) : ($btn_no_stock != '' ? $btn_no_stock : esc_html($product->add_to_cart_text()))
             );
         }
+    }
+}
+
+if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
+    /**
+     * Check if the cart is eligible for free shipping
+     * 
+     * @return Number the amount missing, 0||-1 when eligible for free shipping
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_woocommerce_free_shipping_threshold()
+    {
+        $amount_to_free = -1;
+        $allZones = WC_Shipping_Zones::get_zones();
+        foreach ($allZones as $zone) {
+            $zone_methods = $zone['shipping_methods'];
+            foreach ($zone_methods as $method) {
+                $m_name = $method->get_rate_id();
+                if (strpos($m_name, 'free_shipping') !== false && $method->is_enabled()) {
+                    $order_min_amount = (float)$method->min_amount;
+                    $amount_to_free = $order_min_amount - (float)WC()->cart->total;
+                }
+            }
+        }
+        return $amount_to_free;
     }
 }

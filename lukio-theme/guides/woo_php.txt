@@ -14,6 +14,11 @@ Lukio woocommerce PHP guide:
             @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock
             @param String $html_tag [optional] html tag for the button output, default 'a'
 
+        lukio_woocommerce_free_shipping_threshold()
+            Check if the cart is eligible for free shipping
+            
+            @return Number the amount missing, 0||-1 when eligible for free shipping
+
     Filters:
         lukio_woocommerce_refresh_mini_cart_extra
             add data to send back with the mini cart refresh ajax.
