@@ -14,10 +14,23 @@ Lukio woocommerce PHP guide:
             @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock
             @param String $html_tag [optional] html tag for the button output, default 'a'
 
-        lukio_woocommerce_free_shipping_threshold()
+        lukio_woocommerce_free_shipping_threshold($decimals = 2, $decimal_separator = '.', $thousands_separator = ',')
             Check if the cart is eligible for free shipping
             
-            @return Number the amount missing, 0||-1 when eligible for free shipping
+            @param Number $decimals [optional] sets the number of decimal digits when returning a number, default 2
+            @param String $decimal_separator [optional] sets the separator for the decimal point when returning a number, default '.'
+            @param String $thousands_separator [optional] sets the thousands separator when returning a number, default ','
+            @return Bool|Number true when eligible for free shipping, missing amount otherwise
+
+        lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $minus_content = null, $plus_content = null)
+
+            echo item quantity plus minus control buttons for woocommerce cart and minicart
+
+            @param WC_Product $product [requierd] product object
+            @param String $cart_item_key [requierd] cart item key from the cart loop
+            @param Array $cart_item [requierd] cart item from the cart loop
+            @param String $minus_content [optional] markup to use in the minus button, default pre set svg
+            @param String $plus_content [optional] markup to use in the plus button, default pre set svg
 
     Filters:
         lukio_woocommerce_refresh_mini_cart_extra

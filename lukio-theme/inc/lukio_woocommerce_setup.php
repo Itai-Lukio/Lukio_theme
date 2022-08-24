@@ -25,6 +25,7 @@ if (!function_exists('lukio_woocommerce_enqueues')) {
      */
     function lukio_woocommerce_enqueues()
     {
+        lukio_enqueue('/assets/css/lukio_woocommerce.css', 'lukio_woocommerce_stylesheet', array('lukio_main_theme_general_stylesheet'), array('parent' => true));
         lukio_enqueue('/assets/js/lukio_woocommerce.js', 'lukio_woocommerce_script', array('jquery'), array('parent' => true));
 
         wp_localize_script(
@@ -93,7 +94,7 @@ if (!function_exists('lukio_woocommerce_mini_cart')) {
         <div class="lukio_mini_cart_wrapper">
             <?php woocommerce_mini_cart(); ?>
         </div>
-<?php
+    <?php
         return ob_get_clean();
     }
 }
@@ -123,7 +124,7 @@ if (!function_exists('lukio_woocommerce_refresh_mini_cart')) {
             ),
             'extra' => apply_filters('lukio_woocommerce_refresh_mini_cart_extra', $extra)
         ));
-        wp_die();
+        die;
     }
 }
 add_action('wp_ajax_lukio_woocommerce_refresh_mini_cart', 'lukio_woocommerce_refresh_mini_cart');
@@ -191,11 +192,14 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
     /**
      * Check if the cart is eligible for free shipping
      * 
-     * @return Number the amount missing, 0||-1 when eligible for free shipping
+     * @param Number $decimals [optional] sets the number of decimal digits when returning a number, default 2
+     * @param String $decimal_separator [optional] sets the separator for the decimal point when returning a number, default '.'
+     * @param String $thousands_separator [optional] sets the thousands separator when returning a number, default ','
+     * @return Bool|Number true when eligible for free shipping, missing amount otherwise
      * 
      * @author Itai Dotan
      */
-    function lukio_woocommerce_free_shipping_threshold()
+    function lukio_woocommerce_free_shipping_threshold($decimals = 2, $decimal_separator = '.', $thousands_separator = ',')
     {
         $amount_to_free = -1;
         $allZones = WC_Shipping_Zones::get_zones();
@@ -209,6 +213,66 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
                 }
             }
         }
-        return $amount_to_free;
+        return $amount_to_free <= 0 ? true : number_format((float)$amount_to_free, $decimals, $decimal_separator, $thousands_separator);
     }
 }
+
+if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
+    /**
+     * echo item quantity plus minus control buttons for woocommerce cart and minicart
+     * 
+     * @param WC_Product $product [requierd] product object
+     * @param String $cart_item_key [requierd] cart item key from the cart loop
+     * @param Array $cart_item [requierd] cart item from the cart loop
+     * @param String $minus_content [optional] markup to use in the minus button, default pre set svg
+     * @param String $plus_content [optional] markup to use in the plus button, default pre set svg
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $minus_content = null, $plus_content = null)
+    {
+        $default_minus = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.1011 13.9995H19.8906" stroke="#ffffff" stroke-linecap="square" />
+                            </svg>';
+        $default_plus = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.0004 8.10547L14.0004 19.8949" stroke="#ffffff" stroke-linecap="square" />
+                            <path d="M8.1011 13.9995L19.8906 13.9995" stroke="#ffffff" stroke-linecap="square" />
+                            </svg>';
+        $product_max_quantity = $product->get_max_purchase_quantity();
+
+        $minus_markup = is_null($minus_content) ? $default_minus : $minus_content;
+        $pluse_markup = is_null($plus_content) ? $default_plus : $plus_content;
+    ?>
+        <div class="lukio_cart_product_quantity<?php if ($cart_item['quantity'] == $product_max_quantity) {
+                                                    echo ' plus_disabled';
+                                                } ?>" data-key="<?php echo $cart_item_key; ?>">
+            <div class="lukio_cart_product_quantity_btn minus">
+                <?php echo $minus_markup; ?>
+            </div>
+
+            <span class="lukio_cart_product_quantity_display" max="<?php echo $product_max_quantity; ?>"><?php echo $cart_item['quantity']; ?></span>
+
+            <div class="lukio_cart_product_quantity_btn plus">
+                <?php echo $pluse_markup; ?>
+            </div>
+        </div>
+<?php
+    }
+}
+if (!function_exists('lukio_update_cart_quantity')) {
+    /**
+     * update cart item quantity
+     * 
+     * @author Tal Shpeizer
+     */
+    function lukio_update_cart_quantity()
+    {
+        $cart_item_key = $_POST['cart_item'];
+        $cart_quantity = (int) $_POST['quantity'];
+        $cart = WC()->cart;
+        $cart->set_quantity($cart_item_key, $cart_quantity);
+        die;
+    }
+}
+add_action('wp_ajax_lukio_update_cart_quantity', 'lukio_update_cart_quantity');
+add_action('wp_ajax_nopriv_lukio_update_cart_quantity', 'lukio_update_cart_quantity');
