@@ -22,13 +22,13 @@ Lukio woocommerce PHP guide:
             @param String $thousands_separator [optional] sets the thousands separator when returning a number, default ','
             @return Bool|Number true when eligible for free shipping, missing amount otherwise
 
-        lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $minus_content = null, $plus_content = null)
-
+        lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $class_str = '', $minus_content = null, $plus_content = null)
             echo item quantity plus minus control buttons for woocommerce cart and minicart
 
             @param WC_Product $product [requierd] product object
             @param String $cart_item_key [requierd] cart item key from the cart loop
             @param Array $cart_item [requierd] cart item from the cart loop
+            @param String $class_str [optional] class string to add to all parts
             @param String $minus_content [optional] markup to use in the minus button, default pre set svg
             @param String $plus_content [optional] markup to use in the plus button, default pre set svg
 

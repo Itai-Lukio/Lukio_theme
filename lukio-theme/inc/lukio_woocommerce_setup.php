@@ -224,12 +224,13 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
      * @param WC_Product $product [requierd] product object
      * @param String $cart_item_key [requierd] cart item key from the cart loop
      * @param Array $cart_item [requierd] cart item from the cart loop
+     * @param String $class_str [optional] class string to add to all parts
      * @param String $minus_content [optional] markup to use in the minus button, default pre set svg
      * @param String $plus_content [optional] markup to use in the plus button, default pre set svg
      * 
      * @author Itai Dotan
      */
-    function lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $minus_content = null, $plus_content = null)
+    function lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $class_str = '', $minus_content = null, $plus_content = null)
     {
         $default_minus = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8.1011 13.9995H19.8906" stroke="#ffffff" stroke-linecap="square" />
@@ -240,19 +241,20 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
                             </svg>';
         $product_max_quantity = $product->get_max_purchase_quantity();
 
+        $position_class = $class_str != '' ? ' ' . trim($class_str) : '';
         $minus_markup = is_null($minus_content) ? $default_minus : $minus_content;
         $pluse_markup = is_null($plus_content) ? $default_plus : $plus_content;
     ?>
         <div class="lukio_cart_product_quantity<?php if ($cart_item['quantity'] == $product_max_quantity) {
                                                     echo ' plus_disabled';
-                                                } ?>" data-key="<?php echo $cart_item_key; ?>">
-            <div class="lukio_cart_product_quantity_btn minus">
+                                                } ?><?php echo $position_class; ?>" data-key="<?php echo $cart_item_key; ?>">
+            <div class="lukio_cart_product_quantity_btn minus<?php echo $position_class; ?>">
                 <?php echo $minus_markup; ?>
             </div>
 
-            <span class="lukio_cart_product_quantity_display" max="<?php echo $product_max_quantity; ?>"><?php echo $cart_item['quantity']; ?></span>
+            <span class="lukio_cart_product_quantity_display<?php echo $position_class; ?>" max="<?php echo $product_max_quantity; ?>"><?php echo $cart_item['quantity']; ?></span>
 
-            <div class="lukio_cart_product_quantity_btn plus">
+            <div class="lukio_cart_product_quantity_btn plus<?php echo $position_class; ?>">
                 <?php echo $pluse_markup; ?>
             </div>
         </div>
