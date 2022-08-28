@@ -232,10 +232,10 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
      */
     function lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $class_str = '', $minus_content = null, $plus_content = null)
     {
-        $default_minus = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        $default_minus = '<svg class="lukio_cart_product_quantity_btn_svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8.1011 13.9995H19.8906" stroke="#ffffff" stroke-linecap="square" />
                             </svg>';
-        $default_plus = '<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        $default_plus = '<svg class="lukio_cart_product_quantity_btn_svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M14.0004 8.10547L14.0004 19.8949" stroke="#ffffff" stroke-linecap="square" />
                             <path d="M8.1011 13.9995L19.8906 13.9995" stroke="#ffffff" stroke-linecap="square" />
                             </svg>';
