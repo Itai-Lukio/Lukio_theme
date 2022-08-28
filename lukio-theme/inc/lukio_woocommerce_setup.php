@@ -31,7 +31,10 @@ if (!function_exists('lukio_woocommerce_enqueues')) {
         wp_localize_script(
             'lukio_woocommerce_script',
             'lukio_wc_ajax',
-            array('ajax_url' => admin_url('admin-ajax.php'))
+            array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'checkout_url' => wc_get_checkout_url()
+            )
         );
     }
 }

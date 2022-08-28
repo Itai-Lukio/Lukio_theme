@@ -39,7 +39,11 @@
                 url: lukio_wc_ajax.ajax_url,
                 data: { action: 'lukio_update_cart_quantity', cart_item: group.data('key'), quantity: product_quantity },
                 success: function () {
-                    $('body').trigger('wc_fragment_refresh');
+                    if (window.location.href == lukio_wc_ajax.checkout_url) {
+                        $('body').trigger('update_checkout');
+                    } else {
+                        $('body').trigger('wc_fragment_refresh');
+                    }
                 }
             });
 
