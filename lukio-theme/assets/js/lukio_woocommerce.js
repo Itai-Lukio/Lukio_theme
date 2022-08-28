@@ -2,7 +2,7 @@
     $(document).ready(function () {
 
         // refresh the mini cart in to lukio_mini_cart_wrapper from the shortcode 
-        $('body').on('wc_fragments_loaded wc_fragments_refreshed', function () {
+        $('body').on('wc_fragments_loaded wc_fragments_refreshed updated_checkout', function () {
             $.ajax({
                 method: 'POST',
                 url: lukio_wc_ajax.ajax_url,
