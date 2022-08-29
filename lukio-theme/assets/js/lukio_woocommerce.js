@@ -2,7 +2,7 @@
     $(document).ready(function () {
 
         // refresh the mini cart in to lukio_mini_cart_wrapper from the shortcode 
-        $('body').on('wc_fragments_loaded wc_fragments_refreshed updated_checkout', function () {
+        $('body').on('wc_fragments_loaded wc_fragments_refreshed updated_checkout updated_cart_totals', function () {
             $.ajax({
                 method: 'POST',
                 url: lukio_wc_ajax.ajax_url,
@@ -39,14 +39,24 @@
                 url: lukio_wc_ajax.ajax_url,
                 data: { action: 'lukio_update_cart_quantity', cart_item: group.data('key'), quantity: product_quantity },
                 success: function () {
-                    if (window.location.href == lukio_wc_ajax.checkout_url) {
-                        $('body').trigger('update_checkout');
-                    } else {
-                        $('body').trigger('wc_fragment_refresh');
-                    }
+                    $('body').trigger('lukio_update_wc_parts');
                 }
             });
+        });
 
-        })
+        // event to trigger when needing to refresh woocommerce parts
+        $('body').on('lukio_update_wc_parts', function () {
+            switch (window.location.href) {
+                case lukio_wc_ajax.checkout_url:
+                    $('body').trigger('update_checkout');
+                    break;
+                case lukio_wc_ajax.cart_url:
+                    $('body').trigger('wc_update_cart');
+                    break;
+                default:
+                    $('body').trigger('wc_fragment_refresh');
+                    break;
+            };
+        });
     })
 })(jQuery)

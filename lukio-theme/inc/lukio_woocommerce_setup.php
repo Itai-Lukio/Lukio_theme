@@ -33,7 +33,8 @@ if (!function_exists('lukio_woocommerce_enqueues')) {
             'lukio_wc_ajax',
             array(
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'checkout_url' => wc_get_checkout_url()
+                'checkout_url' => wc_get_checkout_url(),
+                'cart_url' => wc_get_cart_url(),
             )
         );
     }
