@@ -58,5 +58,16 @@
                     break;
             };
         });
+
+        // refresh wc parts when removing item from the mini cart when in cart or checkout
+        let page = window.location.origin + window.location.pathname;
+        if (page == lukio_wc_ajax.cart_url || page == lukio_wc_ajax.checkout_url) {
+            $(document).on('click', '.lukio_mini_cart_wrapper .remove', function () {
+                $('body').one('wc_fragments_loaded', function () {
+                    $('body').trigger('lukio_update_wc_parts');
+                });
+            });
+        };
+
     })
 })(jQuery)
