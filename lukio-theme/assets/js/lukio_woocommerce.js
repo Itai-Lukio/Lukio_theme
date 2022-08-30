@@ -46,7 +46,7 @@
 
         // event to trigger when needing to refresh woocommerce parts
         $('body').on('lukio_update_wc_parts', function () {
-            switch (window.location.href) {
+            switch (window.location.origin + window.location.pathname) {
                 case lukio_wc_ajax.checkout_url:
                     $('body').trigger('update_checkout');
                     break;
