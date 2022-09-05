@@ -17,7 +17,6 @@ ob_start();
 foreach (get_field('flexible_content') as $strip) {
     get_template_part('/template-parts/strips/' . $strip['acf_fc_layout'], '', $strip['strip_content']);
 }
-
 $page_markup = ob_get_clean();
 
 get_header();

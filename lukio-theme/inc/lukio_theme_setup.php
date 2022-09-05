@@ -309,3 +309,16 @@ if (!function_exists('lukio_load_base_acf_fields')) {
     }
 }
 add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');
+
+if (!function_exists('lukio_acf_custom_fields_tab_restriction')) {
+    /**
+     * make it so only 'administrator' user can see the custom fields tab and edit its content
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_acf_custom_fields_tab_restriction($capability)
+    {
+        return 'administrator';
+    }
+}
+add_filter('acf/settings/capability', 'lukio_acf_custom_fields_tab_restriction');
