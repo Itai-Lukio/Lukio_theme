@@ -364,3 +364,18 @@ if (!function_exists('lukio_acf_root_colors_allow_name_change')) {
     }
 }
 add_filter('acf/prepare_field/name=lukio_site_colors', 'lukio_acf_root_colors_allow_name_change');
+
+if (!function_exists('lukio_acf_root_colors_disable_repeater_buttons')) {
+    /**
+     * add css to the theme setup option page to not 'administrator' user in order to disable the repeater row buttons
+     * 
+     * @author Itai Dotan 
+     */
+    function lukio_acf_root_colors_disable_repeater_buttons()
+    {
+        if (strpos(get_current_screen()->base, 'theme-setup') !== false && !(count(array_intersect(array('administrator'), wp_get_current_user()->roles)) > 0)) {
+            lukio_enqueue('/assets/css/lukio_theme_setup_page.css', 'lukio_theme_setup_page_stylesheet', array(), array('parent' => true));
+        };
+    }
+}
+add_action('admin_enqueue_scripts', 'lukio_acf_root_colors_disable_repeater_buttons');
