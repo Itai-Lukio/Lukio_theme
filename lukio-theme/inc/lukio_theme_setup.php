@@ -150,6 +150,7 @@ if (!function_exists('lukio_theme_setup_enqueues')) {
         lukio_enqueue('/style.css', 'lukio_main_theme_stylesheet', array(), array('parent' => true));
         lukio_enqueue('/assets/css/general.css', 'lukio_main_theme_general_stylesheet', array(), array('parent' => true));
         lukio_enqueue('/assets/js/lukio_theme.js', 'lukio_main_theme_script', array('jquery'), array('parent' => true));
+        lukio_enqueue('/assets/css/site_colors.css', 'lukio_site_colors');
     }
 }
 add_action('wp_enqueue_scripts', 'lukio_theme_setup_enqueues', PHP_INT_MAX);
@@ -322,3 +323,44 @@ if (!function_exists('lukio_acf_custom_fields_tab_restriction')) {
     }
 }
 add_filter('acf/settings/capability', 'lukio_acf_custom_fields_tab_restriction');
+
+if (!function_exists('lukio_acf_root_colors')) {
+    /**
+     * create and update the site colors css from acf
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_acf_root_colors($value, $post_id, $field, $original)
+    {
+        $base_path = get_stylesheet_directory() . '/assets/css/site_colors.css';
+        $file = fopen($base_path, "w");
+        fwrite($file, ":root{\n");
+        foreach ($original as $row) {
+            $data = array_values($row);
+            fwrite($file, $data[0] . ': ' . $data[1] . ";\n");
+        }
+        fwrite($file, "}\n");
+        fclose($file);
+        return $value;
+    }
+}
+add_filter('acf/update_value/name=lukio_site_colors', 'lukio_acf_root_colors', 10, 4);
+
+if (!function_exists('lukio_acf_root_colors_allow_name_change')) {
+    /**
+     * allow only admin to change the name for the 'lukio_site_colors' name
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_acf_root_colors_allow_name_change($field)
+    {
+        $allowed_roles = array('administrator');
+        $admin_status = count(array_intersect($allowed_roles, wp_get_current_user()->roles)) > 0;
+        if (!$admin_status) {
+            $field['sub_fields'][0]['readonly'] = true;
+        }
+
+        return $field;
+    }
+}
+add_filter('acf/prepare_field/name=lukio_site_colors', 'lukio_acf_root_colors_allow_name_change');
