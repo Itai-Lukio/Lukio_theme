@@ -57,3 +57,10 @@ Lukio js guide:
             @param {Number} item_width - single item width
             @param {Number} column_gap - gap between items            
             @returns {Bool} true when resized, false when the continer_width is equal or lower then item_width
+
+        mobile_admin_bar_top_fix(element, top = '0px', height = '100vh')
+            fix the skewed position of a fixed top 0 element when the wp admin bar is visible below 601px such as mobile menu
+
+            @param {jQuery} element the fixed element
+            @param {String} top top position top use. default '0px'
+            @param {String} height height of the element. default '100vh'
