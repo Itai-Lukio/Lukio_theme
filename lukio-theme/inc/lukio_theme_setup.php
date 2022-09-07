@@ -126,9 +126,8 @@ if (!function_exists('lukio_custom_user_role')) {
         // $admin_capabilities['activate_plugins'] = false;
         $admin_capabilities['edit_plugins'] = false;
         $admin_capabilities['install_plugins'] = false;
-        // $admin_capabilities['update_plugins'] = false;
+        $admin_capabilities['update_plugins'] = false;
         $admin_capabilities['delete_plugins'] = false;
-
 
         foreach ($admin_capabilities as $cap => $grant) {
             $site_manager->add_cap($cap, $grant);
