@@ -140,7 +140,9 @@ const lukio_helpers = (function ($) {
          */
         mobile_admin_bar_top_fix(element, top = '0px', height = '100vh') {
             if (window.innerWidth < 601 && window.pageYOffset == 0 && $('body').hasClass('admin-bar')) {
-                element.css('top', 'calc(' + top + '- var(--wp-admin--admin-bar--height))').css('height', 'calc(' + height + '- var(--wp-admin--admin-bar--height))');
+                element.css('top', 'calc(' + top + ' + var(--wp-admin--admin-bar--height))').css('height', 'calc(' + height + ' - var(--wp-admin--admin-bar--height))');
+            } else {
+                element.css('top', '').css('height', '');
             }
         }
     }
