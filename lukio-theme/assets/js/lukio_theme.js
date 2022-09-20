@@ -20,12 +20,12 @@ const lukio_helpers = (function ($) {
                 el.addClass('scroll_horizontally_el_' + mark);
                 // clone the continer to get the offset with out visual effect on the original
                 continer.before(continer.clone().css('height', 0).css('direction', 'ltr').addClass('scroll_horizontally_continer_' + mark));
-                el_scroll = ((-1) * $(`.scroll_horizontally_continer_${mark}`).find(`.scroll_horizontally_el_${mark}`).position()['left']) + parseFloat(continer.css('padding-left').replace('px', ''));
+                el_scroll = ((-1) * ($(`.scroll_horizontally_continer_${mark}`).find(`.scroll_horizontally_el_${mark}`).position()['left']) + parseFloat(continer.css('padding-left').replace('px', '') + continer[0].scrollLeft));
                 // clean up
                 $(`.scroll_horizontally_continer_${mark}`).remove();
                 $(`.scroll_horizontally_el_${mark}`).removeClass(`scroll_horizontally_el_${mark}`);
             } else {
-                el_scroll = el.position()['left'];
+                el_scroll = continer[0].scrollLeft + el.position()['left'];
             }
 
             continer[0].scrollTo({
