@@ -194,6 +194,31 @@ if (!function_exists('lukio_create_whatsapp_link_url')) {
     }
 }
 
+if (!function_exists('lukio_create_socialmedia_link_url')) {
+    /**
+     * Create a social media share url
+     * 
+     * @param String $url to share
+     * @param String $site social media to create link to. 'facebook', 'linkedin', 'twitter'
+     * @return String generated share link
+     */
+    function lukio_create_socialmedia_link_url($url, $site)
+    {
+        $url = urlencode($url);
+        switch ($site) {
+            case 'facebook':
+                return 'https://www.facebook.com/sharer/sharer.php?u=' . $url;
+                break;
+            case 'linkedin':
+                return 'https://www.linkedin.com/shareArticle?mini=true&url=' . $url;
+                break;
+            case 'twitter':
+                return 'https://twitter.com/intent/tweet?url=' . $url . '/&text=';
+                break;
+        }
+    }
+}
+
 if (!function_exists('lukio_range_min_max')) {
     /**
      * Lukio number range input min and max.

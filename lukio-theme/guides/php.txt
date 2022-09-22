@@ -53,8 +53,15 @@ Lukio PHP guide:
             @param String $text [optional] default text for the whatsapp message. default '' for no message
             @return String whatsapp link uri
 
+        lukio_create_socialmedia_link_url($url, $site)
+                Create a social media share url
+
+                @param String $url to share
+                @param String $site social media to create link to. 'facebook', 'linkedin', 'twitter'
+                @return String generated share link
+
         lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thum_color)
-                 Lukio number range input min and max.
+                Lukio number range input min and max.
 
                 @param String $target_class [requierd] class to add the all items
                 @param String $inner_color [requierd] color to use in side the range
