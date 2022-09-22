@@ -54,22 +54,22 @@ Lukio PHP guide:
             @return String whatsapp link uri
 
         lukio_create_socialmedia_link_url($url, $site)
-                Create a social media share url
+            Create a social media share url
 
-                @param String $url to share
-                @param String $site social media to create link to. 'facebook', 'linkedin', 'twitter'
-                @return String generated share link
+            @param String $url to share
+            @param String $site social media to create link to. 'facebook', 'linkedin', 'twitter'
+            @return String generated share link
 
         lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thum_color)
-                Lukio number range input min and max.
+            Lukio number range input min and max.
 
-                @param String $target_class [requierd] class to add the all items
-                @param String $inner_color [requierd] color to use in side the range
-                @param String $outer_color [requierd] color to use put of the range
-                @param String $name [requierd] name for the inputs to be grouped under
-                @param Number $min [requierd] min value for the inputs
-                @param Number $max [requierd] max value fot the inputs
-                @param String $thumb_color [requierd] color of the range thumb
+            @param String $target_class [requierd] class to add the all items
+            @param String $inner_color [requierd] color to use in side the range
+            @param String $outer_color [requierd] color to use put of the range
+            @param String $name [requierd] name for the inputs to be grouped under
+            @param Number $min [requierd] min value for the inputs
+            @param Number $max [requierd] max value fot the inputs
+            @param String $thumb_color [requierd] color of the range thumb
 
     Hooks:
         lukio_classic_editor
