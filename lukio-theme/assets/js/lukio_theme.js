@@ -9,10 +9,11 @@ const lukio_helpers = (function ($) {
          * the continer need to be positioned.
          * @param {jQuery} el element to scroll to
          * @param {jQuery} continer continer to scroll
+         * @param {String} scroll_behavior scrollTo behavior to use. default 'smooth'
          * 
          * @author Itai Dotan
          */
-        scroll_horizontally(el, continer) {
+        scroll_horizontally(el, continer, scroll_behavior = 'smooth') {
             let el_scroll;
             // check what is the continer direction
             if (continer.css('direction') == 'rtl') {
@@ -31,7 +32,7 @@ const lukio_helpers = (function ($) {
             continer[0].scrollTo({
                 top: 0,
                 left: el_scroll,
-                behavior: 'smooth'
+                behavior: scroll_behavior
             });
         }
 

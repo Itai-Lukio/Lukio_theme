@@ -6,12 +6,13 @@ Lukio js guide:
     lukio_helpers.function_name(args);
 
     Helpers functions:
-        scroll_horizontally(el, continer)
+        scroll_horizontally(el, continer, scroll_behavior)
             Scroll horizontally to the element with in its continer
             the continer need to be positioned.
 
             @param {jQuery} el - element to scroll to
             @param {jQuery} continer - continer to scroll
+            @param {String} scroll_behavior scrollTo behavior to use. default 'smooth'
 
         animate_size(el, direction, size, time, end, extra_options = {}, complete = null)
             animate a given element for a nice open and close effect
