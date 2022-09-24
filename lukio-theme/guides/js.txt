@@ -6,7 +6,7 @@ Lukio js guide:
     lukio_helpers.function_name(args);
 
     Helpers functions:
-        scroll_horizontally(el, continer, scroll_behavior)
+        scroll_horizontally(el, continer, scroll_behavior = 'smooth')
             Scroll horizontally to the element with in its continer
             the continer need to be positioned.
 
