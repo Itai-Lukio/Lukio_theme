@@ -150,6 +150,9 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
     {
         // modified from includes/wc-template-functions.php -> woocommerce_template_loop_add_to_cart()
         if ($product) {
+            $is_purchasable_bool = $product->is_purchasable();
+            $is_in_stock_bool = $product->is_in_stock();
+
             $defaults = array(
                 'quantity'   => 1,
                 'class'      => implode(
@@ -158,8 +161,8 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
                         array(
                             'button',
                             'product_type_' . $product->get_type(),
-                            $product->is_purchasable() && $product->is_in_stock() ? 'add_to_cart_button' : '',
-                            $product->supports('ajax_add_to_cart') && $product->is_purchasable() && $product->is_in_stock() ? 'ajax_add_to_cart' : '',
+                            $is_purchasable_bool && $is_in_stock_bool ? 'add_to_cart_button' : 'no_stock',
+                            $product->supports('ajax_add_to_cart') && $is_purchasable_bool && $is_in_stock_bool ? 'ajax_add_to_cart' : '',
                             trim($class_str),
                         )
                     )
@@ -186,7 +189,7 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
                 esc_attr(isset($args['quantity']) ? $args['quantity'] : 1),
                 esc_attr(isset($args['class']) ? $args['class'] : 'button'),
                 isset($args['attributes']) ? wc_implode_html_attributes($args['attributes']) : '',
-                $product->is_purchasable() && $product->is_in_stock() ? ($btn_add_text != '' ? $btn_add_text : esc_html($product->add_to_cart_text())) : ($btn_no_stock != '' ? $btn_no_stock : esc_html($product->add_to_cart_text()))
+                $is_purchasable_bool && $is_in_stock_bool ? ($btn_add_text != '' ? $btn_add_text : esc_html($product->add_to_cart_text())) : ($btn_no_stock != '' ? $btn_no_stock : esc_html($product->add_to_cart_text()))
             );
         }
     }
