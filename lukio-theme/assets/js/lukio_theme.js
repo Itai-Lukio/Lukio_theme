@@ -151,3 +151,23 @@ const lukio_helpers = (function ($) {
     // return the class object to be stored in the const
     return new class_lukio_helpers;
 })(jQuery);
+
+// functions to run on ready
+(function ($) {
+    $(document).ready(function () {
+        /**
+         * add a var in css with the real 100vw of the page
+         */
+        function lukio_body_width_var() {
+            document.documentElement.style.setProperty('--lukio-100vw', $('body').css('width'));
+        }
+
+        // onload run
+        lukio_body_width_var();
+
+        // rerun on resize
+        $(window).on('resize', function () {
+            lukio_body_width_var();
+        })
+    })
+})(jQuery)
