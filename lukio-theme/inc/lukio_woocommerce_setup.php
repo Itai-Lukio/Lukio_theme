@@ -175,7 +175,7 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
                 ),
             );
 
-            $args = apply_filters('woocommerce_loop_add_to_cart_args', wp_parse_args($args, $defaults), $product);
+            $args = apply_filters('woocommerce_loop_add_to_cart_args', $defaults, $product);
 
             if (isset($args['attributes']['aria-label'])) {
                 $args['attributes']['aria-label'] = wp_strip_all_tags($args['attributes']['aria-label']);
