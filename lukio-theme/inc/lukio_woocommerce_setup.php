@@ -79,7 +79,7 @@ if (!function_exists('lukio_woocommerce_admin_bar_guides')) {
         }
     }
 }
-add_action('admin_bar_menu', 'lukio_woocommerce_admin_bar_guides', 999);
+add_action('admin_bar_menu', 'lukio_woocommerce_admin_bar_guides', 50);
 
 if (!function_exists('lukio_woocommerce_mini_cart')) {
     /**

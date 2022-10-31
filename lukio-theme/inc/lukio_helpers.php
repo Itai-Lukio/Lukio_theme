@@ -140,7 +140,7 @@ if (!function_exists('lukio_remove_p_tags')) {
      */
     function lukio_remove_p_tags($string)
     {
-        return str_replace(array('<p>', '</p>'), '', $string);
+        return str_replace(array('<p>', '<p style="display: none !important">', '</p>'), '', $string);
     }
 }
 
