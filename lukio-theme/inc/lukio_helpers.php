@@ -178,7 +178,7 @@ if (!function_exists('lukio_create_whatsapp_link_url')) {
     /**
      * Create a url for a whatsapp link
      * 
-     * @param Number|String $number [requierd] international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
+     * @param Number|String $number [optional] international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
      * @param String $text [optional] default text for the whatsapp message. default '' for no message
      * @return String whatsapp link uri
      * 
@@ -198,8 +198,8 @@ if (!function_exists('lukio_create_socialmedia_link_url')) {
     /**
      * Create a social media share url
      * 
-     * @param String $url to share
-     * @param String $site social media to create link to. 'facebook', 'linkedin', 'twitter'
+     * @param String $url [requierd] to share
+     * @param String $site [requierd] social media to create link to. 'facebook', 'linkedin', 'twitter'
      * @return String generated share link
      */
     function lukio_create_socialmedia_link_url($url, $site)
@@ -216,6 +216,20 @@ if (!function_exists('lukio_create_socialmedia_link_url')) {
                 return 'https://twitter.com/intent/tweet?url=' . $url . '/&text=';
                 break;
         }
+    }
+}
+
+if (!function_exists('lukio_create_pinterest_share_link')) {
+    /**
+     * Create a pinterest share link
+     * 
+     * @param String $link [requierd] url to link to
+     * @param String $image_url [requierd] url to the image to add to the pin
+     * @return String generated pinterest link
+     */
+    function lukio_create_pinterest_share_link($link, $image_url)
+    {
+        return 'https://www.pinterest.com/pin/create/link/?url=' . urlencode($link) . '&media=' . urldecode($image_url) . '&method=link';
     }
 }
 
