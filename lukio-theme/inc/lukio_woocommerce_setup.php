@@ -202,24 +202,59 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
      * @param Number $decimals [optional] sets the number of decimal digits when returning a number, default 2
      * @param String $decimal_separator [optional] sets the separator for the decimal point when returning a number, default '.'
      * @param String $thousands_separator [optional] sets the thousands separator when returning a number, default ','
-     * @return Bool|Number true when eligible for free shipping, missing amount otherwise
+     * @return Bool|Number false when free shipping not available, true when eligible for free shipping or missing amount to free shipping
      * 
      * @author Itai Dotan
      */
     function lukio_woocommerce_free_shipping_threshold($decimals = 2, $decimal_separator = '.', $thousands_separator = ',')
     {
+        if (!function_exists('lukio_woocommerce_free_shipping_threshold_get_user_ip')) {
+            /**
+             * get client ip
+             */
+            function lukio_woocommerce_free_shipping_threshold_get_user_ip()
+            {
+                if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                    return $_SERVER['HTTP_CLIENT_IP'];
+                } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    return $_SERVER['HTTP_X_FORWARDED_FOR'];
+                } else {
+                    return $_SERVER['REMOTE_ADDR'];
+                }
+            }
+        }
+
+        $free_shipping_available = false;
         $amount_to_free = -1;
         $allZones = WC_Shipping_Zones::get_zones();
+        $user_id = get_current_user_id();
+        $country_code = '';
+        // try to get the user saved country
+        if ($user_id != 0) {
+            $country_code = get_user_meta($user_id, 'shipping_country', true);
+        };
+        // when there is no country code get one from the ip
+        if ($country_code == '') {
+            $ip_data = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . lukio_woocommerce_free_shipping_threshold_get_user_ip()));
+            $country_code = $ip_data->geoplugin_countryCode;
+        }
+
         foreach ($allZones as $zone) {
+            if ($zone['zone_locations'][0]->code != $country_code) {
+                // skip any zone that is not the user's zone
+                continue;
+            }
             $zone_methods = $zone['shipping_methods'];
             foreach ($zone_methods as $method) {
                 $m_name = $method->get_rate_id();
                 if (strpos($m_name, 'free_shipping') !== false && $method->is_enabled()) {
+                    $free_shipping_available = true;
                     $order_min_amount = (float)$method->min_amount;
                     $amount_to_free = $order_min_amount - (float)WC()->cart->total;
                 }
             }
         }
+        return $free_shipping_available ? ($amount_to_free <= 0 ? true : number_format((float)$amount_to_free, $decimals, $decimal_separator, $thousands_separator)) : false;
         return $amount_to_free <= 0 ? true : number_format((float)$amount_to_free, $decimals, $decimal_separator, $thousands_separator);
     }
 }
