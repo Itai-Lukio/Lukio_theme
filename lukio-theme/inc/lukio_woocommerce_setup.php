@@ -255,7 +255,6 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
             }
         }
         return $free_shipping_available ? ($amount_to_free <= 0 ? true : number_format((float)$amount_to_free, $decimals, $decimal_separator, $thousands_separator)) : false;
-        return $amount_to_free <= 0 ? true : number_format((float)$amount_to_free, $decimals, $decimal_separator, $thousands_separator);
     }
 }
 
