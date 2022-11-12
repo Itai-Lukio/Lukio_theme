@@ -240,19 +240,33 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
         }
 
         foreach ($allZones as $zone) {
-            if ($zone['zone_locations'][0]->code != $country_code) {
+            $country_in_zone = false;
+            // check the zone for the user's country code
+            foreach ($zone['zone_locations'] as $location) {
+                if ($location->code == $country_code) {
+                    $country_in_zone = true;
+                    break;
+                }
+            }
+
+            if (!$country_in_zone) {
                 // skip any zone that is not the user's zone
                 continue;
             }
+
             $zone_methods = $zone['shipping_methods'];
             foreach ($zone_methods as $method) {
                 $m_name = $method->get_rate_id();
                 if (strpos($m_name, 'free_shipping') !== false && $method->is_enabled()) {
                     $free_shipping_available = true;
                     $order_min_amount = (float)$method->min_amount;
-                    $amount_to_free = $order_min_amount - (float)WC()->cart->total;
+                    $amount_to_free = $order_min_amount - (float)WC()->cart->subtotal;
+                    // break out of the method loop when free shipping was found and tested
+                    break;
                 }
             }
+            // break out of the zone loop when the user's zone was found and tested
+            break;
         }
         return $free_shipping_available ? ($amount_to_free <= 0 ? true : number_format((float)$amount_to_free, $decimals, $decimal_separator, $thousands_separator)) : false;
     }
