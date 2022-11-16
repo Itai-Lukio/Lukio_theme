@@ -6,7 +6,7 @@ if (!function_exists('lukio_enqueue')) {
      * @param String $path [requierd] full file path inside the theme folder.
      * @param String $name [optional] name to use in the enqueue, default null to use $path.
      * @param Array $deps [optional] an array of registered dependents.
-     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default false. 'media' => for style enqueue media type, default 'all'. 'version' version to set in the enqueue when its a url, default '1.0'.
+     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default true. 'media' => for style enqueue media type, default 'all'. 'version' version to set in the enqueue when its a url, default '1.0'.
      * 
      * @author Itai Dotan
      */
@@ -48,7 +48,7 @@ if (!function_exists('lukio_enqueue')) {
 
         $default_extras = array(
             'parent' => false,
-            'in_footer' => false,
+            'in_footer' => true,
             'media' => 'all',
             'version' => 1.0,
         );

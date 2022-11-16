@@ -17,7 +17,7 @@ Lukio PHP guide:
             @param Array $deps [optional] an array of registered dependents.
             @param Array $user_extras [optional] [
                                         'parent' => for parent theme enqueue, default false.
-                                        'in_footer' => for script enqueue in the footer, default false.
+                                        'in_footer' => for script enqueue in the footer, default true.
                                         'media' => for style enqueue media type, default 'all'.
                                         'version' => version to set in the enqueue when its a url, default '1.0'
                                         ]

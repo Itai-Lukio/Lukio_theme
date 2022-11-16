@@ -15,6 +15,14 @@ if (function_exists('get_field')) {
     $acf_pixels_data = get_field('pixels', 'options');
 }
 
+ob_start();
+get_template_part('/template-parts/header/pre_header_content');
+$pre_header_markup = ob_get_clean();
+
+ob_start();
+get_template_part('/template-parts/header/header_content');
+$header_markup = ob_get_clean();
+
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -32,11 +40,11 @@ if (function_exists('get_field')) {
     <?php do_action('wp_body_open'); ?>
     <div id="page" class="site">
 
-        <?php get_template_part('/template-parts/header/pre_header_content'); ?>
+        <?php echo $pre_header_markup; ?>
 
         <header id="site_header">
 
-            <?php get_template_part('/template-parts/header/header_content'); ?>
+            <?php echo $header_markup; ?>
 
         </header><!-- #site_header -->
 
