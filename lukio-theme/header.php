@@ -15,6 +15,8 @@ if (function_exists('get_field')) {
     $acf_pixels_data = get_field('pixels', 'options');
 }
 
+do_action('wp_enqueue_scripts');
+
 ob_start();
 get_template_part('/template-parts/header/pre_header_content');
 $pre_header_markup = ob_get_clean();
