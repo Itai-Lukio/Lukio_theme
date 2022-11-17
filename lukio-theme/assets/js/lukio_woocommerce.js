@@ -81,5 +81,10 @@
             input.closest('.lukio_add_to_cart_form_wrapper').find('.lukio_add_btn').attr('data-product_id', input.val());
         });
 
+        // hook in to wc add_to_cart trigger and prevent the ajax when the button has a 'disabled' class
+        $('body').on('should_send_ajax_request.adding_to_cart', function (e, btn) {
+            return !btn.hasClass('disabled');
+        });
+
     })
 })(jQuery)
