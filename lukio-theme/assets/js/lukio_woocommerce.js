@@ -69,5 +69,17 @@
             });
         };
 
+        // update lukio add to cart button quantity inside of wc add to cart form
+        $('.lukio_add_to_cart_form_wrapper input[name="quantity"]').on('change', function () {
+            let input = $(this);
+            input.closest('.lukio_add_to_cart_form_wrapper').find('.lukio_add_btn').attr('data-quantity', input.val());
+        });
+
+        // update lukio add to cart button product_id inside of wc add to cart form
+        $('.lukio_add_to_cart_form_wrapper input[name="variation_id"]').on('change', function () {
+            let input = $(this);
+            input.closest('.lukio_add_to_cart_form_wrapper').find('.lukio_add_btn').attr('data-product_id', input.val());
+        });
+
     })
 })(jQuery)

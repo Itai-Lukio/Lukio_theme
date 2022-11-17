@@ -137,6 +137,7 @@ add_action('wp_ajax_nopriv_lukio_woocommerce_refresh_mini_cart', 'lukio_woocomme
 if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
     /**
      * echo a valid woocommerce button with custom classes and button text
+     * to use ajax with wc add_to_cart form remove the form submit button and place the function in the wanted template
      * 
      * @param WC_Product $product [requierd] product the button is for
      * @param String $class_str [optional] class string to add to the button
@@ -161,8 +162,8 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
                         array(
                             'button',
                             'product_type_' . $product->get_type(),
-                            $is_purchasable_bool && $is_in_stock_bool ? 'add_to_cart_button' : 'no_stock',
-                            $product->supports('ajax_add_to_cart') && $is_purchasable_bool && $is_in_stock_bool ? 'ajax_add_to_cart' : '',
+                            $is_purchasable_bool && $is_in_stock_bool ? 'ajax_add_to_cart add_to_cart_button' : 'no_stock',
+                            'lukio_add_btn',
                             trim($class_str),
                         )
                     )
@@ -333,3 +334,18 @@ if (!function_exists('lukio_update_cart_quantity')) {
 }
 add_action('wp_ajax_lukio_update_cart_quantity', 'lukio_update_cart_quantity');
 add_action('wp_ajax_nopriv_lukio_update_cart_quantity', 'lukio_update_cart_quantity');
+
+if (!function_exists('woocommerce_template_single_add_to_cart')) {
+    /**
+     * overwrite 'woocommerce_template_single_add_to_cart' to wrap the form with a targetable div
+     * 
+     * @author Itai Dotan
+     */
+    function woocommerce_template_single_add_to_cart()
+    {
+        echo '<div class="lukio_add_to_cart_form_wrapper">';
+        global $product;
+        do_action('woocommerce_' . $product->get_type() . '_add_to_cart');
+        echo '</div>';
+    }
+}
