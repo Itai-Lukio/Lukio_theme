@@ -137,7 +137,8 @@ add_action('wp_ajax_nopriv_lukio_woocommerce_refresh_mini_cart', 'lukio_woocomme
 if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
     /**
      * echo a valid woocommerce button with custom classes and button text
-     * to use ajax with wc add_to_cart form remove the form submit button and place the function in the wanted template
+     * 
+     * to use ajax with wc add_to_cart form remove the form submit button and place the function in the wanted template.
      * templates/single-product/add-to-cart/filename.php
      * 
      * @param WC_Product $product [requierd] product the button is for
