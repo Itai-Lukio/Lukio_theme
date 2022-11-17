@@ -138,6 +138,7 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
     /**
      * echo a valid woocommerce button with custom classes and button text
      * to use ajax with wc add_to_cart form remove the form submit button and place the function in the wanted template
+     * templates/single-product/add-to-cart/filename.php
      * 
      * @param WC_Product $product [requierd] product the button is for
      * @param String $class_str [optional] class string to add to the button
