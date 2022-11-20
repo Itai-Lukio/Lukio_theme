@@ -10,6 +10,7 @@
  * @param Number $args['min'] min value for the inputs
  * @param Number $args['max'] max value fot the inputs
  * @param String $args['thumb_color'] color of the range thumb
+ * @param String $format [optional] format for the display string, default '%d'
  * 
  * @author Itai Dotan
  */
