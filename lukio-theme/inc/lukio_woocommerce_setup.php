@@ -345,7 +345,7 @@ if (!function_exists('woocommerce_template_single_add_to_cart')) {
      */
     function woocommerce_template_single_add_to_cart()
     {
-        echo '<div class="lukio_add_to_cart_form_wrapper">';
+        echo '<div class="lukio_theme_add_to_cart_form_wrapper">';
         global $product;
         do_action('woocommerce_' . $product->get_type() . '_add_to_cart');
         echo '</div>';

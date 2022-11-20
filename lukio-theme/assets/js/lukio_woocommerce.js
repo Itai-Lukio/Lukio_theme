@@ -75,7 +75,7 @@
                 return false;
             }
             // update the button attributes when in the lukio wrapper
-            let wrapper = btn.closest('.lukio_add_to_cart_form_wrapper');
+            let wrapper = btn.closest('.lukio_theme_add_to_cart_form_wrapper');
             if (wrapper.length == 1) {
                 let quantity = wrapper.find('input[name="quantity"]');
                 if (quantity.length == 1) {
