@@ -13,6 +13,7 @@
                 this.price_gap = this.track_divider * 0.1;
                 this.inner_color = wrapper.attr('inner_color');
                 this.outer_color = wrapper.attr('outer_color');
+                this.format = wrapper.attr('format');
 
                 let update = (input) => { this.input_update(input) };
                 wrapper.find('.lukio_range_min_max_input').each(function () {
@@ -34,12 +35,12 @@
                     if (current_max - current_min <= this.price_gap) {
                         input.val(current_max - this.price_gap);
                     }
-                    this.min_display.text(input.val());
+                    this.min_display.text(this.format.replace('%d', input.val()));
                 } else {
                     if (current_max - current_min <= this.price_gap) {
                         input.val(current_min + this.price_gap);
                     }
-                    this.max_display.text(input.val());
+                    this.max_display.text(this.format.replace('%d', input.val()));
                 };
                 this.track_update();
             };

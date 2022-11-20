@@ -27,15 +27,15 @@ $input_name = substr($args['name'], -2) == '[]' ? $args['name'] : $args['name'] 
 
 ?>
 
-<div class="lukio_range_min_max<?php echo $target_class; ?>" data-count="<?php echo $lukio_range_min_max_counter; ?>" inner_color="<?php echo $args['inner_color']; ?>" outer_color="<?php echo $args['outer_color']; ?>">
+<div class="lukio_range_min_max<?php echo $target_class; ?>" data-count="<?php echo $lukio_range_min_max_counter; ?>" inner_color="<?php echo $args['inner_color']; ?>" outer_color="<?php echo $args['outer_color']; ?>" format="<?php echo $args['format']; ?>">
     <div class="lukio_range_min_max_track_wrapper<?php echo $target_class; ?>">
         <div class="lukio_range_min_max_track<?php echo $target_class; ?>"></div>
         <input class="lukio_range_min_max_input min<?php echo $target_class; ?>" title="min" type="range" name="<?php echo $input_name; ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" value="<?php echo $args['min'] ?>">
         <input class="lukio_range_min_max_input max<?php echo $target_class; ?>" title="max" type="range" name="<?php echo $input_name; ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" value="<?php echo $args['max'] ?>">
     </div>
     <div class="lukio_range_min_max_display_wrapper<?php echo $target_class; ?>">
-        <span class="lukio_range_min_max_display min<?php echo $target_class; ?>"><?php echo $args['min']; ?></span>
-        <span class="lukio_range_min_max_display max<?php echo $target_class; ?>"><?php echo $args['max']; ?></span>
+        <span class="lukio_range_min_max_display min<?php echo $target_class; ?>"><?php echo sprintf($args['format'], $args['min']); ?></span>
+        <span class="lukio_range_min_max_display max<?php echo $target_class; ?>"><?php echo sprintf($args['format'], $args['max']); ?></span>
     </div>
 </div>
 
