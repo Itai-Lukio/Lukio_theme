@@ -69,22 +69,22 @@
             });
         };
 
-        // update lukio add to cart button quantity inside of wc add to cart form
-        $(document).on('change', '.lukio_add_to_cart_form_wrapper input[name="quantity"]', function () {
-            let input = $(this);
-            input.closest('.lukio_add_to_cart_form_wrapper').find('.lukio_add_btn').attr('data-quantity', input.val());
-        });
-
-        // update lukio add to cart button product_id inside of wc add to cart form
-        $(document).on('change', '.lukio_add_to_cart_form_wrapper input[name="variation_id"]', function () {
-            let input = $(this);
-            input.closest('.lukio_add_to_cart_form_wrapper').find('.lukio_add_btn').attr('data-product_id', input.val());
-        });
-
-        // hook in to wc add_to_cart trigger and prevent the ajax when the button has a 'disabled' class
+        // hook in to wc add_to_cart trigger and prevent the ajax when the button has a 'disabled' class and update its attributes
         $('body').on('should_send_ajax_request.adding_to_cart', function (e, btn) {
             if (btn.hasClass('disabled')) {
                 return false;
+            }
+            // update the button attributes when in the lukio wrapper
+            let wrapper = btn.closest('.lukio_add_to_cart_form_wrapper');
+            if (wrapper.length == 1) {
+                let quantity = wrapper.find('input[name="quantity"]');
+                if (quantity.length == 1) {
+                    btn.attr('data-quantity', quantity.val());
+                }
+                let product_id = wrapper.find('input[name="variation_id"]');
+                if (product_id.length == 1) {
+                    btn.attr('data-product_id', product_id.val());
+                }
             }
         });
 
