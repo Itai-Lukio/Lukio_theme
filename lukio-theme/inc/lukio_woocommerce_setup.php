@@ -164,7 +164,7 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
                         array(
                             'button',
                             'product_type_' . $product->get_type(),
-                            $is_purchasable_bool && $is_in_stock_bool ? 'ajax_add_to_cart add_to_cart_button' : 'no_stock',
+                            $is_purchasable_bool && $is_in_stock_bool ? 'ajax_add_to_cart add_to_cart_button single_add_to_cart_button' : 'no_stock',
                             'lukio_add_btn',
                             trim($class_str),
                         )
