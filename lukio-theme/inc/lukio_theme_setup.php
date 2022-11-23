@@ -150,6 +150,13 @@ if (!function_exists('lukio_theme_setup_enqueues')) {
         lukio_enqueue('/style.css', 'lukio_main_theme_stylesheet', array(), array('parent' => true));
         lukio_enqueue('/assets/css/general.css', 'lukio_main_theme_general_stylesheet', array(), array('parent' => true));
         lukio_enqueue('/assets/js/lukio_theme.js', 'lukio_main_theme_script', array('jquery'), array('parent' => true));
+        wp_localize_script(
+            'lukio_main_theme_script',
+            'lukio_localize',
+            array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+            )
+        );
         lukio_enqueue('/assets/css/site_colors.css', 'lukio_site_colors');
     }
 }

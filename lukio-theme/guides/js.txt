@@ -65,3 +65,8 @@ Lukio js guide:
             @param {jQuery} element the fixed element
             @param {String} top top position top use. default '0px'
             @param {String} height height of the element. default '100vh'
+
+
+    Ajax:
+        lukio_localize.ajax_url
+            global site ajax url to use for any needed ajax in the site

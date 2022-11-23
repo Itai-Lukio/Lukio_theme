@@ -5,7 +5,7 @@
         $('body').on('wc_fragments_loaded wc_fragments_refreshed updated_checkout updated_cart_totals', function () {
             $.ajax({
                 method: 'POST',
-                url: lukio_wc_ajax.ajax_url,
+                url: lukio_localize.ajax_url,
                 data: { action: 'lukio_woocommerce_refresh_mini_cart' },
                 success: function (data) {
                     if (data) {
@@ -36,7 +36,7 @@
             group.addClass('working');
             $.ajax({
                 method: 'POST',
-                url: lukio_wc_ajax.ajax_url,
+                url: lukio_localize.ajax_url,
                 data: { action: 'lukio_update_cart_quantity', cart_item: group.data('key'), quantity: product_quantity },
                 success: function () {
                     $('body').trigger('lukio_update_wc_parts');
