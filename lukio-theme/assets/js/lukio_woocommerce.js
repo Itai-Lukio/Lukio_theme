@@ -47,10 +47,10 @@
         // event to trigger when needing to refresh woocommerce parts
         $('body').on('lukio_update_wc_parts', function () {
             switch (window.location.origin + window.location.pathname) {
-                case lukio_wc_ajax.checkout_url:
+                case lukio_woo.checkout_url:
                     $('body').trigger('update_checkout');
                     break;
-                case lukio_wc_ajax.cart_url:
+                case lukio_woo.cart_url:
                     $('body').trigger('wc_update_cart');
                     break;
                 default:
@@ -61,7 +61,7 @@
 
         // refresh wc parts when removing item from the mini cart when in cart or checkout
         let page = window.location.origin + window.location.pathname;
-        if (page == lukio_wc_ajax.cart_url || page == lukio_wc_ajax.checkout_url) {
+        if (page == lukio_woo.cart_url || page == lukio_woo.checkout_url) {
             $(document).on('click', '.lukio_mini_cart_wrapper .remove', function () {
                 $('body').one('wc_fragments_loaded', function () {
                     $('body').trigger('lukio_update_wc_parts');
