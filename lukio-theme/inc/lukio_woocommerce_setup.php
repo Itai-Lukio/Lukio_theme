@@ -337,17 +337,12 @@ if (!function_exists('lukio_update_cart_quantity')) {
 add_action('wp_ajax_lukio_update_cart_quantity', 'lukio_update_cart_quantity');
 add_action('wp_ajax_nopriv_lukio_update_cart_quantity', 'lukio_update_cart_quantity');
 
-if (!function_exists('woocommerce_template_single_add_to_cart')) {
-    /**
-     * overwrite 'woocommerce_template_single_add_to_cart' to wrap the form with a targetable div
-     * 
-     * @author Itai Dotan
-     */
-    function woocommerce_template_single_add_to_cart()
-    {
-        echo '<div class="lukio_theme_add_to_cart_form_wrapper">';
-        global $product;
-        do_action('woocommerce_' . $product->get_type() . '_add_to_cart');
-        echo '</div>';
-    }
-}
+// wrap the form with a targetable div
+add_action('woocommerce_before_add_to_cart_form', function () {
+    echo '<div class="lukio_theme_add_to_cart_form_wrapper">';
+});
+
+// close the form targetable div
+add_action('woocommerce_after_add_to_cart_form', function () {
+    echo '</div>';
+});
