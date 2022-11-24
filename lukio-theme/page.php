@@ -10,8 +10,14 @@
 // Exit if accessed directly.
 defined('ABSPATH') || exit;
 
+do_action('wp_enqueue_scripts');
+
+ob_start();
+the_content();
+$content = ob_get_clean();
+
 get_header();
 
-the_content();
+echo $content;
 
 get_footer();
