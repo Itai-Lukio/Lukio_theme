@@ -17,12 +17,9 @@ Lukio woocommerce PHP guide:
             @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock
             @param String $html_tag [optional] html tag for the button output, default 'a'
 
-        lukio_woocommerce_free_shipping_threshold($decimals = 2, $decimal_separator = '.', $thousands_separator = ',')
+        lukio_woocommerce_free_shipping_threshold()
             Check if the cart is eligible for free shipping
             
-            @param Number $decimals [optional] sets the number of decimal digits when returning a number, default 2
-            @param String $decimal_separator [optional] sets the separator for the decimal point when returning a number, default '.'
-            @param String $thousands_separator [optional] sets the thousands separator when returning a number, default ','
             @return Bool|Number false when free shipping not available, true when eligible for free shipping or missing amount to free shipping
 
         lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $class_str = '', $minus_content = null, $plus_content = null)

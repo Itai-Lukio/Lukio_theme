@@ -201,14 +201,11 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
     /**
      * Check if the cart is eligible for free shipping
      * 
-     * @param Number $decimals [optional] sets the number of decimal digits when returning a number, default 2
-     * @param String $decimal_separator [optional] sets the separator for the decimal point when returning a number, default '.'
-     * @param String $thousands_separator [optional] sets the thousands separator when returning a number, default ','
      * @return Bool|Number false when free shipping not available, true when eligible for free shipping or missing amount to free shipping
      * 
      * @author Itai Dotan
      */
-    function lukio_woocommerce_free_shipping_threshold($decimals = 2, $decimal_separator = '.', $thousands_separator = ',')
+    function lukio_woocommerce_free_shipping_threshold()
     {
         if (!function_exists('lukio_woocommerce_free_shipping_threshold_get_user_ip')) {
             /**
@@ -270,7 +267,7 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
             // break out of the zone loop when the user's zone was found and tested
             break;
         }
-        return $free_shipping_available ? ($amount_to_free <= 0 ? true : number_format((float)$amount_to_free, $decimals, $decimal_separator, $thousands_separator)) : false;
+        return $free_shipping_available ? ($amount_to_free <= 0 ? true : (float)$amount_to_free) : false;
     }
 }
 
