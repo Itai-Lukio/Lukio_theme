@@ -17,6 +17,16 @@ Lukio woocommerce PHP guide:
             @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock
             @param String $html_tag [optional] html tag for the button output, default 'a'
 
+        lukio_woocommerce_get_user_ip()
+            get client ip
+
+            @return String client ip
+
+        lukio_woocommerce_get_user_country_code()
+            get the user country code
+
+            @return String country code
+
         lukio_woocommerce_free_shipping_threshold()
             Check if the cart is eligible for free shipping
             

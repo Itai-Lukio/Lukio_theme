@@ -197,6 +197,51 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
     }
 }
 
+if (!function_exists('lukio_woocommerce_get_user_ip')) {
+    /**
+     * get client ip
+     * 
+     * @return String client ip
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_woocommerce_get_user_ip()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            return $_SERVER['HTTP_CLIENT_IP'];
+        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            return $_SERVER['REMOTE_ADDR'];
+        }
+    }
+}
+
+if (!function_exists('lukio_woocommerce_get_user_country_code')) {
+    /**
+     * get the user country code
+     * 
+     * @return String country code
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_woocommerce_get_user_country_code()
+    {
+        $user_id = get_current_user_id();
+        $country_code = '';
+        // try to get the user saved country
+        if ($user_id != 0) {
+            $country_code = get_user_meta($user_id, 'shipping_country', true);
+        };
+        // when there is no country code get one from the ip
+        if ($country_code == '') {
+            $ip_data = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . lukio_woocommerce_get_user_ip()));
+            $country_code = $ip_data->geoplugin_countryCode;
+        }
+        return $country_code;
+    }
+}
+
 if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
     /**
      * Check if the cart is eligible for free shipping
@@ -207,36 +252,10 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
      */
     function lukio_woocommerce_free_shipping_threshold()
     {
-        if (!function_exists('lukio_woocommerce_free_shipping_threshold_get_user_ip')) {
-            /**
-             * get client ip
-             */
-            function lukio_woocommerce_free_shipping_threshold_get_user_ip()
-            {
-                if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                    return $_SERVER['HTTP_CLIENT_IP'];
-                } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                    return $_SERVER['HTTP_X_FORWARDED_FOR'];
-                } else {
-                    return $_SERVER['REMOTE_ADDR'];
-                }
-            }
-        }
-
         $free_shipping_available = false;
         $amount_to_free = -1;
         $allZones = WC_Shipping_Zones::get_zones();
-        $user_id = get_current_user_id();
-        $country_code = '';
-        // try to get the user saved country
-        if ($user_id != 0) {
-            $country_code = get_user_meta($user_id, 'shipping_country', true);
-        };
-        // when there is no country code get one from the ip
-        if ($country_code == '') {
-            $ip_data = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . lukio_woocommerce_free_shipping_threshold_get_user_ip()));
-            $country_code = $ip_data->geoplugin_countryCode;
-        }
+        $country_code = lukio_woocommerce_get_user_country_code();
 
         foreach ($allZones as $zone) {
             $country_in_zone = false;
