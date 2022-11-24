@@ -11,7 +11,7 @@
 // Exit if accessed directly.
 defined('ABSPATH') || exit;
 
-do_action('flexible_content_enqueue');
+do_action('wp_enqueue_scripts');
 
 ob_start();
 foreach (get_field('flexible_content') as $strip) {
