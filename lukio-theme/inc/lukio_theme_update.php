@@ -22,7 +22,7 @@ if (!function_exists('lukio_theme_update')) {
 
             // connect to a remote server where the update information is stored
             $remote = wp_remote_get(
-                'https://raw.githubusercontent.com/Itai-Lukio/Lukio_theme/main/info.json',
+                $theme->get('ThemeURI') . '/raw/main/info.json',
                 array(
                     'timeout' => 10,
                     'headers' => array(
