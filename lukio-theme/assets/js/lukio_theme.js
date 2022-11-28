@@ -165,9 +165,8 @@ const lukio_helpers = (function ($) {
         // onload run
         lukio_body_width_var();
 
-        // rerun on resize
-        $(window).on('resize', function () {
-            lukio_body_width_var();
-        })
+        // rerun on resize of the body to update even when using 'overflow: hidden;' on the body
+        const lukio_resize_observer = new ResizeObserver(lukio_body_width_var);
+        lukio_resize_observer.observe($('body')[0]);
     })
 })(jQuery)
