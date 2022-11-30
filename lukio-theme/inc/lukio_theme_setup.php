@@ -160,7 +160,7 @@ if (!function_exists('lukio_theme_setup_enqueues')) {
         lukio_enqueue('/assets/css/site_colors.css', 'lukio_site_colors');
     }
 }
-add_action('wp_enqueue_scripts', 'lukio_theme_setup_enqueues', PHP_INT_MAX);
+add_action('wp_enqueue_scripts', 'lukio_theme_setup_enqueues');
 
 if (!function_exists('lukio_theme_admin_setup_enqueues')) {
     /**

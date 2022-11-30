@@ -156,7 +156,7 @@ const lukio_helpers = (function ($) {
 (function ($) {
     $(document).ready(function () {
         /**
-         * add a var in css with the real 100vw of the page
+         * update the css var with the real 100vw of the page
          */
         function lukio_body_width_var() {
             document.documentElement.style.setProperty('--lukio-100vw', $('body').css('width'));
