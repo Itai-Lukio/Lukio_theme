@@ -6,7 +6,7 @@ if (!function_exists('lukio_enqueue')) {
      * @param String $path [requierd] full file path inside the theme folder.
      * @param String $name [optional] name to use in the enqueue, default null to use $path.
      * @param Array $deps [optional] an array of registered dependents.
-     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default true. 'media' => for style enqueue media type, default 'all'. 'version' version to set in the enqueue when its a url, default '1.0'.
+     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default true. 'media' => for style enqueue media type, default 'all'.
      * 
      * @author Itai Dotan
      */
@@ -50,7 +50,6 @@ if (!function_exists('lukio_enqueue')) {
             'parent' => false,
             'in_footer' => true,
             'media' => 'all',
-            'version' => 1.0,
         );
         $active_extras = array_merge($default_extras, $user_extras);
 
@@ -80,7 +79,7 @@ if (!function_exists('lukio_enqueue')) {
             $enqueue = (!$lukio_enqueue_admin_status && file_exists($directory . $path . '.min' . $file_type)) ? $path . '.min' . $file_type : $path . $file_type;
             $path = $directory_uri . $enqueue;
 
-            $active_extras['version'] = filemtime($directory . $enqueue);
+            $version = filemtime($directory . $enqueue);
         }
 
         if ($file_type == '.css') {
@@ -88,7 +87,7 @@ if (!function_exists('lukio_enqueue')) {
                 $name,
                 $path,
                 $deps,
-                $active_extras['version'],
+                $version,
                 $active_extras['media']
             );
         } else {
@@ -96,7 +95,7 @@ if (!function_exists('lukio_enqueue')) {
                 $name,
                 $path,
                 $deps,
-                $active_extras['version'],
+                $version,
                 $active_extras['in_footer']
             );
         }

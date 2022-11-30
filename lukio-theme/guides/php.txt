@@ -19,7 +19,6 @@ Lukio PHP guide:
                                         'parent' => for parent theme enqueue, default false.
                                         'in_footer' => for script enqueue in the footer, default true.
                                         'media' => for style enqueue media type, default 'all'.
-                                        'version' => version to set in the enqueue when its a url, default '1.0'
                                         ]
 
         lukio_footer_credit($dark_mode = false, $eng = false)
@@ -28,25 +27,13 @@ Lukio PHP guide:
             @param Bool $dark_mode - [optional] to use dark mode. default false
             @param Bool $eng - [optional] to use english text. default false
 
-        function lukio_remove_p_tags($string)
-            Remove <p> tags from string
-    
-            @param String $string [requierd] string to remove tags from
-            @return String cleared string
-
-        lukio_remove_br_tags($string)
-            Remove <br> tags from string
-
-            @param String $string [requierd] string to remove tags from
-            @return String cleared string
-
         lukio_get_cf7_form($form_id)
             Get and clean <p> and <br> tags from a CF7 contact form
  
             @param Number $form_id [requierd] form id to get
             @return String clean cf7 form string
 
-        lukio_create_whatsapp_link_url
+        lukio_create_whatsapp_link_url($number, $text = '')
             Create a url for a whatsapp link
 
             @param Number|String $number [optional] international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
