@@ -118,12 +118,13 @@ if (!function_exists('lukio_woocommerce_refresh_mini_cart')) {
         woocommerce_mini_cart();
         $fragment = ob_get_clean();
         $extra = array();
+        $cart = WC()->cart;
 
         echo json_encode(array(
             'fragment' => $fragment,
             'items_count' => array(
-                'all' => WC()->cart->get_cart_contents_count(),
-                'unique' => count(WC()->cart->get_cart()),
+                'all' => $cart->get_cart_contents_count(),
+                'unique' => count($cart->get_cart()),
             ),
             'extra' => apply_filters('lukio_woocommerce_refresh_mini_cart_extra', $extra)
         ));
