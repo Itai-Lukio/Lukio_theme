@@ -104,6 +104,8 @@ add_action('lukio_theme_updated', 'lukio_create_options');
 if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
     /**
      * upgrade from the acf option to lukio option when needed
+     * 
+     * @author Itai Dotan
      */
     function lukio_upgrade_from_acf_to_menu()
     {

@@ -56,11 +56,15 @@ if (!function_exists('lukio_enqueue')) {
         if ($file_enqueue) {
             // setup for local file enqueue
 
-            global $lukio_enqueue_admin_status;
-            // set $lukio_enqueue_admin_status if not set yet
-            if (!isset($lukio_enqueue_admin_status)) {
-                $allowed_roles = array('administrator');
-                $lukio_enqueue_admin_status = count(array_intersect($allowed_roles, wp_get_current_user()->roles)) > 0;
+            global $lukio_enqueue_disable_min;
+            // set $lukio_enqueue_disable_min if not set yet
+            if (!isset($lukio_enqueue_disable_min)) {
+                // check the option if set to be disabled
+                if (get_option('lukio_disable_enqueue_min')) {
+                    $lukio_enqueue_disable_min = true;
+                } else {
+                    $lukio_enqueue_disable_min = in_array('administrator', wp_get_current_user()->roles);
+                }
             }
 
             // setup the file path and uri path
@@ -76,7 +80,7 @@ if (!function_exists('lukio_enqueue')) {
             $path = substr($path, 0, $path_sub_offset);
 
             // set the enqueue path
-            $enqueue = (!$lukio_enqueue_admin_status && file_exists($directory . $path . '.min' . $file_type)) ? $path . '.min' . $file_type : $path . $file_type;
+            $enqueue = (!$lukio_enqueue_disable_min && file_exists($directory . $path . '.min' . $file_type)) ? $path . '.min' . $file_type : $path . $file_type;
             $path = $directory_uri . $enqueue;
 
             $version = filemtime($directory . $enqueue);

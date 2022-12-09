@@ -142,7 +142,7 @@ if (!function_exists('lukio_create_options')) {
      */
     function lukio_create_options()
     {
-        $options = ['pixels_head', 'pixels_body', 'site_colors'];
+        $options = ['pixels_head', 'pixels_body', 'site_colors', 'disable_enqueue_min'];
         $prefix = 'lukio_';
         foreach ($options as $option) {
             if (!get_option($prefix . $option)) {
@@ -171,7 +171,9 @@ if (!function_exists('lukio_theme_setup_enqueues')) {
                 'ajax_url' => admin_url('admin-ajax.php'),
             )
         );
-        lukio_enqueue('/assets/css/site_colors.css', 'lukio_site_colors');
+        if (file_exists(get_stylesheet_directory() . '/assets/css/site_colors.css')) {
+            lukio_enqueue('/assets/css/site_colors.css', 'lukio_site_colors');
+        };
     }
 }
 add_action('wp_enqueue_scripts', 'lukio_theme_setup_enqueues');
