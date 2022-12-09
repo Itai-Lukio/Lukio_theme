@@ -95,18 +95,8 @@ if (!function_exists('lukio_check_upgrade_completed')) {
 }
 add_action('upgrader_process_complete', 'lukio_check_upgrade_completed', 10, 2);
 
-if (!function_exists('lukio_update_custom_role')) {
-    /**
-     * add a single schedule to update the lukio custom role
-     * 
-     * @author Itai Dotan
-     */
-    function lukio_update_custom_role()
-    {
-        wp_schedule_single_event(time(), 'lukio_custom_user_role_cron');
-    }
-}
-add_action('lukio_theme_updated', 'lukio_update_custom_role');
+// trigger the custom user role to run after an update
+add_action('lukio_theme_updated', 'lukio_custom_user_role');
 
 // trigger the option create to make sure they are created
 add_action('lukio_theme_updated', 'lukio_create_options');
@@ -140,7 +130,10 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
             if ($acf_site_colors && is_array($acf_site_colors) && $acf_site_colors[0]['css_name'] != 'lukio_updated') {
                 $site_colors = [];
                 foreach ($acf_site_colors as $row) {
-                    $site_colors[$row['css_name']] = $row['color'];
+                    $site_colors[] = array(
+                        'css_name' => $row['css_name'],
+                        'color' => $row['color'],
+                    );
                 }
                 update_option('lukio_site_colors', json_encode($site_colors));
                 update_field('lukio_site_colors', array(

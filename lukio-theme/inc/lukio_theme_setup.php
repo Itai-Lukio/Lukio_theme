@@ -111,7 +111,6 @@ if (!function_exists('lukio_custom_user_role')) {
      */
     function lukio_custom_user_role()
     {
-
         $site_manager = add_role('site_manager', __('Site manager', 'lukio-theme'), []);
         global $wp_roles;
         if (is_null($site_manager)) {
@@ -136,8 +135,6 @@ if (!function_exists('lukio_custom_user_role')) {
     }
 }
 add_action('after_switch_theme', 'lukio_custom_user_role');
-// hook for cron on theme update
-add_action('lukio_custom_user_role_cron', 'lukio_custom_user_role');
 
 if (!function_exists('lukio_create_options')) {
     /**

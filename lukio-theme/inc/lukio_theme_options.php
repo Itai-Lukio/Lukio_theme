@@ -33,12 +33,12 @@ if (!function_exists('lukio_theme_option_page_callable')) {
         <?php
         $colors_options = get_option('lukio_site_colors');
         $colors_options =  $colors_options != '' ? json_decode($colors_options) : array();
-        foreach ($colors_options as $css_name => $color) {
+        foreach ($colors_options as $index => $per) {
             $edit_name = (in_array('administrator', wp_get_current_user()->roles)) ? true : false;
         ?>
             <div>
-                <input type="text" class="lukio_theme_option_css_name" name="css_name[]" value="<?php echo $css_name; ?>" <?php echo !$edit_name ? ' disabled' : ''; ?>>
-                <input type="text" class="lukio_theme_option_color_picker" name="color[]" id="button_color" value="<?php echo $color; ?>" autocomplete="off">
+                <input type="text" class="lukio_theme_option_css_name" name="css_name[]" value="<?php echo $per->css_name; ?>" <?php echo !$edit_name ? ' disabled' : ''; ?>>
+                <input type="text" class="lukio_theme_option_color_picker" name="color[]" id="button_color" value="<?php echo $per->color; ?>" autocomplete="off">
             </div>
 <?php
         }
