@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) {
 // Require Extras files
 require_once __DIR__ . '/inc/lukio_helpers.php';
 require_once __DIR__ . '/inc/lukio_theme_setup.php';
+require_once __DIR__ . '/inc/lukio_theme_options.php';
 require_once __DIR__ . '/inc/lukio_svg_support.php';
 require_once __DIR__ . '/inc/lukio_theme_update.php';
 

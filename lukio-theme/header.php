@@ -34,11 +34,11 @@ $header_markup = ob_get_clean();
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
     <link rel="profile" href="http://gmpg.org/xfn/11">
     <?php wp_head(); ?>
-    <?php echo ($acf_pixels_data && $acf_pixels_data['head_scripts'] != '') ? $acf_pixels_data['head_scripts'] : ''; ?>
+    <?php echo get_option('lukio_pixels_head'); ?>
 </head>
 
 <body <?php body_class(); ?>>
-    <?php echo ($acf_pixels_data && $acf_pixels_data['body_opening_scripts'] != '') != '' ? $acf_pixels_data['body_opening_scripts'] : ''; ?>
+    <?php echo get_option('lukio_pixels_body'); ?>
     <?php do_action('wp_body_open'); ?>
     <div id="page" class="site">
 

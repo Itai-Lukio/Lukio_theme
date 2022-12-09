@@ -139,6 +139,23 @@ add_action('after_switch_theme', 'lukio_custom_user_role');
 // hook for cron on theme update
 add_action('lukio_custom_user_role_cron', 'lukio_custom_user_role');
 
+if (!function_exists('lukio_create_options')) {
+    /**
+     * create lukio options when there are not been created yet
+     */
+    function lukio_create_options()
+    {
+        $options = ['pixels_head', 'pixels_body', 'site_colors'];
+        $prefix = 'lukio_';
+        foreach ($options as $option) {
+            if (!get_option($prefix . $option)) {
+                add_option($prefix . $option);
+            }
+        }
+    }
+}
+add_action('after_switch_theme', 'lukio_create_options');
+
 if (!function_exists('lukio_theme_setup_enqueues')) {
     /**
      * enqueue the theme base styles and scripts
@@ -306,6 +323,7 @@ if (!function_exists('lukio_load_base_acf_fields')) {
     /**
      * add the acf-JSON folder of the parent theme when using a child theme
      * 
+     * @deprecated deprecated since version 1.0.5
      * @author Itai Dotan
      */
     function lukio_load_base_acf_fields($paths)
@@ -316,7 +334,8 @@ if (!function_exists('lukio_load_base_acf_fields')) {
         return $paths;
     }
 }
-add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');
+// deprecated and now using lukio options
+// add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');
 
 if (!function_exists('lukio_acf_custom_fields_tab_restriction')) {
     /**
@@ -335,6 +354,7 @@ if (!function_exists('lukio_acf_root_colors')) {
     /**
      * create and update the site colors css from acf
      * 
+     * @deprecated  deprecated since version 1.0.5
      * @author Itai Dotan
      */
     function lukio_acf_root_colors($value, $post_id, $field, $original)
@@ -351,12 +371,14 @@ if (!function_exists('lukio_acf_root_colors')) {
         return $value;
     }
 }
-add_filter('acf/update_value/name=lukio_site_colors', 'lukio_acf_root_colors', 10, 4);
+// deprecated and now using lukio options
+// add_filter('acf/update_value/name=lukio_site_colors', 'lukio_acf_root_colors', 10, 4);
 
 if (!function_exists('lukio_acf_root_colors_allow_name_change')) {
     /**
      * allow only admin to change the name for the 'lukio_site_colors' name
      * 
+     * @deprecated deprecated since version 1.0.5 
      * @author Itai Dotan
      */
     function lukio_acf_root_colors_allow_name_change($field)
@@ -370,12 +392,14 @@ if (!function_exists('lukio_acf_root_colors_allow_name_change')) {
         return $field;
     }
 }
-add_filter('acf/prepare_field/name=lukio_site_colors', 'lukio_acf_root_colors_allow_name_change');
+// deprecated and now using lukio options
+// add_filter('acf/prepare_field/name=lukio_site_colors', 'lukio_acf_root_colors_allow_name_change');
 
 if (!function_exists('lukio_acf_root_colors_disable_repeater_buttons')) {
     /**
      * add css to the theme setup option page to not 'administrator' user in order to disable the repeater row buttons
      * 
+     * @deprecated deprecated since version 1.0.5
      * @author Itai Dotan 
      */
     function lukio_acf_root_colors_disable_repeater_buttons()
@@ -385,4 +409,5 @@ if (!function_exists('lukio_acf_root_colors_disable_repeater_buttons')) {
         };
     }
 }
-add_action('admin_enqueue_scripts', 'lukio_acf_root_colors_disable_repeater_buttons');
+// deprecated and now using lukio options
+// add_action('admin_enqueue_scripts', 'lukio_acf_root_colors_disable_repeater_buttons');
