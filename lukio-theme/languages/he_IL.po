@@ -7,16 +7,45 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-12 17:47+0200\n"
-"PO-Revision-Date: 2022-08-12 17:49+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2022-12-10 20:20+0200\n"
+"PO-Revision-Date: 2022-12-10 20:21+0200\n"
+"Last-Translator: Itai Dotan <itai@lukio.pro>\n"
+"Language-Team: \n"
+"Language: he_IL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: plurals=2; plural=(n > 1)\n"
-"X-Generator: Eazy Po 1.0.0.0\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
+"2 : 3);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: inc/lukio_theme_options.php:25 inc/lukio_theme_options.php:26
+msgid "Lukio options"
+msgstr "אפשרויות לוקיו"
+
+#: inc/lukio_theme_options.php:71
+msgid "Disable enqueue min files"
+msgstr "ביטול קבצי מיני"
+
+#: inc/lukio_theme_options.php:82
+msgid "Site colors"
+msgstr "צבעי אתר"
+
+#: inc/lukio_theme_options.php:83
+msgid "Pixels"
+msgstr "פיקסלס"
+
+#: inc/lukio_theme_options.php:94 inc/lukio_theme_options.php:120
+msgid "Remove row"
+msgstr "הורדת שורה"
+
+#: inc/lukio_theme_options.php:130
+msgid "Add row"
+msgstr "הוספת שורה"
+
+#: inc/lukio_theme_options.php:145
+msgid "Save options"
+msgstr "שמור אפשרויות"
 
 #: inc/lukio_theme_setup.php:55
 msgid "Header menu"
@@ -26,12 +55,13 @@ msgstr "תפריט האדר"
 msgid "Footer menu"
 msgstr "תפריט פוטר"
 
-#: inc/lukio_theme_setup.php:112
+#: inc/lukio_theme_setup.php:114
 msgid "Site manager"
 msgstr "מנהל אתר"
 
-#: inc/lukio_theme_setup.php:225 inc/lukio_theme_setup.php:230
-#: inc/lukio_theme_setup.php:240
+#: inc/lukio_theme_setup.php:257 inc/lukio_theme_setup.php:262
+#: inc/lukio_theme_setup.php:272 inc/lukio_woocommerce_setup.php:55
+#: inc/lukio_woocommerce_setup.php:61 inc/lukio_woocommerce_setup.php:71
 msgid "guide"
 msgid_plural "guides"
 msgstr[0] "מדריך"
@@ -39,6 +69,24 @@ msgstr[1] "מדריכים"
 msgstr[2] "מדריכים"
 msgstr[3] "מדריכים"
 
-#: inc/lukio_theme_setup.php:292 inc/lukio_theme_setup.php:293
+#: inc/lukio_theme_setup.php:310 inc/lukio_theme_setup.php:311
 msgid "Theme Setup"
 msgstr "הגדרות תבנית"
+
+#~ msgid "Lukio's base theme"
+#~ msgstr "תבנית בסיס של לוקיו"
+
+#~ msgid "Itai Dotan @lukio"
+#~ msgstr "איתי דותן @לוקיו"
+
+#~ msgid "@Lukio"
+#~ msgstr "@לוקיו"
+
+#~ msgid "Lukio theme"
+#~ msgstr "תבנית לוקיו"
+
+#~ msgid "Clean theme"
+#~ msgstr "תבנית נקיה"
+
+#~ msgid "Clean theme, Base theme, Very good"
+#~ msgstr "תבנית נקיה, תבנית בסיס, מאוד טוב"

@@ -48,4 +48,14 @@ jQuery(document).ready(function ($) {
         update_color_loop_count();
         activate_color_picker();
     });
+
+    $('.lukio_theme_option_tab').on('click', function () {
+        let tab = $(this);
+        if (tab.hasClass('active')) {
+            return;
+        }
+        let new_tab_index = tab.data('tab');
+        $('.lukio_theme_option_tab.active, .lukio_theme_option_tab_content.active').removeClass('active');
+        $(`.lukio_theme_option_tab[data-tab="${new_tab_index}"], .lukio_theme_option_tab_content[data-tab="${new_tab_index}"]`).addClass('active');
+    });
 });

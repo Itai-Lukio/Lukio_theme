@@ -62,12 +62,14 @@ class Lukio_Theme_Options
         // run the save function to save when posted
         $this->lukio_theme_option_save($colors_options, $full_access_bool);
 ?>
+        <h1><?php echo get_admin_page_title(); ?></h1>
+
         <form class="lukio_theme_option_form" method="POST">
             <?php
             if ($full_access_bool) {
                 // output the enqueue switch
             ?>
-                <div>
+                <div class="lukio_theme_option_enqueue_switch_wrapper">
                     <span><?php echo __('Disable enqueue min files', 'lukio-theme'); ?></span>
                     <label class="lukio_theme_option_enqueue_switch">
                         <input class="lukio_theme_option_enqueue_switch_input" type="checkbox" name="lukio_disable_enqueue_min" autocomplete="off" <?php echo (bool)get_option('lukio_disable_enqueue_min') ? ' checked' : ''; ?>>
@@ -78,12 +80,12 @@ class Lukio_Theme_Options
             }
             ?>
 
-            <div class="lukio_theme_option_pixels_wrappair">
-                <textarea name="lukio_pixels_head" cols="30" rows="10"><?php echo get_option('lukio_pixels_head'); ?></textarea>
-                <textarea name="lukio_pixels_body" cols="30" rows="10"><?php echo get_option('lukio_pixels_body'); ?></textarea>
-            </div>
+            <ul class="lukio_theme_option_tabs_wrapper">
+                <li class="lukio_theme_option_tab active" data-tab="0"><?php echo __('Site colors', 'lukio-theme'); ?></li>
+                <li class="lukio_theme_option_tab" data-tab="1"><?php echo __('Pixels', 'lukio-theme'); ?></li>
+            </ul>
 
-            <div class="lukio_theme_option_colors_wrappair">
+            <div class="lukio_theme_option_tab_content active" data-tab="0">
                 <?php
                 if ($full_access_bool) {
                     // output color row templete to be used when adding a new row
@@ -108,7 +110,7 @@ class Lukio_Theme_Options
                         } else {
                             // display name when not editable
                         ?>
-                            <span><?php echo $pair['css_name']; ?></span>
+                            <span class="lukio_theme_option_css_name"><?php echo $pair['css_name']; ?></span>
                         <?php
                         }
                         ?>
@@ -133,6 +135,11 @@ class Lukio_Theme_Options
                 ?>
 
                 <input type="hidden" id="lukio_theme_option_loop_count" name="loop_count" value="<?php echo count($colors_options); ?>" autocomplete="off">
+            </div>
+
+            <div class="lukio_theme_option_tab_content" data-tab="1">
+                <textarea class="lukio_theme_option_pixels_textarea" name="lukio_pixels_head" cols="30" rows="10"><?php echo get_option('lukio_pixels_head'); ?></textarea>
+                <textarea class="lukio_theme_option_pixels_textarea" name="lukio_pixels_body" cols="30" rows="10"><?php echo get_option('lukio_pixels_body'); ?></textarea>
             </div>
 
             <input type="hidden" name="action" value="lukio_theme_option_save">

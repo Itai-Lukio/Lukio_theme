@@ -1,4 +1,14 @@
+.lukio_theme_option_form {
+    margin-top: 10px;
+    width: 95%;
+}
+
+.lukio_theme_option_enqueue_switch_wrapper {
+    margin-bottom: 8px;
+}
+
 .lukio_theme_option_enqueue_switch {
+    margin-inline-start: 6px;
     position: relative;
     display: inline-block;
     width: 50px;
@@ -51,21 +61,62 @@ input[type="checkbox"].lukio_theme_option_enqueue_switch_input {
     transform: translateX(22px);
 }
 
-.lukio_theme_option_colors_wrappair {
-    width: max-content;
+.lukio_theme_option_tabs_wrapper {
+    margin: 0 0 -1px;
+    list-style: none;
+    padding: 0 10px;
+}
+
+.lukio_theme_option_tab {
+    margin: 0;
+    margin-inline-end: 5px;
+    display: inline-block;
+    padding: 10px 5px;
+    font-weight: 600;
+    border: solid 1px #cccccc;
+    background: #e6e6e6;
+    cursor: pointer;
+}
+
+.lukio_theme_option_tab.active {
+    background-color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.lukio_theme_option_tab_content {
+    display: none;
+    width: 100%;
     margin-bottom: 15px;
+    padding: 15px 20px;
+    border: solid 1px #cccccc;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+.lukio_theme_option_tab_content.active {
+    display: block;
+}
+
+.lukio_theme_option_css_name {
+    width: 100%;
+}
+
+input.lukio_theme_option_css_name {
+    direction: ltr;
 }
 
 .lukio_theme_option_color_pair {
-    width: 100%;
+    padding: 5px 10px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     gap: 15px;
+    border: solid 1px #ccc;
+    border-bottom: none;
 }
 
-.lukio_theme_option_color_pair:not(:last-of-type) {
-    margin-bottom: 10px;
+.lukio_theme_option_color_pair:last-of-type {
+    border-bottom: solid 1px #cccccc;
 }
 
 .lukio_theme_option_color_pair .wp-picker-container .wp-color-result.button {
@@ -92,4 +143,26 @@ input[type="checkbox"].lukio_theme_option_enqueue_switch_input {
 
 .lukio_theme_option_add_row.button {
     margin-top: 8px;
+}
+
+.lukio_theme_option_pixels_textarea {
+    width: 100%;
+}
+
+.lukio_theme_option_pixels_textarea:not(:last-of-type) {
+    margin-bottom: 10px;
+}
+
+@media screen and (min-width:1024px) {
+    .lukio_theme_option_form {
+        max-width: 1200px;
+    }
+
+    .lukio_theme_option_color_pair {
+        flex-direction: row;
+    }
+
+    .lukio_theme_option_css_name {
+        width: 200px;
+    }
 }

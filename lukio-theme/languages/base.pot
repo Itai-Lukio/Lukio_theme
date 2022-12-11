@@ -8,15 +8,44 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-12 17:41+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2022-12-10 20:20+0200\n"
+"PO-Revision-Date: 2022-12-10 20:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Eazy Po 1.0.0.0\n"
+
+#: inc/lukio_theme_options.php:25 inc/lukio_theme_options.php:26
+msgid "Lukio options"
+msgstr ""
+
+#: inc/lukio_theme_options.php:71
+msgid "Disable enqueue min files"
+msgstr ""
+
+#: inc/lukio_theme_options.php:82
+msgid "Site colors"
+msgstr ""
+
+#: inc/lukio_theme_options.php:83
+msgid "Pixels"
+msgstr ""
+
+#: inc/lukio_theme_options.php:94 inc/lukio_theme_options.php:120
+msgid "Remove row"
+msgstr ""
+
+#: inc/lukio_theme_options.php:130
+msgid "Add row"
+msgstr ""
+
+#: inc/lukio_theme_options.php:145
+msgid "Save options"
+msgstr ""
 
 #: inc/lukio_theme_setup.php:55
 msgid "Header menu"
@@ -26,17 +55,24 @@ msgstr ""
 msgid "Footer menu"
 msgstr ""
 
-#: inc/lukio_theme_setup.php:112
+#: inc/lukio_theme_setup.php:114
 msgid "Site manager"
 msgstr ""
 
-#: inc/lukio_theme_setup.php:225 inc/lukio_theme_setup.php:230
-#: inc/lukio_theme_setup.php:240
+#: inc/lukio_theme_setup.php:257 inc/lukio_theme_setup.php:262
+#: inc/lukio_theme_setup.php:272 inc/lukio_woocommerce_setup.php:55
+#: inc/lukio_woocommerce_setup.php:61 inc/lukio_woocommerce_setup.php:71
 msgid "guide"
 msgid_plural "guides"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/lukio_theme_setup.php:292 inc/lukio_theme_setup.php:293
+#: inc/lukio_theme_setup.php:310 inc/lukio_theme_setup.php:311
 msgid "Theme Setup"
 msgstr ""
+
+#~ msgid "Lukio's base theme"
+#~ msgstr ""
+
+#~ msgid "Itai Dotan @lukio"
+#~ msgstr ""
