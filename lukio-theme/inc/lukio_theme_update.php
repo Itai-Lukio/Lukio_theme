@@ -88,12 +88,25 @@ if (!function_exists('lukio_check_upgrade_completed')) {
      */
     function lukio_check_upgrade_completed($upgrader_object, $options)
     {
-        if ($options['action'] == 'update' && $options['type'] == 'theme' && $options['themes'] == [get_template()]) {
-            do_action('lukio_theme_updated');
+        if ($options['action'] == 'update' && $options['type'] == 'theme' && in_array(get_template(), $options['themes'])) {
+            wp_schedule_single_event(time(), 'lukio_theme_trigger_updated');
         }
     }
 }
 add_action('upgrader_process_complete', 'lukio_check_upgrade_completed', 10, 2);
+
+if (!function_exists('lukio_theme_trigger_upgrade_completed_hooks')) {
+    /**
+     * scheduled task to run after theme update. trigger all actions hooked to 'lukio_theme_updated'
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_theme_trigger_upgrade_completed_hooks()
+    {
+        do_action('lukio_theme_updated');
+    }
+}
+add_action('lukio_theme_trigger_updated', 'lukio_theme_trigger_upgrade_completed_hooks');
 
 // trigger the custom user role to run after an update
 add_action('lukio_theme_updated', 'lukio_custom_user_role');
@@ -109,43 +122,53 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
      */
     function lukio_upgrade_from_acf_to_menu()
     {
+        $old_theme_option = get_template_directory() . '/acf-json/group_62c6f6db79755.json';
         // make sure acf is active
-        if (function_exists('get_field')) {
-            $acf_pixels_data = get_field('pixels', 'options');
-            $pixels = array(
-                'head_scripts' => 'lukio_pixels_head',
-                'body_opening_scripts' => 'lukio_pixels_body',
-            );
-            // upgrade the pixels if needed
-            foreach ($pixels as $acf_key => $option) {
-                // get the acf option and updated to lukio option when havent done it before
-                if ($acf_pixels_data && $acf_pixels_data[$acf_key] != 'lukio_updated') {
-                    update_option($option, $acf_pixels_data[$acf_key]);
-                    $acf_pixels_data[$acf_key] = 'lukio_updated';
-                    // set the acf option as been upgraded
-                    update_field('pixels', $acf_pixels_data, 'options');
-                }
-            }
+        if (!function_exists('get_field') && !file_exists($old_theme_option)) {
+            return;
+        }
 
-            // upgrade the site_colors if needed
-            $acf_site_colors = get_field('lukio_site_colors', 'options');
-            if ($acf_site_colors && is_array($acf_site_colors) && $acf_site_colors[0]['css_name'] != 'lukio_updated') {
-                $site_colors = [];
-                foreach ($acf_site_colors as $row) {
-                    $site_colors[] = array(
-                        'css_name' => $row['css_name'],
-                        'color' => $row['color'],
-                    );
-                }
-                update_option('lukio_site_colors', json_encode($site_colors));
-                update_field('lukio_site_colors', array(
-                    array(
-                        'css_name' => 'lukio_updated',
-                        'color' => 'lukio_updated',
-                    )
-                ), 'options');
+        $acf_pixels_data = get_field('pixels', 'options');
+        $test = fopen(get_stylesheet_directory() . '/acf.txt', 'w');
+        ob_start();
+        var_dump($acf_pixels_data);
+        fwrite($test, ob_get_clean());
+        fclose($test);
+        $pixels = array(
+            'head_scripts' => 'lukio_pixels_head',
+            'body_opening_scripts' => 'lukio_pixels_body',
+        );
+        // upgrade the pixels if needed
+        foreach ($pixels as $acf_key => $option) {
+            // get the acf option and updated to lukio option when havent done it before
+            if ($acf_pixels_data && $acf_pixels_data[$acf_key] != 'lukio_updated') {
+                update_option($option, $acf_pixels_data[$acf_key]);
+                $acf_pixels_data[$acf_key] = 'lukio_updated';
+                // set the acf option as been upgraded
+                update_field('pixels', $acf_pixels_data, 'options');
             }
         }
+
+        // upgrade the site_colors if needed
+        $acf_site_colors = get_field('lukio_site_colors', 'options');
+        if ($acf_site_colors && is_array($acf_site_colors) && $acf_site_colors[0]['css_name'] != 'lukio_updated') {
+            $site_colors = [];
+            foreach ($acf_site_colors as $row) {
+                $site_colors[] = array(
+                    'css_name' => $row['css_name'],
+                    'color' => $row['color'],
+                );
+            }
+            update_option('lukio_site_colors', json_encode($site_colors));
+            update_field('lukio_site_colors', array(
+                array(
+                    'css_name' => 'lukio_updated',
+                    'color' => 'lukio_updated',
+                )
+            ), 'options');
+        }
+
+        rename($old_theme_option, $old_theme_option . '-deprecated');
     }
 }
 add_action('lukio_theme_updated', 'lukio_upgrade_from_acf_to_menu', 20);

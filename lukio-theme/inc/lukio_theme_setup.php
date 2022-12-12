@@ -322,19 +322,18 @@ if (!function_exists('lukio_load_base_acf_fields')) {
     /**
      * add the acf-JSON folder of the parent theme when using a child theme
      * 
-     * @deprecated deprecated since version 1.0.5
      * @author Itai Dotan
      */
     function lukio_load_base_acf_fields($paths)
     {
-        if (get_template_directory() !== get_stylesheet_directory()) {
-            array_push($paths, get_template_directory() . '/acf-json');
+        $template_directory = get_template_directory();
+        if ($template_directory !== get_stylesheet_directory()) {
+            array_push($paths, $template_directory . '/acf-json');
         }
         return $paths;
     }
 }
-// deprecated and now using lukio options
-// add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');
+add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');
 
 if (!function_exists('lukio_acf_custom_fields_tab_restriction')) {
     /**
@@ -348,65 +347,3 @@ if (!function_exists('lukio_acf_custom_fields_tab_restriction')) {
     }
 }
 add_filter('acf/settings/capability', 'lukio_acf_custom_fields_tab_restriction');
-
-if (!function_exists('lukio_acf_root_colors')) {
-    /**
-     * create and update the site colors css from acf
-     * 
-     * @deprecated  deprecated since version 1.0.5
-     * @author Itai Dotan
-     */
-    function lukio_acf_root_colors($value, $post_id, $field, $original)
-    {
-        $base_path = get_stylesheet_directory() . '/assets/css/site_colors.css';
-        $file = fopen($base_path, "w");
-        fwrite($file, ":root{\n");
-        foreach ($original as $row) {
-            $data = array_values($row);
-            fwrite($file, $data[0] . ': ' . $data[1] . ";\n");
-        }
-        fwrite($file, "}\n");
-        fclose($file);
-        return $value;
-    }
-}
-// deprecated and now using lukio options
-// add_filter('acf/update_value/name=lukio_site_colors', 'lukio_acf_root_colors', 10, 4);
-
-if (!function_exists('lukio_acf_root_colors_allow_name_change')) {
-    /**
-     * allow only admin to change the name for the 'lukio_site_colors' name
-     * 
-     * @deprecated deprecated since version 1.0.5 
-     * @author Itai Dotan
-     */
-    function lukio_acf_root_colors_allow_name_change($field)
-    {
-        $allowed_roles = array('administrator');
-        $admin_status = count(array_intersect($allowed_roles, wp_get_current_user()->roles)) > 0;
-        if (!$admin_status) {
-            $field['sub_fields'][0]['readonly'] = true;
-        }
-
-        return $field;
-    }
-}
-// deprecated and now using lukio options
-// add_filter('acf/prepare_field/name=lukio_site_colors', 'lukio_acf_root_colors_allow_name_change');
-
-if (!function_exists('lukio_acf_root_colors_disable_repeater_buttons')) {
-    /**
-     * add css to the theme setup option page to not 'administrator' user in order to disable the repeater row buttons
-     * 
-     * @deprecated deprecated since version 1.0.5
-     * @author Itai Dotan 
-     */
-    function lukio_acf_root_colors_disable_repeater_buttons()
-    {
-        if (strpos(get_current_screen()->base, 'theme-setup') !== false && !(count(array_intersect(array('administrator'), wp_get_current_user()->roles)) > 0)) {
-            lukio_enqueue('/assets/css/lukio_theme_setup_page.css', 'lukio_theme_setup_page_stylesheet', array(), array('parent' => true));
-        };
-    }
-}
-// deprecated and now using lukio options
-// add_action('admin_enqueue_scripts', 'lukio_acf_root_colors_disable_repeater_buttons');
