@@ -123,17 +123,12 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
     function lukio_upgrade_from_acf_to_menu()
     {
         $old_theme_option = get_template_directory() . '/acf-json/group_62c6f6db79755.json';
-        // make sure acf is active
-        if (!function_exists('get_field') && !file_exists($old_theme_option)) {
+        // make sure acf is active and the old group json exists
+        if (!function_exists('get_field') || !file_exists($old_theme_option)) {
             return;
         }
 
         $acf_pixels_data = get_field('pixels', 'options');
-        $test = fopen(get_stylesheet_directory() . '/acf.txt', 'w');
-        ob_start();
-        var_dump($acf_pixels_data);
-        fwrite($test, ob_get_clean());
-        fclose($test);
         $pixels = array(
             'head_scripts' => 'lukio_pixels_head',
             'body_opening_scripts' => 'lukio_pixels_body',
@@ -168,7 +163,7 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
             ), 'options');
         }
 
-        rename($old_theme_option, $old_theme_option . '-deprecated');
+        rename($old_theme_option, $old_theme_option . '.deprecated');
     }
 }
 add_action('lukio_theme_updated', 'lukio_upgrade_from_acf_to_menu', 20);
