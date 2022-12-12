@@ -123,8 +123,9 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
     function lukio_upgrade_from_acf_to_menu()
     {
         $old_theme_option = get_template_directory() . '/acf-json/group_62c6f6db79755.json';
-        // make sure acf is active and the old group json exists
-        if (!function_exists('get_field') || !file_exists($old_theme_option)) {
+
+        // make sure acf is active
+        if (!function_exists('get_field')) {
             return;
         }
 
