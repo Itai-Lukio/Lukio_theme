@@ -129,7 +129,7 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
         // upgrade the pixels if needed and delete the old option
         foreach ($pixels as $acf_key => $option) {
             $pixel_option = get_option($acf_key);
-            if ($pixel_option) {
+            if ($pixel_option && $pixel_option != 'lukio_updated') {
                 update_option($option, $pixel_option);
                 delete_option($acf_key);
             }
@@ -137,7 +137,7 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
 
         // upgrade the site_colors if needed and delete the old option
         $acf_site_colors_count = (int)get_option('options_lukio_site_colors');
-        if ($acf_site_colors_count) {
+        if ($acf_site_colors_count && $acf_site_colors_count != 'lukio_updated') {
             $site_colors = [];
             for ($i = 0; $i < $acf_site_colors_count; $i++) {
                 $site_colors[] = array(
