@@ -318,23 +318,6 @@ if (function_exists('acf_add_options_page')) {
     });
 }
 
-if (!function_exists('lukio_load_base_acf_fields')) {
-    /**
-     * add the acf-JSON folder of the parent theme when using a child theme
-     * 
-     * @author Itai Dotan
-     */
-    function lukio_load_base_acf_fields($paths)
-    {
-        $template_directory = get_template_directory();
-        if ($template_directory !== get_stylesheet_directory()) {
-            array_push($paths, $template_directory . '/acf-json');
-        }
-        return $paths;
-    }
-}
-add_filter('acf/settings/load_json', 'lukio_load_base_acf_fields');
-
 if (!function_exists('lukio_acf_custom_fields_tab_restriction')) {
     /**
      * make it so only 'administrator' user can see the custom fields tab and edit its content
