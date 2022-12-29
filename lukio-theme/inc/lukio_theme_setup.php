@@ -139,6 +139,8 @@ add_action('after_switch_theme', 'lukio_custom_user_role');
 if (!function_exists('lukio_create_options')) {
     /**
      * create lukio options when there are not been created yet
+     * 
+     * @author Itai Dotan
      */
     function lukio_create_options()
     {

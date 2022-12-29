@@ -44,6 +44,8 @@ if (!function_exists('lukio_woocommerce_admin_bar_guides')) {
     /**
      * add woocommerce guides to the admin bar
      * 
+     * @param WP_Admin_Bar $wp_admin_bar The WP_Admin_Bar instance, passed by reference
+     * 
      * @author Itai Dotan
      */
     function lukio_woocommerce_admin_bar_guides($wp_admin_bar)
@@ -142,10 +144,10 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
      * templates/single-product/add-to-cart/filename.php
      * 
      * @param WC_Product $product [requierd] product the button is for
-     * @param String $class_str [optional] class string to add to the button
-     * @param String $btn_add_text [optional] text when the item is purchasable and in stock
-     * @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock
-     * @param String $html_tag [optional] html tag for the button output, default 'a'
+     * @param String $class_str [optional] class string to add to the button, default `''`
+     * @param String $btn_add_text [optional] text when the item is purchasable and in stock, default `''`
+     * @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock, default `''`
+     * @param String $html_tag [optional] html tag for the button output, default `a`
      * 
      * @author Itai Dotan
      */
@@ -298,9 +300,9 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
      * @param WC_Product $product [requierd] product object
      * @param String $cart_item_key [requierd] cart item key from the cart loop
      * @param Array $cart_item [requierd] cart item from the cart loop
-     * @param String $class_str [optional] class string to add to all parts
-     * @param String $minus_content [optional] markup to use in the minus button, default pre set svg
-     * @param String $plus_content [optional] markup to use in the plus button, default pre set svg
+     * @param String $class_str [optional] class string to add to all parts, default `''`
+     * @param String $minus_content [optional] markup to use in the minus button, default `pre set svg`
+     * @param String $plus_content [optional] markup to use in the plus button, default `pre set svg`
      * 
      * @author Itai Dotan
      */

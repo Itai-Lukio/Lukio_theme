@@ -12,9 +12,9 @@ Lukio woocommerce PHP guide:
             templates/single-product/add-to-cart/filename.php
 
             @param WC_Product $product [requierd] product the button is for
-            @param String $class_str [optional] class string to add to the button
-            @param String $btn_add_text [optional] text when the item is purchasable and in stock
-            @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock
+            @param String $class_str [optional] class string to add to the button, default ''
+            @param String $btn_add_text [optional] text when the item is purchasable and in stock, default ''
+            @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock, default ''
             @param String $html_tag [optional] html tag for the button output, default 'a'
 
         lukio_woocommerce_get_user_ip()
@@ -38,7 +38,7 @@ Lukio woocommerce PHP guide:
             @param WC_Product $product [requierd] product object
             @param String $cart_item_key [requierd] cart item key from the cart loop
             @param Array $cart_item [requierd] cart item from the cart loop
-            @param String $class_str [optional] class string to add to all parts
+            @param String $class_str [optional] class string to add to all parts, default ''
             @param String $minus_content [optional] markup to use in the minus button, default pre set svg
             @param String $plus_content [optional] markup to use in the plus button, default pre set svg
 

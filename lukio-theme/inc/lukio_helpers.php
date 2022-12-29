@@ -4,9 +4,11 @@ if (!function_exists('lukio_enqueue')) {
      * enqueue the given loacl script and stylesheet files or url. normal file for admin and min file for any one eles if exists.
      *
      * @param String $path [requierd] full file path inside the theme folder.
-     * @param String $name [optional] name to use in the enqueue, default null to use $path.
-     * @param Array $deps [optional] an array of registered dependents.
-     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default false. 'in_footer' => for script enqueue in the footer, default true. 'media' => for style enqueue media type, default 'all'.
+     * @param String $name [optional] name to use in the enqueue, default `null` to use $path.
+     * @param Array $deps [optional] an array of registered dependents, default `array()`
+     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default `false`.
+     *                                      'in_footer' => for script enqueue in the footer, default `true`. 
+     *                                      'media' => for style enqueue media type, default `all`.
      * 
      * @author Itai Dotan
      */
@@ -110,8 +112,8 @@ if (!function_exists('lukio_footer_credit')) {
     /**
      * echo the lukio credit.
      * 
-     * @param Bool $dark_mode [optional] to use dark mode. default false
-     * @param Bool $eng [optional] to use english text. default false
+     * @param Bool $dark_mode [optional] to use dark mode. default `false`
+     * @param Bool $eng [optional] to use english text. default `false`
      * 
      * @author Itai Dotan
      */
@@ -182,7 +184,7 @@ if (!function_exists('lukio_create_whatsapp_link_url')) {
      * Create a url for a whatsapp link
      * 
      * @param Number|String $number [optional] international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
-     * @param String $text [optional] default text for the whatsapp message. default '' for no message
+     * @param String $text [optional] default text for the whatsapp message. default `''` for no message
      * @return String whatsapp link uri
      * 
      * @author Itai Dotan
@@ -247,7 +249,7 @@ if (!function_exists('lukio_range_min_max')) {
      * @param Number $min [requierd] min value for the inputs
      * @param Number $max [requierd] max value fot the inputs
      * @param String $thumb_color [requierd] color of the range thumb
-     * @param String $format [optional] format for the display string, default '%d'
+     * @param String $format [optional] format for the display string, default `%d`
      * 
      * @author Itai Dotan
      */

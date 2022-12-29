@@ -81,8 +81,8 @@ if (!function_exists('lukio_check_upgrade_completed')) {
     /**
      * run when an update process is complete and when its for the update of the theme, do all action of the hook
      * 
-     * @param $upgrader_object Array
-     * @param $options Array
+     * @param Array $upgrader_object WP_Upgrader instance
+     * @param Array $options array of bulk item update data
      * 
      * @author Itai Dotan
      */
