@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-10 20:20+0200\n"
-"PO-Revision-Date: 2022-12-10 20:21+0200\n"
+"PO-Revision-Date: 2023-01-01 09:44+0200\n"
 "Last-Translator: Itai Dotan <itai@lukio.pro>\n"
 "Language-Team: \n"
 "Language: he_IL\n"
@@ -25,7 +25,7 @@ msgstr "אפשרויות לוקיו"
 
 #: inc/lukio_theme_options.php:71
 msgid "Disable enqueue min files"
-msgstr "ביטול קבצי מיני"
+msgstr "ביטול קבצי .min"
 
 #: inc/lukio_theme_options.php:82
 msgid "Site colors"
@@ -33,7 +33,7 @@ msgstr "צבעי אתר"
 
 #: inc/lukio_theme_options.php:83
 msgid "Pixels"
-msgstr "פיקסלס"
+msgstr "פיקסלים"
 
 #: inc/lukio_theme_options.php:94 inc/lukio_theme_options.php:120
 msgid "Remove row"
