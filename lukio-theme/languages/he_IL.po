@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-10 20:20+0200\n"
-"PO-Revision-Date: 2023-01-01 09:44+0200\n"
+"POT-Creation-Date: 2023-01-02 19:59+0200\n"
+"PO-Revision-Date: 2023-01-02 19:59+0200\n"
 "Last-Translator: Itai Dotan <itai@lukio.pro>\n"
 "Language-Team: \n"
 "Language: he_IL\n"
@@ -19,49 +19,54 @@ msgstr ""
 "2 : 3);\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#: inc/lukio_theme_options.php:25 inc/lukio_theme_options.php:26
-msgid "Lukio options"
-msgstr "אפשרויות לוקיו"
+#: lukio-theme/inc/lukio_theme_options.php:25
+#: lukio-theme/inc/lukio_theme_options.php:26
+msgid "Site options"
+msgstr "אפשרויות אתר"
 
-#: inc/lukio_theme_options.php:71
+#: lukio-theme/inc/lukio_theme_options.php:73
 msgid "Disable enqueue min files"
 msgstr "ביטול קבצי .min"
 
-#: inc/lukio_theme_options.php:82
+#: lukio-theme/inc/lukio_theme_options.php:84
 msgid "Site colors"
 msgstr "צבעי אתר"
 
-#: inc/lukio_theme_options.php:83
+#: lukio-theme/inc/lukio_theme_options.php:85
 msgid "Pixels"
 msgstr "פיקסלים"
 
-#: inc/lukio_theme_options.php:94 inc/lukio_theme_options.php:120
+#: lukio-theme/inc/lukio_theme_options.php:96
+#: lukio-theme/inc/lukio_theme_options.php:122
 msgid "Remove row"
 msgstr "הורדת שורה"
 
-#: inc/lukio_theme_options.php:130
+#: lukio-theme/inc/lukio_theme_options.php:132
 msgid "Add row"
 msgstr "הוספת שורה"
 
-#: inc/lukio_theme_options.php:145
+#: lukio-theme/inc/lukio_theme_options.php:147
 msgid "Save options"
 msgstr "שמור אפשרויות"
 
-#: inc/lukio_theme_setup.php:55
+#: lukio-theme/inc/lukio_theme_setup.php:55
 msgid "Header menu"
 msgstr "תפריט האדר"
 
-#: inc/lukio_theme_setup.php:56
+#: lukio-theme/inc/lukio_theme_setup.php:56
 msgid "Footer menu"
 msgstr "תפריט פוטר"
 
-#: inc/lukio_theme_setup.php:114
+#: lukio-theme/inc/lukio_theme_setup.php:114
 msgid "Site manager"
 msgstr "מנהל אתר"
 
-#: inc/lukio_theme_setup.php:257 inc/lukio_theme_setup.php:262
-#: inc/lukio_theme_setup.php:272 inc/lukio_woocommerce_setup.php:55
-#: inc/lukio_woocommerce_setup.php:61 inc/lukio_woocommerce_setup.php:71
+#: lukio-theme/inc/lukio_theme_setup.php:259
+#: lukio-theme/inc/lukio_theme_setup.php:264
+#: lukio-theme/inc/lukio_theme_setup.php:274
+#: lukio-theme/inc/lukio_woocommerce_setup.php:57
+#: lukio-theme/inc/lukio_woocommerce_setup.php:63
+#: lukio-theme/inc/lukio_woocommerce_setup.php:73
 msgid "guide"
 msgid_plural "guides"
 msgstr[0] "מדריך"
@@ -69,9 +74,13 @@ msgstr[1] "מדריכים"
 msgstr[2] "מדריכים"
 msgstr[3] "מדריכים"
 
-#: inc/lukio_theme_setup.php:310 inc/lukio_theme_setup.php:311
+#: lukio-theme/inc/lukio_theme_setup.php:312
+#: lukio-theme/inc/lukio_theme_setup.php:313
 msgid "Theme Setup"
 msgstr "הגדרות תבנית"
+
+#~ msgid "Lukio options"
+#~ msgstr "אפשרויות אתר"
 
 #~ msgid "Lukio's base theme"
 #~ msgstr "תבנית בסיס של לוקיו"

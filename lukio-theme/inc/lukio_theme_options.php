@@ -22,8 +22,8 @@ class Lukio_Theme_Options
     public function lukio_add_option_menu()
     {
         add_menu_page(
-            __('Lukio options', 'lukio-theme'),
-            __('Lukio options', 'lukio-theme'),
+            __('Site options', 'lukio-theme'),
+            __('Site options', 'lukio-theme'),
             'manage_options',
             'lukio_theme_options',
             array($this, 'lukio_theme_option_page_callable'),
