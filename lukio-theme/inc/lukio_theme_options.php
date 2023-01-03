@@ -27,7 +27,7 @@ class Lukio_Theme_Options
             'manage_options',
             'lukio_theme_options',
             array($this, 'lukio_theme_option_page_callable'),
-            'dashicons-admin-generic',
+            'dashicons-lukio_theme-options',
             2
         );
     }
@@ -39,6 +39,8 @@ class Lukio_Theme_Options
      */
     public function lukio_option_page_enqueue()
     {
+        lukio_enqueue('/assets/css/lukio_theme_dashicons.css', 'lukio_theme_dashicons', [], ['parent' => true]);
+
         if (get_current_screen()->base == 'toplevel_page_lukio_theme_options') {
             wp_enqueue_style('wp-color-picker');
             lukio_enqueue('/assets/js/lukio_option_page.js', 'lukio_theme_option_page', ['jquery', 'wp-color-picker'], ['parent' => true]);
@@ -182,11 +184,11 @@ class Lukio_Theme_Options
                 $update_pair = isset($colors_options[$i]) ? $colors_options[$i] : array();
                 $track_update = 0;
                 if ($full_access_bool && isset($_POST['css_name_' . $i]) && $_POST['css_name_' . $i] != '') {
-                    $update_pair['css_name'] = $_POST['css_name_' . $i];
+                    $update_pair['css_name'] = sanitize_text_field($_POST['css_name_' . $i]);
                     $track_update++;
                 }
                 if (isset($_POST['color_' . $i]) && $_POST['color_' . $i] != '') {
-                    $update_pair['color'] = $_POST['color_' . $i];
+                    $update_pair['color'] = sanitize_hex_color($_POST['color_' . $i]);
                     $track_update++;
                 }
 
