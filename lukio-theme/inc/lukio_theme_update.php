@@ -1,12 +1,28 @@
 <?php
 
-if (!function_exists('lukio_theme_update')) {
+/**
+ * lukio theme update class
+ */
+class Lukio_Theme_Update
+{
+    /**
+     * construct action to run when creating a new instance
+     * 
+     * @author Itai Dotan
+     */
+    public function __construct()
+    {
+        add_filter('site_transient_update_themes', array($this, 'theme_update'));
+        add_action('upgrader_process_complete', array($this, 'check_upgrade_completed'), 10, 2);
+        add_action('lukio_theme_updated', array($this, 'upgrade_from_acf_to_menu'), 20);
+    }
+
     /**
      * based on https://rudrastyh.com/wordpress/theme-updates-from-custom-server.html
      * 
      * @author Itai Dotan
      */
-    function lukio_theme_update($transient)
+    public function theme_update($transient)
     {
         // prevent run when in mid update
         if (!$transient) {
@@ -74,10 +90,7 @@ if (!function_exists('lukio_theme_update')) {
 
         return $transient;
     }
-}
-add_filter('site_transient_update_themes', 'lukio_theme_update');
 
-if (!function_exists('lukio_check_upgrade_completed')) {
     /**
      * run when an update process is complete and when its for the update of the theme, do all action of the hook
      * 
@@ -86,41 +99,29 @@ if (!function_exists('lukio_check_upgrade_completed')) {
      * 
      * @author Itai Dotan
      */
-    function lukio_check_upgrade_completed($upgrader_object, $options)
+    public function check_upgrade_completed($upgrader_object, $options)
     {
         if ($options['action'] == 'update' && $options['type'] == 'theme' && in_array(get_template(), $options['themes'])) {
-            wp_schedule_single_event(time(), 'lukio_theme_trigger_updated');
+            wp_schedule_single_event(time(), Lukio_Theme_Update::trigger_upgrade_completed_hooks());
         }
     }
-}
-add_action('upgrader_process_complete', 'lukio_check_upgrade_completed', 10, 2);
 
-if (!function_exists('lukio_theme_trigger_upgrade_completed_hooks')) {
     /**
      * scheduled task to run after theme update. trigger all actions hooked to 'lukio_theme_updated'
      * 
      * @author Itai Dotan
      */
-    function lukio_theme_trigger_upgrade_completed_hooks()
+    public static function trigger_upgrade_completed_hooks()
     {
         do_action('lukio_theme_updated');
     }
-}
-add_action('lukio_theme_trigger_updated', 'lukio_theme_trigger_upgrade_completed_hooks');
 
-// trigger the custom user role to run after an update
-add_action('lukio_theme_updated', 'lukio_custom_user_role');
-
-// trigger the option create to make sure they are created
-add_action('lukio_theme_updated', 'lukio_create_options');
-
-if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
     /**
      * upgrade from the acf option to lukio option when needed
      * 
      * @author Itai Dotan
      */
-    function lukio_upgrade_from_acf_to_menu()
+    public function upgrade_from_acf_to_menu()
     {
         $pixels = array(
             'options_pixels_head_scripts' => 'lukio_pixels_head',
@@ -152,4 +153,4 @@ if (!function_exists('lukio_upgrade_from_acf_to_menu')) {
         }
     }
 }
-add_action('lukio_theme_updated', 'lukio_upgrade_from_acf_to_menu', 20);
+new Lukio_Theme_Update();

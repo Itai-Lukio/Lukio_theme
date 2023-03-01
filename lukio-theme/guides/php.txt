@@ -1,7 +1,7 @@
 Lukio PHP guide:
 
     Header/Footer:
-        'header_content.php' and 'footer_content.php' in the 'template-parts' directory are already in header/footer tag respectively when called with get_header() and get_footer().
+        'header_content.php' and 'footer_content.php' in the 'template-parts/globals' are already in header/footer tag respectively when called with get_header() and get_footer().
         Just place the content you want to be displayed inside the template-part.
 
     Pre header:
@@ -65,16 +65,25 @@ Lukio PHP guide:
             @param Number $max [requierd] max value fot the inputs
             @param String $thumb_color [requierd] color of the range thumb
             @param String $format [optional] format for the display string, default '%d'
+    
+    Filters:
+        lukio_admin_guides_roles
+            allows to edit the user roles the guides are visable for.
 
-    Hooks:
-        lukio_classic_editor
-            add filter to use classsic editor.
+            @param Array array of user roles name
 
-            To toggle it off in the child theme use the below remove_action in 'init' action: 
-                remove_action('lukio_classic_editor', 'lukio_classic_editor', 10)
+        lukio_no_branding_to_none_admin
+            disable the branding to none admins.
 
-        disable_lukio_wp_admin_bar_branding_for_not_administrator
-            disable lukio logo in the admin bar to any one but administrators
+            add_filter('lukio_no_branding_to_none_admin', '__return_true')
 
-            use 'add_action('admin_bar_menu', 'disable_lukio_wp_admin_bar_branding_for_not_administrator')' in child theme to trigger
+        lukio_use_block_editor
+            reuse the block editor.
+
+            add_filter('lukio_use_block_editor', '__return_true')
+        
+        lukio_theme_options_full_access_roles
+            allows to edit the user roles who have full access in lukio option page.
+
+            @param Array user roles name array
  

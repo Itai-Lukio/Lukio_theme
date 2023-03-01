@@ -1,35 +1,16 @@
 <?php
 
+/**
+ * lukio theme woocommerce setup
+ */
 class Lukio_Woocommerce_Setup
 {
-    /**
-     * instance of the class
-     * 
-     * @var Lukio_Woocommerce_Setup|null class instance when running, null before class was first called
-     */
-    private static $instance = null;
-
-    /**
-     * get an instance of the class, create new on first call
-     * 
-     * @return Lukio_Woocommerce_Setup class instance
-     * 
-     * @author Itai Dotan
-     */
-    public static function get_instance()
-    {
-        if (self::$instance == null) {
-            self::$instance = new self;
-        }
-        return self::$instance;
-    }
-
     /**
      * construct action to run when creating a new instance
      * 
      * @author Itai Dotan
      */
-    private function __construct()
+    public function __construct()
     {
         add_action('after_setup_theme', array($this, 'theme_support'));
         add_action('wp_enqueue_scripts', array($this, 'enqueues'), PHP_INT_MAX);
@@ -97,8 +78,8 @@ class Lukio_Woocommerce_Setup
      */
     public function admin_bar_guides($wp_admin_bar)
     {
-        global $lukio_admin_bar_guides_allowerd_roles;
-        if (count(array_intersect($lukio_admin_bar_guides_allowerd_roles, wp_get_current_user()->roles)) > 0) {
+        $allowerd_roles = apply_filters('lukio_admin_guides_roles', Lukio_Theme_setup::get_guides_roles());
+        if (count(array_intersect($allowerd_roles, wp_get_current_user()->roles)) > 0) {
             $wp_admin_bar->add_node(array(
                 'id' => 'lukio_woocommerce_guides',
                 'title' => "WOO " .  _n('guide', 'guides', 1, 'lukio-theme'),
@@ -189,4 +170,4 @@ class Lukio_Woocommerce_Setup
         die;
     }
 }
-Lukio_Woocommerce_Setup::get_instance();
+new Lukio_Woocommerce_Setup();

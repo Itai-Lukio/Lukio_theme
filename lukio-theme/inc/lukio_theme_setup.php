@@ -1,35 +1,23 @@
 <?php
 
+/**
+ * lukio theme main setup
+ */
 class Lukio_Theme_setup
 {
     /**
-     * instance of the class
+     * array of the roles with the admin bar guides
      * 
-     * @var Lukio_Theme_setup|null class instance when running, null before class was first called
+     * @var array array of user roles name
      */
-    private static $instance = null;
-
-    /**
-     * get an instance of the class, create new on first call
-     * 
-     * @return Lukio_Theme_setup class instance
-     * 
-     * @author Itai Dotan
-     */
-    public static function get_instance()
-    {
-        if (self::$instance == null) {
-            self::$instance = new self;
-        }
-        return self::$instance;
-    }
+    private static $guides_allowerd_roles = array('administrator');
 
     /**
      * construct action to run when creating a new instance
      * 
      * @author Itai Dotan
      */
-    private function __construct()
+    public function __construct()
     {
         add_action('after_setup_theme', array($this, 'theme_setup'));
         add_action('after_switch_theme', array($this, 'custom_user_role'));
@@ -38,6 +26,7 @@ class Lukio_Theme_setup
         add_action('wp_before_admin_bar_render', array($this, 'theme_admin_setup_enqueues'));
         add_action('init', array($this, 'classic_editor'));
         add_action('admin_bar_menu', array($this, 'wp_admin_bar_branding'), 40);
+        add_action('lukio_theme_updated', array($this, 'updated'));
         add_filter('acf/settings/capability', array($this, 'acf_custom_fields_tab_restriction'));
 
         /**
@@ -273,10 +262,9 @@ class Lukio_Theme_setup
 
         $svg = '<svg id="lukio_guides_svg" xmlns="http://www.w3.org/2000/svg" width="35" viewBox="0 0 107.87 40.12"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path class="lukio_guides_svg_u" d="M24.14,29c-7.8,0-13-5-13-12.47V1h9.68V16.57c0,2.39,1.1,3.56,3.36,3.56s3.52-1.22,3.52-3.61V1h9.68V16.57C37.34,24,32,29,24.14,29Z"></path><path class="lukio_guides_svg_u_border" d="M36.34,2V16.57C36.34,23.29,31.73,28,24.15,28s-12-4.75-12-11.47V2h7.68V16.57c0,3,1.58,4.56,4.37,4.56s4.51-1.59,4.51-4.61V2h7.68m2-2H26.66V16.52c0,1.85-.73,2.61-2.51,2.61-1.43,0-2.37-.44-2.37-2.56V0H10.1V16.57C10.1,24.63,15.74,30,24.15,30s14.19-5.41,14.19-13.47V0Z"></path><path class="lukio_guides_svg_text" d="M93.93,12.18a13.55,13.55,0,0,0-14,14,13.95,13.95,0,1,0,27.89,0C107.87,17.86,101.84,12.2,93.93,12.18Zm0,19.9a5.93,5.93,0,0,1,0-11.86,5.93,5.93,0,1,1,0,11.86Z"></path><polygon class="lukio_guides_svg_text" points="76.7 12.81 69.02 12.81 69.02 39.4 76.7 39.4 76.7 39.4 76.7 39.4 76.7 12.81 76.7 12.81 76.7 12.81"></polygon><polygon class="lukio_guides_svg_text l" points="7.68 2.08 0 2.08 0 32.2 0 39.4 7.68 39.4 35.95 39.4 35.95 32.2 7.68 32.2 7.68 2.08"></polygon><polygon class="lukio_guides_svg_text" points="67.11 12.81 58.03 12.81 48.38 25 48.38 2.08 40.7 2.08 40.7 39.4 48.38 39.4 48.38 26.54 58.03 39.4 67.44 39.4 56.74 25.48 67.11 12.81"></polygon><path class="lukio_guides_svg_text" d="M72.89,10.3a4.15,4.15,0,1,0-4.23-4.17A4.14,4.14,0,0,0,72.89,10.3Z"></path></g></g></svg>';
 
-        global $lukio_admin_bar_guides_allowerd_roles;
-        $lukio_admin_bar_guides_allowerd_roles = array('administrator');
+        $allowerd_roles = apply_filters('lukio_admin_guides_roles', self::$guides_allowerd_roles);
 
-        if (count(array_intersect($lukio_admin_bar_guides_allowerd_roles, $user_roles)) > 0) {
+        if (count(array_intersect($allowerd_roles, $user_roles)) > 0) {
             $wp_admin_bar->add_node(array(
                 'id'    => 'lukio_guides',
                 'title' => "$svg " . _n('guide', 'guides', 2, 'lukio-theme'),
@@ -341,6 +329,17 @@ class Lukio_Theme_setup
     }
 
     /**
+     * actions to take when the theme was updated
+     * 
+     * @author Itai Dotan
+     */
+    public function updated()
+    {
+        $this->custom_user_role();
+        $this->create_options();
+    }
+
+    /**
      * get the pre_header template part with a fallback for the old path.
      * 
      * /template-parts/globals/pre_header_content
@@ -384,6 +383,16 @@ class Lukio_Theme_setup
         }
         get_template_part('/template-parts/footer/footer_content');
     }
+
+    /**
+     * get the roles allowerd to see the guides
+     * 
+     * @author Itai Dotan
+     */
+    static public function get_guides_roles()
+    {
+        return self::$guides_allowerd_roles;
+    }
 }
 
-Lukio_Theme_setup::get_instance();
+new Lukio_Theme_setup();
