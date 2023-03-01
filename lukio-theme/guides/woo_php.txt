@@ -1,5 +1,14 @@
 Lukio woocommerce PHP guide:
 
+    Templates:
+        Minicart
+        woocommerce/cart/mini-cart.php
+            template of the minicart and the refresh of the minicart.
+            for proper use we stay with the wc style and most importantly the ul and li of the products.
+
+            in the template use the class 'always_refresh' to mark parts of the minicart to refresh when the full refresg of the minicart was skipped.
+            example: add 'always_refresh' class to the div of the cart totals to be refreshed even when removeing an item from the cart.
+
     Shortcode:
         '[lukio_woocommerce_mini_cart]'
             mini cart markup with woocommerce/cart/mini-cart.php, ready for the ajax refresh.

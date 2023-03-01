@@ -169,4 +169,62 @@ const lukio_helpers = (function ($) {
         const lukio_resize_observer = new ResizeObserver(lukio_body_width_var);
         lukio_resize_observer.observe($('body')[0]);
     })
+
+    $.fn.lukioDragScroll = function () {
+        this.each(function () {
+            let el = $(this),
+                top = 0,
+                left = 0,
+                x = 0,
+                y = 0;
+
+            el.css({
+                cursor: 'grab',
+                userSelect: '',
+            });
+
+            el.on('pointerdown', (e) => {
+                pointerDownHandler(e);
+            });
+
+            function pointerDownHandler(e) {
+                e.preventDefault();
+                el.css({
+                    cursor: 'grabbing',
+                    userSelect: 'none',
+                });
+
+                left = el[0].scrollLeft;
+                top = el[0].scrollTop;
+                x = e.clientX;
+                y = e.clientY;
+
+                $(window).on('pointermove.lukio_drag', (e) => {
+                    pointerMoveHandler(e);
+                });
+                $(window).on('pointerup.lukio_drag', () => {
+                    pointerUpHandler();
+                });
+            }
+
+            function pointerMoveHandler(e) {
+                let dx = e.clientX - x;
+                let dy = e.clientY - y;
+
+                // Scroll the element
+                el[0].scrollTop = top - dy;
+                el[0].scrollLeft = left - dx;
+            };
+
+            function pointerUpHandler() {
+                el.css({
+                    cursor: 'grab',
+                    userSelect: '',
+                });
+                jQuery(window).off('pointermove.lukio_drag');
+                jQuery(window).off('pointerup.lukio_drag');
+            }
+        });
+        return this;
+    }
 })(jQuery)

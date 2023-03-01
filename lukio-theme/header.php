@@ -18,11 +18,11 @@ if (function_exists('get_field')) {
 do_action('wp_enqueue_scripts');
 
 ob_start();
-get_template_part('/template-parts/header/pre_header_content');
+Lukio_Theme_setup::get_pre_header_part();
 $pre_header_markup = ob_get_clean();
 
 ob_start();
-get_template_part('/template-parts/header/header_content');
+Lukio_Theme_setup::get_header_part();
 $header_markup = ob_get_clean();
 
 ?>

@@ -14,5 +14,6 @@ require_once __DIR__ . '/inc/lukio_theme_update.php';
 if (function_exists('is_plugin_active')) {
     if (is_plugin_active('woocommerce/woocommerce.php')) {
         require_once __DIR__ . '/inc/lukio_woocommerce_setup.php';
+        require_once __DIR__ . '/inc/lukio_woocommerce_helpers.php';
     }
 }

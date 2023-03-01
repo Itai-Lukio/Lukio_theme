@@ -1,12 +1,72 @@
 <?php
 
-if (!function_exists('lukio_theme_setup')) {
+class Lukio_Theme_setup
+{
+    /**
+     * instance of the class
+     * 
+     * @var Lukio_Theme_setup|null class instance when running, null before class was first called
+     */
+    private static $instance = null;
+
+    /**
+     * get an instance of the class, create new on first call
+     * 
+     * @return Lukio_Theme_setup class instance
+     * 
+     * @author Itai Dotan
+     */
+    public static function get_instance()
+    {
+        if (self::$instance == null) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+
+    /**
+     * construct action to run when creating a new instance
+     * 
+     * @author Itai Dotan
+     */
+    private function __construct()
+    {
+        add_action('after_setup_theme', array($this, 'theme_setup'));
+        add_action('after_switch_theme', array($this, 'custom_user_role'));
+        add_action('after_switch_theme', array($this, 'create_options'));
+        add_action('wp_enqueue_scripts', array($this, 'enqueue'));
+        add_action('wp_before_admin_bar_render', array($this, 'theme_admin_setup_enqueues'));
+        add_action('init', array($this, 'classic_editor'));
+        add_action('admin_bar_menu', array($this, 'wp_admin_bar_branding'), 40);
+        add_filter('acf/settings/capability', array($this, 'acf_custom_fields_tab_restriction'));
+
+        /**
+         * add 'lukio' class to the body
+         * 
+         * @author Itai Dotan
+         */
+        add_filter('body_class', function ($classes) {
+            return array_merge($classes, array('lukio'));
+        });
+
+        /**
+         * add 'lukio' class to the body in admin pages
+         * 
+         * @author Itai Dotan
+         */
+        add_filter('admin_body_class', function ($classes) {
+            return $classes . ' lukio ';
+        });
+
+        $this->create_acf_option();
+    }
+
     /**
      * setup the theme and theme support
      * 
      * @author Itai Dotan
      */
-    function lukio_theme_setup()
+    public function theme_setup()
     {
         // Load text domain
         load_theme_textdomain('lukio-theme', get_template_directory() . '/languages');
@@ -100,16 +160,13 @@ if (!function_exists('lukio_theme_setup')) {
          */
         add_image_size('custom-size', 220, 180);
     }
-}
-add_action('after_setup_theme', 'lukio_theme_setup');
 
-if (!function_exists('lukio_custom_user_role')) {
     /**
      * create custom user role and update its capabilities when the theme is activated or updated
      * 
      * @author Itai Dotan
      */
-    function lukio_custom_user_role()
+    public function custom_user_role()
     {
         $site_manager = add_role('site_manager', __('Site manager', 'lukio-theme'), []);
         global $wp_roles;
@@ -133,16 +190,13 @@ if (!function_exists('lukio_custom_user_role')) {
             $site_manager->add_cap($cap, $grant);
         }
     }
-}
-add_action('after_switch_theme', 'lukio_custom_user_role');
 
-if (!function_exists('lukio_create_options')) {
     /**
      * create lukio options when there are not been created yet
      * 
      * @author Itai Dotan
      */
-    function lukio_create_options()
+    public function create_options()
     {
         $options = ['pixels_head', 'pixels_body', 'site_colors', 'disable_enqueue_min'];
         $prefix = 'lukio_';
@@ -152,16 +206,13 @@ if (!function_exists('lukio_create_options')) {
             }
         }
     }
-}
-add_action('after_switch_theme', 'lukio_create_options');
 
-if (!function_exists('lukio_theme_setup_enqueues')) {
     /**
      * enqueue the theme base styles and scripts
      * 
      * @author Itai Dotan
      */
-    function lukio_theme_setup_enqueues()
+    public function enqueue()
     {
         lukio_enqueue('/style.css', 'lukio_main_theme_stylesheet', array(), array('parent' => true));
         lukio_enqueue('/assets/css/general.css', 'lukio_main_theme_general_stylesheet', array(), array('parent' => true));
@@ -177,83 +228,55 @@ if (!function_exists('lukio_theme_setup_enqueues')) {
             lukio_enqueue('/assets/css/site_colors.css', 'lukio_site_colors');
         };
     }
-}
-add_action('wp_enqueue_scripts', 'lukio_theme_setup_enqueues');
 
-if (!function_exists('lukio_theme_admin_setup_enqueues')) {
     /**
      * enqueue relevant files for the admin bar 
      * 
      * @author Itai Dotan
      */
-    function lukio_theme_admin_setup_enqueues()
+    public function theme_admin_setup_enqueues()
     {
         lukio_enqueue('/assets/css/lukio_admin.css', 'lukio_theme_admin_stylesheet', array(), array('parent' => true));
     }
-}
-add_action('wp_before_admin_bar_render', 'lukio_theme_admin_setup_enqueues');
 
-/**
- * add 'lukio' class to the body
- * 
- * @author Itai Dotan
- */
-add_filter('body_class', function ($classes) {
-    return array_merge($classes, array('lukio'));
-});
-
-/**
- * add 'lukio' class to the body in admin pages
- * 
- * @author Itai Dotan
- */
-add_filter('admin_body_class', function ($classes) {
-    return $classes . ' lukio ';
-});
-
-if (!function_exists('lukio_classic_editor')) {
     /**
      * add filter to use classsic editor
      * 
+     * use add_filter('lukio_use_block_editor', '__return_true') to use the block editor
+     * 
      * @author Itai Dotan
      */
-    function lukio_classic_editor()
+    public function classic_editor()
     {
+        if (apply_filters('lukio_use_block_editor', false)) {
+            return;
+        }
         // enable classic editor for wordpress
         add_filter('use_block_editor_for_post', '__return_false');
     }
-};
-add_action('lukio_classic_editor', 'lukio_classic_editor', 10);
 
-if (!function_exists('lukio_classic_editor_trigger')) {
-    /**
-     * trigger the classic editor separately to enable to toggle it off in the child theme init action using:
-     * 
-     * remove_action('lukio_classic_editor', 'lukio_classic_editor', 10)
-     * 
-     * @author Itai Dotan
-     */
-    function lukio_classic_editor_trigger()
-    {
-        do_action('lukio_classic_editor');
-    }
-}
-add_action('init', 'lukio_classic_editor_trigger', 10);
-
-if (!function_exists('lukio_wp_admin_bar_branding')) {
     /**
      * add lukio guides to wp-admin bar
      * 
+     * use add_filter('lukio_no_branding_to_none_admin', '__return_true') to disable the branding to none admins
+     * 
      * @author Itai Dotan
      */
-    function lukio_wp_admin_bar_branding($wp_admin_bar)
+    public function wp_admin_bar_branding($wp_admin_bar)
     {
+        $user_roles = wp_get_current_user()->roles;
+        if (apply_filters('lukio_no_branding_to_none_admin', false)) {
+            if (!in_array('administrator', $user_roles)) {
+                return;
+            }
+        }
+
         $svg = '<svg id="lukio_guides_svg" xmlns="http://www.w3.org/2000/svg" width="35" viewBox="0 0 107.87 40.12"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path class="lukio_guides_svg_u" d="M24.14,29c-7.8,0-13-5-13-12.47V1h9.68V16.57c0,2.39,1.1,3.56,3.36,3.56s3.52-1.22,3.52-3.61V1h9.68V16.57C37.34,24,32,29,24.14,29Z"></path><path class="lukio_guides_svg_u_border" d="M36.34,2V16.57C36.34,23.29,31.73,28,24.15,28s-12-4.75-12-11.47V2h7.68V16.57c0,3,1.58,4.56,4.37,4.56s4.51-1.59,4.51-4.61V2h7.68m2-2H26.66V16.52c0,1.85-.73,2.61-2.51,2.61-1.43,0-2.37-.44-2.37-2.56V0H10.1V16.57C10.1,24.63,15.74,30,24.15,30s14.19-5.41,14.19-13.47V0Z"></path><path class="lukio_guides_svg_text" d="M93.93,12.18a13.55,13.55,0,0,0-14,14,13.95,13.95,0,1,0,27.89,0C107.87,17.86,101.84,12.2,93.93,12.18Zm0,19.9a5.93,5.93,0,0,1,0-11.86,5.93,5.93,0,1,1,0,11.86Z"></path><polygon class="lukio_guides_svg_text" points="76.7 12.81 69.02 12.81 69.02 39.4 76.7 39.4 76.7 39.4 76.7 39.4 76.7 12.81 76.7 12.81 76.7 12.81"></polygon><polygon class="lukio_guides_svg_text l" points="7.68 2.08 0 2.08 0 32.2 0 39.4 7.68 39.4 35.95 39.4 35.95 32.2 7.68 32.2 7.68 2.08"></polygon><polygon class="lukio_guides_svg_text" points="67.11 12.81 58.03 12.81 48.38 25 48.38 2.08 40.7 2.08 40.7 39.4 48.38 39.4 48.38 26.54 58.03 39.4 67.44 39.4 56.74 25.48 67.11 12.81"></polygon><path class="lukio_guides_svg_text" d="M72.89,10.3a4.15,4.15,0,1,0-4.23-4.17A4.14,4.14,0,0,0,72.89,10.3Z"></path></g></g></svg>';
 
         global $lukio_admin_bar_guides_allowerd_roles;
         $lukio_admin_bar_guides_allowerd_roles = array('administrator');
 
-        if (count(array_intersect($lukio_admin_bar_guides_allowerd_roles, wp_get_current_user()->roles)) > 0) {
+        if (count(array_intersect($lukio_admin_bar_guides_allowerd_roles, $user_roles)) > 0) {
             $wp_admin_bar->add_node(array(
                 'id'    => 'lukio_guides',
                 'title' => "$svg " . _n('guide', 'guides', 2, 'lukio-theme'),
@@ -285,50 +308,82 @@ if (!function_exists('lukio_wp_admin_bar_branding')) {
             ));
         }
     }
-}
-add_action('admin_bar_menu', 'lukio_wp_admin_bar_branding', 40);
 
-if (!function_exists('disable_lukio_wp_admin_bar_branding_for_not_administrator')) {
     /**
-     * disable lukio logo in the admin bar to any one but administrators
-     * 
-     * use 'add_action('admin_bar_menu', 'disable_lukio_wp_admin_bar_branding_for_not_administrator')' in child theme to trigger
-     * 
-     * @author Itai Dotan
+     * create acf option page when acf plugin is present
      */
-    function disable_lukio_wp_admin_bar_branding_for_not_administrator()
+    private function create_acf_option()
     {
-        if (!in_array('administrator', wp_get_current_user()->roles)) {
-            remove_action('admin_bar_menu', 'lukio_wp_admin_bar_branding', 40);
+        // Add the Systems options pgae
+        if (function_exists('acf_add_options_page')) {
+            add_action('after_setup_theme', function () {
+                acf_add_options_page(array(
+                    'page_title'  => __('Theme Setup', 'lukio-theme'),
+                    'menu_title'  => __('Theme Setup', 'lukio-theme'),
+                    'menu_slug'   => 'theme-setup',
+                    'capability'  => 'edit_posts',
+                    'redirect'    => false,
+                    'position'    => 2,
+                    'icon_url'    => 'dashicons-shortcode'
+                ));
+            });
         }
     }
-}
 
-// Add the Systems options pgae
-if (function_exists('acf_add_options_page')) {
-    add_action('after_setup_theme', function () {
-
-        acf_add_options_page(array(
-            'page_title'  => __('Theme Setup', 'lukio-theme'),
-            'menu_title'  => __('Theme Setup', 'lukio-theme'),
-            'menu_slug'   => 'theme-setup',
-            'capability'  => 'edit_posts',
-            'redirect'    => false,
-            'position'    => 2,
-            'icon_url'    => 'dashicons-shortcode'
-        ));
-    });
-}
-
-if (!function_exists('lukio_acf_custom_fields_tab_restriction')) {
     /**
      * make it so only 'administrator' user can see the custom fields tab and edit its content
      * 
      * @author Itai Dotan
      */
-    function lukio_acf_custom_fields_tab_restriction($capability)
+    public function acf_custom_fields_tab_restriction($capability)
     {
         return 'administrator';
     }
+
+    /**
+     * get the pre_header template part with a fallback for the old path.
+     * 
+     * /template-parts/globals/pre_header_content
+     * 
+     * @author Itai Dotan
+     */
+    static public function get_pre_header_part()
+    {
+        if (get_template_part('/template-parts/globals/pre_header_content') !== false) {
+            return;
+        }
+        get_template_part('/template-parts/header/pre_header_content');
+    }
+
+    /**
+     * get the header template part with a fallback for the old path
+     * 
+     * /template-parts/globals/header_content
+     * 
+     * @author Itai Dotan
+     */
+    static public function get_header_part()
+    {
+        if (get_template_part('/template-parts/globals/header_content') !== false) {
+            return;
+        }
+        get_template_part('/template-parts/header/header_content');
+    }
+
+    /**
+     * get the footer template part with a fallback for the old path
+     * 
+     * /template-parts/globals/footer_contents
+     * 
+     * @author Itai Dotan
+     */
+    static public function get_footer_part()
+    {
+        if (get_template_part('/template-parts/globals/footer_content') !== false) {
+            return;
+        }
+        get_template_part('/template-parts/footer/footer_content');
+    }
 }
-add_filter('acf/settings/capability', 'lukio_acf_custom_fields_tab_restriction');
+
+Lukio_Theme_setup::get_instance();

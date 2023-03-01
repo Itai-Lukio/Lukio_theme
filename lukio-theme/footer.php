@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 
 <footer id="site_footer">
 
-    <?php get_template_part('/template-parts/footer/footer_content'); ?>
+    <?php Lukio_Theme_setup::get_footer_part(); ?>
 </footer><!-- #site_footer -->
 
 </div><!-- #page -->

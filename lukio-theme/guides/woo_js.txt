@@ -4,15 +4,39 @@ Lukio woocommerce JS guide:
         lukio_cart_num_refresh
             target: body
             trigger after mini cart refresh and get array parm with the updated cart counts.
-            $('body').on('lukio_cart_num_refresh', function(e, counts){})
+            allow developers to hook to it and use the data where needed.
+            
+            $('body').on('lukio_cart_num_refresh', function(e, counts){});
                 counts['all'] = total items
                 counts['unique'] = unique items count
 
         lukio_refresh_mini_cart_extra
             target: body
             trigger after mini cart refresh and get the parm added to the ajax using the filter 'lukio_woocommerce_refresh_mini_cart_extra'.
-            $('body').on('lukio_refresh_mini_cart_extra', function(e, extra){})
+            allow developers to hook to it and use the data where needed.
+            
+            $('body').on('lukio_refresh_mini_cart_extra', function(e, extra){});
         
         lukio_update_wc_parts
             target: body
             event to trigger when needing to refresh woocommerce parts
+
+        lukio_should_fully_refresh_minicart
+            target: body
+            allow developers to hook in to the event to prevent full refresh of the mini cart.
+            returning false from the event will skip the full refresh.
+
+            # any element with 'always_refresh' class will be refreshed
+
+            $('body').one('lukio_should_fully_refresh_minicart', function () {
+                return false;
+            });
+
+        lukio_minicart_not_fully_refreshed
+            target: body
+            triggers when the full refresh of the minicart was skipped.
+            allow developers to get the full minicart new fragment as an jQuery object and pull from it any information they needed.
+            will fire when removeing item from the minicart and when changing an item quantity.
+
+            $('body').on('lukio_cart_num_refresh', function(e, fragment){});
+                fragment = jQuery object
