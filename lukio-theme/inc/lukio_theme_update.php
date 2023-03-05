@@ -102,7 +102,7 @@ class Lukio_Theme_Update
     public function check_upgrade_completed($upgrader_object, $options)
     {
         if ($options['action'] == 'update' && $options['type'] == 'theme' && in_array(get_template(), $options['themes'])) {
-            wp_schedule_single_event(time(), Lukio_Theme_Update::trigger_upgrade_completed_hooks());
+            wp_schedule_single_event(time() + 300, Lukio_Theme_Update::trigger_upgrade_completed_hooks());
         }
     }
 

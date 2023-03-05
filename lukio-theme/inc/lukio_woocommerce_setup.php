@@ -33,6 +33,8 @@ class Lukio_Woocommerce_Setup
         add_action('woocommerce_after_add_to_cart_form', function () {
             echo '</div>';
         });
+
+        add_action('woocommerce_product_thumbnails', array($this, 'add_gallery_arrows'));
     }
 
     /**
@@ -124,7 +126,7 @@ class Lukio_Woocommerce_Setup
         <div class="lukio_mini_cart_wrapper">
             <?php woocommerce_mini_cart(); ?>
         </div>
-<?php
+        <?php
         return ob_get_clean();
     }
 
@@ -168,6 +170,40 @@ class Lukio_Woocommerce_Setup
         $cart = WC()->cart;
         $cart->set_quantity($cart_item_key, $cart_quantity);
         die;
+    }
+
+    /**
+     * add product gallery controls
+     * 
+     * @author Itai Dotan
+     */
+    public function add_gallery_arrows()
+    {
+        global $product;
+        $attachment_ids = $product->get_gallery_image_ids();
+
+        // check if there is a gallery
+        if (count($attachment_ids) == 0) {
+            return;
+        }
+        $loop = apply_filters('lukio_product_gallery_use_loop', true) ? 'true' : 'false';
+        foreach (['prev', 'next'] as $button_action) {
+        ?>
+            <button class="lukio_product_gallery_arrow <?php echo $button_action; ?>" data-action="<?php echo $button_action; ?>" data-loop="<?php echo $loop; ?>" type="button"><?php echo apply_filters("lukio_product_gallery_arrow_$button_action", $button_action); ?></button>
+<?php
+        }
+
+        if (apply_filters('lukio_product_gallery_pagination', true)) {
+            echo '<ul class="lukio_product_gallery_pagination">';
+
+            // add one more entry for the main image
+            $attachment_ids[] = 0;
+
+            foreach ($attachment_ids as $index => $id) {
+                echo '<li class="lukio_product_gallery_pagination_dot' . ($index == 0 ? ' active' : '') . '" data-index="' . $index . '" data-loop="' . $index . '"></li>';
+            }
+            echo '</ul>';
+        }
     }
 }
 new Lukio_Woocommerce_Setup();

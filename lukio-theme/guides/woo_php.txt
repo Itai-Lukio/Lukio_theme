@@ -56,3 +56,15 @@ Lukio woocommerce PHP guide:
             add data to send back with the mini cart refresh ajax.
 
             @param Array $extra value to send
+
+    lukio_product_gallery_arrow_{$button_action}
+        $button_action = prev||next
+        filters to change the content of the gallery arrow button
+
+    lukio_product_gallery_pagination
+        filter if to add pagination to the product gallery. default true.
+        return false to skip the pagination.
+
+    lukio_product_gallery_use_loop
+        filter if to use the gallery with a loop. default true.
+        return false to disable the loop.

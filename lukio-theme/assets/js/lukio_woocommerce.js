@@ -38,6 +38,8 @@ jQuery(document).ready(function ($) {
      * 
      * @param {string} class_name 
      * @returns {string} valid jquery class selector
+     * 
+     * @author Itai Dotan
      */
     function class_name_to_selector(class_name) {
         return class_name.replaceAll(' ', '.');
@@ -47,6 +49,8 @@ jQuery(document).ready(function ($) {
      * shrink fades and remove minicart li element
      * 
      * @param {jQuery} el element to remove
+     * 
+     * @author Itai Dotan
      */
     function remove_minicart_li(el) {
         lukio_helpers.animate_size(el, 'height', 0, 400, 0, { opacity: '0' }, () => { el.remove() });
@@ -57,6 +61,8 @@ jQuery(document).ready(function ($) {
      * 
      * @param {jQuery} item_li minicart item to check its siblings
      * @returns {bool} true when not the last item
+     * 
+     * @author Itai Dotan
      */
     function not_last_item_in_minicart(item_li) {
         return item_li.siblings().length != 0;
@@ -66,6 +72,8 @@ jQuery(document).ready(function ($) {
      * update the storage to trigger other tabs refresh when in checkout or cart
      * 
      * @param {string} cart_hash new cart hash
+     * 
+     * @author Itai Dotan
      */
     function update_storage(cart_hash) {
         if (!supports_html5_storage || !cart_or_checkout) {
@@ -87,6 +95,79 @@ jQuery(document).ready(function ($) {
             };
         });
     };
+
+    /**
+     * move the arrows to their proper position
+     * 
+     * @param {jQuery} arrows elements to be moved
+     * @param {jQuery} continer element to append in to
+     * 
+     * @author Itai Dotan
+     */
+    function reposition_gallery_arrows(arrows, continer) {
+        arrows.each(function () {
+            let outer = this.outerHTML;
+            $(this).remove();
+            continer.append(outer);
+        });
+        toggle_gallery_arrows(continer.find('.lukio_product_gallery_arrow:first-of-type'));
+    }
+    /**
+     * move the pagination to its proper position
+     * 
+     * @param {jQuery} pagination element to be moved
+     * @param {jQuery} continer element to append in to
+     * 
+     * @author Itai Dotan
+     */
+    function reposition_gallery_pagination(pagination, continer) {
+        let outer = pagination[0].outerHTML;
+        pagination.remove();
+        continer.append(outer);
+    }
+
+    /**
+     * toggle the arrows disable status of the gallery
+     * 
+     * @param {jQuery} btn button/pagination targeted by the event 
+     * 
+     * @author Itai Dotan
+     */
+    function toggle_gallery_arrows(btn) {
+        // no need to disable when looping
+        if (btn.data('loop')) {
+            return;
+        }
+        let continer = btn.closest('.flex-viewport'),
+            arrows = continer.find('.lukio_product_gallery_arrow'),
+            li_list = continer.siblings('.flex-control-nav').children('li'),
+            active_index = li_list.find('.flex-active').closest('li').index(),
+            prev_action = active_index == 0 ? 'addClass' : 'removeClass',
+            next_action = active_index == li_list.length - 1 ? 'addClass' : 'removeClass';
+
+        arrows.filter('.prev')[prev_action]('disable');
+        arrows.filter('.next')[next_action]('disable');
+    }
+
+    /**
+     * check if there gallery parts to reposition on page load
+     * 
+     * @author Itai Dotan
+     */
+    function reposition_gallery_parts() {
+        let arrows = $('.lukio_product_gallery_arrow'),
+            pagination = $('.lukio_product_gallery_pagination'),
+            continer = arrows.closest('.flex-viewport');
+
+        if (arrows.length != 0) {
+            reposition_gallery_arrows(arrows, continer);
+        }
+
+        if (pagination.length != 0) {
+            reposition_gallery_pagination(pagination, continer);
+        }
+    }
+    reposition_gallery_parts();
 
     body
         // refresh the mini cart in to lukio_mini_cart_wrapper from the shortcode
@@ -245,5 +326,53 @@ jQuery(document).ready(function ($) {
                         };
                     });
             }
+        })
+        // change the product gallery image when clicking the arrows 
+        .on('click', '.lukio_product_gallery_arrow', function () {
+            let btn = $(this);
+
+            if (btn.hasClass('disbled')) {
+                return;
+            }
+
+            let action = btn.data('action'),
+                loop = btn.data('loop'),
+                offset = action == 'next' ? 1 : -1,
+                ol = btn.closest('.woocommerce-product-gallery').find('ol.flex-control-nav'),
+                li_thumbs = ol.children('li'),
+                li_index_length = li_thumbs.length - 1,
+                active_li = ol.find('.flex-active').closest('li'),
+                new_index = active_li.index() + offset,
+                pagination = btn.siblings('.lukio_product_gallery_pagination');
+
+            // fix the index when looping
+            if (new_index < 0) {
+                new_index = loop ? li_index_length : 0;
+            } else if (new_index > li_index_length) {
+                new_index = loop ? 0 : li_index_length;
+            }
+
+            // click the new image
+            li_thumbs.eq(new_index).find('img').trigger('click');
+            // change the pagination dot
+            pagination.find('.lukio_product_gallery_pagination_dot.active').removeClass('active');
+            pagination.find('.lukio_product_gallery_pagination_dot').eq(new_index).addClass('active');
+
+            toggle_gallery_arrows(btn);
+        })
+        // change the product gallery image when clicking a pagination dot
+        .on('click', '.lukio_product_gallery_pagination_dot', function () {
+            let btn = $(this);
+
+            if (btn.hasClass('active')) {
+                return;
+            }
+
+            $('.lukio_product_gallery_pagination_dot.active').removeClass('active');
+            btn.addClass('active');
+            // click the new image
+            $('.woocommerce-product-gallery ol.flex-control-nav li').eq(btn.data('index')).find('img').trigger('click');
+
+            toggle_gallery_arrows(btn);
         });
 });
