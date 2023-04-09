@@ -67,6 +67,9 @@ class Lukio_SVG_Support
     /**
      * add .svg to the allowed upload file extension
      * 
+     * @param array $file_types mime types keyed by the file extension regex corresponding to those types
+     * @return array updated $file_types with the new types to allow
+     * 
      * @author Itai Dotan
      */
     public function add_mimes($file_types)
@@ -122,6 +125,7 @@ class Lukio_SVG_Support
      * sanitize and upload svg files
      * 
      * @param Array $file An array of data for a single file
+     * @return Array sanitized file data
      * 
      * @author Itai Dotan
      */
@@ -164,6 +168,7 @@ class Lukio_SVG_Support
      * base on https://github.com/alnorris/SVG-Sanitizer 
      * 
      * @param string file path to XML document
+     * @return string sanitized svg string
      * 
      * @author Itai Dotan
      */

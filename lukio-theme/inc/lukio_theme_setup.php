@@ -28,6 +28,7 @@ class Lukio_Theme_setup
         add_action('admin_bar_menu', array($this, 'wp_admin_bar_branding'), 40);
         add_action('lukio_theme_updated', array($this, 'updated'));
         add_filter('acf/settings/capability', array($this, 'acf_custom_fields_tab_restriction'));
+        add_action('upload_mimes', array($this, 'add_mimes'));
 
         /**
          * add 'lukio' class to the body
@@ -249,6 +250,8 @@ class Lukio_Theme_setup
      * 
      * use add_filter('lukio_no_branding_to_none_admin', '__return_true') to disable the branding to none admins
      * 
+     * @param WP_Admin_Bar the WP_Admin_Bar instance, passed by reference
+     * 
      * @author Itai Dotan
      */
     public function wp_admin_bar_branding($wp_admin_bar)
@@ -337,6 +340,20 @@ class Lukio_Theme_setup
     {
         $this->custom_user_role();
         $this->create_options();
+    }
+
+    /**
+     * add file types to the allowed upload file extension.
+     * for file type that dont need sanitizing
+     * 
+     * @param array $file_types mime types keyed by the file extension regex corresponding to those types
+     * @return array updated $file_types with the new types to allow
+     * 
+     * @author Itai Dotan
+     */
+    public function add_mimes($file_types){
+        $file_types['json'] = 'application/json';
+        return $file_types;
     }
 
     /**
