@@ -10,11 +10,6 @@
 // Exit if accessed directly.
 defined('ABSPATH') || exit;
 
-$acf_pixels_data = null;
-if (function_exists('get_field')) {
-    $acf_pixels_data = get_field('pixels', 'options');
-}
-
 do_action('wp_enqueue_scripts');
 
 ob_start();
