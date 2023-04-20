@@ -22,6 +22,8 @@ class Lukio_Theme_setup
         add_action('after_setup_theme', array($this, 'theme_setup'));
         add_action('after_switch_theme', array($this, 'custom_user_role'));
         add_action('after_switch_theme', array($this, 'create_options'));
+        // remove from wp_head as we trigger it manual before wp_head() and dont want to trigger it both times
+        remove_action('wp_head', 'wp_enqueue_scripts', 1);
         add_action('wp_enqueue_scripts', array($this, 'enqueue'));
         add_action('wp_before_admin_bar_render', array($this, 'theme_admin_setup_enqueues'));
         add_action('init', array($this, 'classic_editor'));
@@ -351,7 +353,8 @@ class Lukio_Theme_setup
      * 
      * @author Itai Dotan
      */
-    public function add_mimes($file_types){
+    public function add_mimes($file_types)
+    {
         $file_types['json'] = 'application/json';
         return $file_types;
     }

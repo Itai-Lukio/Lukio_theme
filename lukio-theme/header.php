@@ -10,7 +10,10 @@
 // Exit if accessed directly.
 defined('ABSPATH') || exit;
 
-do_action('wp_enqueue_scripts');
+// for flexible_content as it trigger the action before the header
+if (!did_action('wp_enqueue_scripts')) {
+    do_action('wp_enqueue_scripts');
+}
 
 ob_start();
 Lukio_Theme_setup::get_pre_header_part();
