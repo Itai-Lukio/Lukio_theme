@@ -146,6 +146,28 @@ const lukio_helpers = (function ($) {
                 element.css('top', '').css('height', '');
             }
         }
+
+        /**
+         * track if header sticky state been triggered
+         * 
+         * @param {String} indication_class class to add when the header is sticky, default `sticky_active`
+         * @param {String} header_selector selector of the header, default the main header `header#site_header`
+         * 
+         * @author Itai Dotan
+         */
+        header_tracking(indication_class = 'sticky_active', header_selector = 'header#site_header') {
+            const header = $(header_selector),
+                observer = new IntersectionObserver((entries, observer) => {
+                    header[entries[0].isIntersecting ? 'removeClass' : 'addClass'](indication_class);
+                });
+
+            // create and add the tracking element
+            let elm = document.createElement('div');
+            elm.setAttribute('sticky-tracker', 1);
+            header.before(elm);
+
+            observer.observe(elm);
+        }
     }
 
     // return the class object to be stored in the const

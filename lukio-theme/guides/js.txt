@@ -70,3 +70,9 @@ Lukio js guide:
             @param {jQuery} element the fixed element
             @param {String} top top position top use. default '0px'
             @param {String} height height of the element. default '100vh'
+
+        header_tracking(indication_class = 'sticky_active', header_selector = 'header#site_header')
+            track if header sticky state been triggered
+
+            @param {String} indication_class class to add when the header is sticky, default `sticky_active`
+            @param {String} header_selector selector of the header, default the main header `header#site_header`
