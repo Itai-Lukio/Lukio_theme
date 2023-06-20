@@ -61,6 +61,8 @@ class Lukio_Woocommerce_Setup
         lukio_enqueue('/assets/css/lukio_woocommerce.css', 'lukio_woocommerce_stylesheet', array('lukio_main_theme_general_stylesheet'), array('parent' => true));
         lukio_enqueue('/assets/js/lukio_woocommerce.js', 'lukio_woocommerce_script', array('jquery'), array('parent' => true));
 
+        wp_enqueue_script('wc-cart-fragments');
+
         wp_localize_script(
             'lukio_woocommerce_script',
             'lukio_woo',
