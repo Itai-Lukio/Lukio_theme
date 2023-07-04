@@ -181,6 +181,11 @@ class Lukio_Woocommerce_Setup
      */
     public function add_gallery_arrows()
     {
+        // allow to filter to not print the arrows
+        if (apply_filters('lukio_theme_skip_product_thumbnails_arrows', false)){
+            return;
+        }
+
         global $product;
         $attachment_ids = $product->get_gallery_image_ids();
 

@@ -57,6 +57,10 @@ Lukio woocommerce PHP guide:
 
             @param Array $extra value to send
 
+        lukio_theme_skip_product_thumbnails_arrows
+            filter to disable product thumbnails arrows
+            return true to not print the arrows, by default the arrows are printed
+
         lukio_product_gallery_arrow_{$button_action}
             $button_action = prev||next
             filters to change the content of the gallery arrow button
