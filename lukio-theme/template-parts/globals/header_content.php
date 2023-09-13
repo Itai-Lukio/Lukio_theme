@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This is the template that displays homepage content
+ * This is the template that displays the header content.
  */
 
 // Exit if accessed directly.

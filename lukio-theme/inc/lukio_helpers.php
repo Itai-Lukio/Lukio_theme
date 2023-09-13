@@ -1,4 +1,6 @@
 <?php
+defined('ABSPATH') || exit;
+
 if (!function_exists('lukio_enqueue')) {
     /**
      * enqueue the given loacl script and stylesheet files or url. normal file for admin and min file for any one eles if exists.
@@ -17,6 +19,7 @@ if (!function_exists('lukio_enqueue')) {
         $file_enqueue = true;
         if (strpos($path, 'http') === 0) {
             $file_enqueue = false;
+            $version = false;
         }
 
         // get the file extension offset and file type
@@ -121,7 +124,7 @@ if (!function_exists('lukio_footer_credit')) {
     {
         $link = 'https://lukio.pro';
         if ($eng) {
-            $text = 'powerd by';
+            $text = 'Developed & Powered by';
             $direction = 'ltr';
         } else {
             $text = 'פותח ומתוחזק ע״י';
@@ -265,5 +268,95 @@ if (!function_exists('lukio_range_min_max')) {
             'thumb_color' => $thumb_color,
             'format' => $format,
         ));
+    }
+}
+
+if (!function_exists('lukio_bold_text')) {
+    /**
+     * Remove curly braces = {{}}, from given string, and replace with <b> tag
+     * 
+     * @param String $text [required] text to replace braces for
+     * @return String new string after braces change
+     */
+    function lukio_bold_text($text)
+    {
+        return str_replace(['{{', '}}'], ['<b>', '</b>'], $text);
+    }
+}
+
+if (!function_exists('lukio_floatval')) {
+    /**
+     * unformat numbers and return a float
+     * 
+     * use the last comma or dot (if any) as the decimal separator to create a clean float
+     * 
+     * @param String $text text to turn in to float
+     * @return Float currect number
+     * 
+     * @author Itai Dotan 
+     */
+    function lukio_floatval($text)
+    {
+        $parts = preg_split('/[\,\.](?!.*?[\,\.].*?)/', $text, 2);
+        if (count($parts) == 1) {
+            return floatval(preg_replace('/[^0-9\-]/', '', $parts[0]));
+        } else {
+            return floatval(preg_replace('/[^0-9\-]/', '', $parts[0]) . '.' . preg_replace('/[^0-9\-]/', '', $parts[1]));
+        }
+    }
+}
+
+if (!function_exists('lukio_dropdown')) {
+    /**
+     * print dropdown to use instead of the normal select element
+     * 
+     * @param array $options option array of arrays. array(
+     *                                                      array('name'=>'option_display_name1', 'value' => 'option_value1'),
+     *                                                      array('name'=>'option_display_name2', 'value' => 'option_value2')                                                 
+     *                                                      )
+     * @param string $name name of the input
+     * @param string $id id for of the input, default `` and will be the same as $name
+     * @param string $class class to add to all the css editable elements, default ``
+     * @param string $placeholder placeholder for the empty value, default ``
+     * @param string $selected_value value to start as selected, default `false` for no selected option
+     * 
+     * @author Itai Dotan
+     */
+    function lukio_dropdown($options, $name, $id = '', $class = '', $placeholder = '', $selected_value = false)
+    {
+        $name = esc_attr($name);
+        $id = $id ? esc_attr($id) : $name;
+        $class = $class ? ' ' . trim($class) : '';
+        $placeholder = esc_html($placeholder);
+        $display = $placeholder;
+?>
+        <div class="lukio_dropdown<?php echo $class; ?>">
+            <select class="lukio_dropdown_select<?php echo $class; ?> hide_js no_js" name="<?php echo $name; ?>" id="<?php echo $id; ?>">
+                <option value=""><?php echo $placeholder; ?></option>
+                <?php
+                $options_html = '';
+                foreach ($options as $option_data) {
+                    $option_name = esc_html($option_data['name']);
+                    $option_value = esc_attr(sanitize_title($option_data['value']));
+                    $selected = '';
+                    if ($selected_value && $selected_value == $option_data['value']) {
+                        $selected = ' selected';
+                        $display = $option_name;
+                    }
+                    echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
+                    $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
+                }
+                ?>
+            </select>
+            <div class="lukio_dropdown_display<?php echo $class; ?> hide_no_js no_js">
+                <span class="lukio_dropdown_display_text<?php echo $class; ?>"><?php echo $display; ?></span>
+                <ul class="lukio_dropdown_display_options_wrapper<?php echo $class; ?>">
+                    <?php
+                    echo $options_html;
+                    ?>
+                </ul>
+            </div>
+        </div>
+<?php
     }
 }

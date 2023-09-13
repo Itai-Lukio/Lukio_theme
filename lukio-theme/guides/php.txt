@@ -66,6 +66,33 @@ Lukio PHP guide:
             @param String $thumb_color [requierd] color of the range thumb
             @param String $format [optional] format for the display string, default '%d'
     
+        lukio_bold_text($text)
+            Remove curly braces = {{}}, from given string, and replace with <b> tag
+            
+            @param String $text [required] text to replace braces for
+            @return String new string after braces change
+
+        lukio_floatval($text)
+            unformat numbers and return a float
+
+            use the last comma or dot (if any) as the decimal separator to create a clean float
+
+            @param String $text text to turn in to float
+            @return Float currect number
+
+        lukio_dropdown($options, $name, $id = '', $class = '', $placeholder = '', $selected_value = false)
+                print dropdown to use instead of the normal select element
+                 
+                @param array $options option array of arrays. array(
+                                                                      array('name'=>'option_display_name1', 'value' => 'option_value1'),
+                                                                      array('name'=>'option_display_name2', 'value' => 'option_value2')                                                 
+                                                                    )
+                @param string $name name of the input
+                @param string $id id for of the input, default `` and will be the same as $name
+                @param string $class class to add to all the css editable elements, default ``
+                @param string $placeholder placeholder for the empty value, default ``
+                @param string $selected_value value to start as selected, default `false` for no selected option
+
     Filters:
         lukio_admin_guides_roles
             allows to edit the user roles the guides are visable for.

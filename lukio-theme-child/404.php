@@ -7,6 +7,8 @@
  *
  */
 
+do_action('wp_enqueue_scripts');
+
 lukio_enqueue('/assets/css/404.css', null, array(), array('parent' => true));
 
 get_header();

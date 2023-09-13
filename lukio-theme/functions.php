@@ -17,3 +17,9 @@ if (function_exists('is_plugin_active')) {
         require_once __DIR__ . '/inc/lukio_woocommerce_helpers.php';
     }
 }
+
+// add the templates sub theme class when exists
+// placed in the main theme to cover an overwrite problem when copying updates from the main theme
+if (file_exists(__DIR__ . '/inc/lukio_templates_theme.php')) {
+    require_once __DIR__ . '/inc/lukio_templates_theme.php';
+}

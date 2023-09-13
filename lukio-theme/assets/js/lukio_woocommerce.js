@@ -8,7 +8,8 @@ jQuery(document).ready(function ($) {
         is_checkout = page == lukio_woo.checkout_url,
         cart_or_checkout = page == lukio_woo.cart_url || is_checkout,
         supports_html5_storage = true,
-        checkout_storage_refresh = false;
+        checkout_storage_refresh = false,
+        thumb_active_class = 'lukio_active_thumb';
 
     // update the refresh events to the type of page
     switch (page) {
@@ -99,6 +100,9 @@ jQuery(document).ready(function ($) {
     /**
      * move the arrows to their proper position
      * 
+     * due to the way wc gallery works can not change the html architecture
+     * like wrapping thumbs in a wrapper to place the arrows with them directly
+     * 
      * @param {jQuery} arrows elements to be moved
      * @param {jQuery} continer element to append in to
      * 
@@ -106,12 +110,18 @@ jQuery(document).ready(function ($) {
      */
     function reposition_gallery_arrows(arrows, continer) {
         arrows.each(function () {
-            let outer = this.outerHTML;
+            let outer = this.outerHTML,
+                arrow = $(this),
+                position = arrow.data('place');
             $(this).remove();
-            continer.append(outer);
+            if (position == 'viewport') {
+                continer.append(outer);
+            } else {
+                continer.closest('.woocommerce-product-gallery').append(outer);
+            }
         });
-        toggle_gallery_arrows(continer.find('.lukio_product_gallery_arrow:first-of-type'));
     }
+
     /**
      * move the pagination to its proper position
      * 
@@ -130,18 +140,19 @@ jQuery(document).ready(function ($) {
      * toggle the arrows disable status of the gallery
      * 
      * @param {jQuery} btn button/pagination targeted by the event 
+     * @param {jQuery} thumbs_ol thumbnails ol element
+     * @param {int} active_index active slide index
      * 
      * @author Itai Dotan
      */
-    function toggle_gallery_arrows(btn) {
+    function toggle_gallery_arrows(btn, thumbs_ol, active_index) {
         // no need to disable when looping
         if (btn.data('loop')) {
             return;
         }
-        let continer = btn.closest('.flex-viewport'),
+        let continer = btn.closest('.woocommerce-product-gallery'),
             arrows = continer.find('.lukio_product_gallery_arrow'),
-            li_list = continer.siblings('.flex-control-nav').children('li'),
-            active_index = li_list.find('.flex-active').closest('li').index(),
+            li_list = thumbs_ol.children('li'),
             prev_action = active_index == 0 ? 'addClass' : 'removeClass',
             next_action = active_index == li_list.length - 1 ? 'addClass' : 'removeClass';
 
@@ -150,24 +161,65 @@ jQuery(document).ready(function ($) {
     }
 
     /**
-     * check if there gallery parts to reposition on page load
+     * update all the parts of product gallery. slide, thumbs, arrows and pagination
+     * 
+     * @param {jQuery} gallery '.woocommerce-product-gallery' div
+     * @param {int} index index of the active slide
      * 
      * @author Itai Dotan
      */
-    function reposition_gallery_parts() {
+    function update_gallery_display_by_index(gallery, index) {
+        let prev_arrow = gallery.find('.lukio_product_gallery_arrow.prev'),
+            thumbs_ol = gallery.find('ol.flex-control-nav'),
+            nth_index = index + 1;
+
+        // update active thumb class
+        thumbs_ol.find(`.${thumb_active_class}`).removeClass(thumb_active_class);
+        thumbs_ol.find(`li:nth-of-type(${nth_index})`).addClass(thumb_active_class);
+
+        // update the arrows
+        toggle_gallery_arrows(prev_arrow, thumbs_ol, index);
+        // scroll the thumb in to view
+        let active_thumb = thumbs_ol.find(`.${thumb_active_class}`);
+        lukio_helpers.scroll_horizontally(active_thumb, thumbs_ol);
+
+        // change the pagination dot
+        gallery.find('.lukio_product_gallery_pagination_dot.active').removeClass('active');
+        gallery.find(`.lukio_product_gallery_pagination_dot:nth-of-type(${nth_index})`).addClass('active');
+
+        // allow to add extra actions at the end of the update 
+        body.trigger('lukio_gallery_display_updated', [gallery, thumbs_ol, active_thumb, index]);
+    }
+
+    /**
+     * setup lukio product gallery
+     * 
+     * @author Itai Dotan
+     */
+    function setup_product_gallery() {
         let arrows = $('.lukio_product_gallery_arrow'),
             pagination = $('.lukio_product_gallery_pagination'),
-            continer = arrows.closest('.flex-viewport');
+            continer = arrows.closest('.flex-viewport'),
+            gallery = arrows.closest('.woocommerce-product-gallery'),
+            thumbs_ol = gallery.find('ol.flex-control-nav.flex-control-thumbs');
 
-        if (arrows.length != 0) {
-            reposition_gallery_arrows(arrows, continer);
+        if (arrows.length == 0) {
+            return;
         }
+
+        // setup thumbs css and grab and drag
+        thumbs_ol.addClass('lukio_product_gallery_thumbs');
+        thumbs_ol.lukioDragScroll();
+
+        reposition_gallery_arrows(arrows, continer);
 
         if (pagination.length != 0) {
             reposition_gallery_pagination(pagination, continer);
         }
+
+        update_gallery_display_by_index(gallery, 0);
     }
-    reposition_gallery_parts();
+    setup_product_gallery();
 
     body
         // refresh the mini cart in to lukio_mini_cart_wrapper from the shortcode
@@ -327,8 +379,18 @@ jQuery(document).ready(function ($) {
                     });
             }
         })
+        // update gallery pagination and arrows when clicking a thumbnail
+        .on('click', '.woocommerce-product-gallery ol.flex-control-nav.flex-control-thumbs li', function (e) {
+            let clicked_li = $(this),
+                ol = clicked_li.closest('.flex-control-nav.flex-control-thumbs'),
+                gallery = ol.closest('.woocommerce-product-gallery'),
+                new_index = clicked_li.index();
+
+            update_gallery_display_by_index(gallery, new_index);
+        })
         // change the product gallery image when clicking the arrows 
-        .on('click', '.lukio_product_gallery_arrow', function () {
+        .on('click', '.lukio_product_gallery_arrow', function (e) {
+            e.stopPropagation();
             let btn = $(this);
 
             if (btn.hasClass('disbled')) {
@@ -336,14 +398,14 @@ jQuery(document).ready(function ($) {
             }
 
             let action = btn.data('action'),
+                gallery = btn.closest('.woocommerce-product-gallery'),
                 loop = btn.data('loop'),
                 offset = action == 'next' ? 1 : -1,
-                ol = btn.closest('.woocommerce-product-gallery').find('ol.flex-control-nav'),
-                li_thumbs = ol.children('li'),
+                ol = gallery.find('ol.flex-control-nav'),
+                li_thumbs = ol.find('li'),
                 li_index_length = li_thumbs.length - 1,
                 active_li = ol.find('.flex-active').closest('li'),
-                new_index = active_li.index() + offset,
-                pagination = btn.siblings('.lukio_product_gallery_pagination');
+                new_index = active_li.index() + offset;
 
             // fix the index when looping
             if (new_index < 0) {
@@ -352,27 +414,70 @@ jQuery(document).ready(function ($) {
                 new_index = loop ? 0 : li_index_length;
             }
 
-            // click the new image
-            li_thumbs.eq(new_index).find('img').trigger('click');
-            // change the pagination dot
-            pagination.find('.lukio_product_gallery_pagination_dot.active').removeClass('active');
-            pagination.find('.lukio_product_gallery_pagination_dot').eq(new_index).addClass('active');
-
-            toggle_gallery_arrows(btn);
+            let new_li = li_thumbs.eq(new_index);
+            new_li.find('img').trigger('click');
         })
         // change the product gallery image when clicking a pagination dot
         .on('click', '.lukio_product_gallery_pagination_dot', function () {
-            let btn = $(this);
+            let btn = $(this),
+                new_index = btn.data('index'),
+                gallery = btn.closest('.woocommerce-product-gallery');
 
             if (btn.hasClass('active')) {
                 return;
             }
 
-            $('.lukio_product_gallery_pagination_dot.active').removeClass('active');
-            btn.addClass('active');
             // click the new image
-            $('.woocommerce-product-gallery ol.flex-control-nav li').eq(btn.data('index')).find('img').trigger('click');
+            gallery.find('ol.flex-control-nav li').eq(new_index).find('img').trigger('click');
+        })
+        // update gallery display when the slide was changed
+        .on('zoom.destroy', '.woocommerce-product-gallery__image.flex-active-slide', function () {
+            let gallery = $(this).closest('.woocommerce-product-gallery'),
+                new_index = gallery.find('.flex-control-nav.flex-control-thumbs .flex-active').closest('li').index();
+            update_gallery_display_by_index(gallery, new_index);
+        })
+        // update wc variation
+        .on('click', '.lukio_woocommerce_product_variations_li', function (e) {
+            e.stopPropagation();
+            let li = $(this);
+            if (li.hasClass('selected')) {
+                return;
+            }
 
-            toggle_gallery_arrows(btn);
+            let value = li.data('value'),
+                wrapper = li.closest('.lukio_woocommerce_product_variations_wrapper'),
+                display = wrapper.find('.lukio_woocommerce_product_variations_dropdown_display');
+
+            wrapper.find('.lukio_woocommerce_product_variations_li.selected').removeClass('selected');
+            li.addClass('selected');
+            wrapper.find(`select`).val(value).trigger('change');
+
+            // when we got a display its a dropdown select
+            if (display.length != 0) {
+                display.text(li.text());
+                $('body').trigger('click.lukio_woocommerce_product_variation_clicked');
+            }
+        })
+        // reset product variation ul selected
+        .on('click', '.variations_form a.reset_variations', function () {
+            let form = $(this).closest('form');
+            form.find('.lukio_woocommerce_product_variations_li.selected').removeClass('selected');
+            form.find('.lukio_woocommerce_product_variations_dropdown_display').each(function () {
+                let display = $(this);
+                display.text(display.data('placeholder'));
+            });
+        })
+        // open variations dropdown and setup body click close 
+        .on('click', '.lukio_woocommerce_product_variations_dropdown', function () {
+            let selector = $(this),
+                ul = selector.find('.lukio_woocommerce_product_variations_ul');
+            selector.addClass('open');
+            $('body').one('click.lukio_woocommerce_product_variation_clicked', function () {
+                ul.addClass('closing');
+                selector.removeClass('open');
+                setTimeout(() => {
+                    ul.removeClass('closing');
+                }, 400);
+            });
         });
 });

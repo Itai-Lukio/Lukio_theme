@@ -1,10 +1,47 @@
 <?php
+defined('ABSPATH') || exit;
 
 /**
  * lukio theme woocommerce setup
  */
 class Lukio_Woocommerce_Setup
 {
+    /**
+     * meta key of the product attribute color
+     * @var string meta key
+     */
+    const COLOR_META_KEY = 'lukio_color';
+
+    /**
+     * meta key of the product attribute color
+     * @var string meta key
+     */
+    const PRODUCT_ATTRIBUTES_META_KEY = 'lukio_product_attributes';
+
+    /**
+     * attribute picker display style for colors
+     * @var string style type
+     */
+    const ATTRIBUTE_STYLE_COLORS = 'colors';
+
+    /**
+     * attribute picker display style for dropdown
+     * @var string style type
+     */
+    const ATTRIBUTE_STYLE_DROPDOWN = 'dropdown';
+
+    /**
+     * attribute picker display style for select
+     * @var string style type
+     */
+    const ATTRIBUTE_STYLE_SELECT = 'select';
+
+    /**
+     * 
+     * @var null|array null before init, array of attributes and their display option 
+     */
+    private $product_attributes = null;
+
     /**
      * construct action to run when creating a new instance
      * 
@@ -34,7 +71,11 @@ class Lukio_Woocommerce_Setup
             echo '</div>';
         });
 
+        add_filter('lukio_theme_options_tabs', array($this, 'add_option_tabs'));
+        add_action('lukio_theme_options_saved', array($this, 'save_woocommerce_options_tabs'));
+        add_action('admin_init', array($this, 'maybe_init_product_attributes'));
         add_action('woocommerce_product_thumbnails', array($this, 'add_gallery_arrows'));
+        add_filter('woocommerce_dropdown_variation_attribute_options_html', array($this, 'product_ul_select'), 10, 2);
     }
 
     /**
@@ -182,7 +223,7 @@ class Lukio_Woocommerce_Setup
     public function add_gallery_arrows()
     {
         // allow to filter to not print the arrows
-        if (apply_filters('lukio_theme_skip_product_thumbnails_arrows', false)){
+        if (apply_filters('lukio_theme_skip_product_thumbnails_arrows', false)) {
             return;
         }
 
@@ -194,14 +235,15 @@ class Lukio_Woocommerce_Setup
             return;
         }
         $loop = apply_filters('lukio_product_gallery_use_loop', true) ? 'true' : 'false';
+        $position = apply_filters('lukio_product_gallery_arrows_in_gallery_wrapper', false) ? 'gallery' : 'viewport';
         foreach (['prev', 'next'] as $button_action) {
         ?>
-            <button class="lukio_product_gallery_arrow <?php echo $button_action; ?>" data-action="<?php echo $button_action; ?>" data-loop="<?php echo $loop; ?>" type="button"><?php echo apply_filters("lukio_product_gallery_arrow_$button_action", $button_action); ?></button>
-<?php
+            <button class="lukio_product_gallery_arrow <?php echo $button_action; ?> hide_no_js no_js" data-action="<?php echo $button_action; ?>" data-loop="<?php echo $loop; ?>" data-place="<?php echo $position; ?>" type="button"><?php echo apply_filters("lukio_product_gallery_arrow_$button_action", $button_action); ?></button>
+        <?php
         }
 
         if (apply_filters('lukio_product_gallery_pagination', true)) {
-            echo '<ul class="lukio_product_gallery_pagination">';
+            echo '<ul class="lukio_product_gallery_pagination hide_no_js no_js">';
 
             // add one more entry for the main image
             $attachment_ids[] = 0;
@@ -211,6 +253,305 @@ class Lukio_Woocommerce_Setup
             }
             echo '</ul>';
         }
+    }
+
+    /**
+     * add woocommerce option tabs to the theme options
+     * 
+     * @param Array $array tabs array
+     * @return Array updated tabs array
+     * 
+     * @author Itai Dotan
+     */
+    public function add_option_tabs($array)
+    {
+        $array[] = array(
+            'label' => __('Product variations style', 'lukio-theme'),
+            'callback' => array($this, 'print_admin_variations_style'),
+        );
+        return $array;
+    }
+
+    /**
+     * print the product variations style tab content
+     * 
+     * @author Itai Dotan
+     */
+    public function print_admin_variations_style()
+    {
+        ?>
+        <div class="lukio_theme_variations_style_wrapper">
+            <?php
+            foreach (wc_get_attribute_taxonomies() as $taxonomie) {
+                $attribute_name = 'pa_' . $taxonomie->attribute_name;
+                $name = $this::PRODUCT_ATTRIBUTES_META_KEY . '[' . $attribute_name . ']';
+            ?>
+                <div class="lukio_theme_variation_style">
+                    <label for="<?php echo $name; ?>"><?php echo $taxonomie->attribute_label; ?></label>
+                    <select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
+                        <option value=""><?php echo __('Buttons', 'lukio-theme'); ?></option>
+                        <?php
+                        $select_types = array(
+                            $this::ATTRIBUTE_STYLE_COLORS => __('Colors', 'lukio-theme'),
+                            $this::ATTRIBUTE_STYLE_DROPDOWN => __('Dropdown', 'lukio-theme'),
+                            $this::ATTRIBUTE_STYLE_SELECT => __('Select', 'lukio-theme'),
+                        );
+
+                        foreach ($select_types as $select_value => $select_label) {
+                            $selected = isset($this->product_attributes[$attribute_name]) && $this->product_attributes[$attribute_name] == $select_value;
+                        ?>
+                            <option value="<?php echo $select_value; ?>" <?php echo $selected ? 'selected' : ''; ?>><?php echo $select_label; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            <?php
+            }
+            ?>
+        </div>
+    <?php
+    }
+
+    /**
+     * save woocommerce options
+     * 
+     * @author Itai Dotan
+     */
+    public function save_woocommerce_options_tabs()
+    {
+        $attribute_style = array();
+        foreach ($_POST[$this::PRODUCT_ATTRIBUTES_META_KEY] as $taxonomie_slug => $type) {
+            if (empty($type)) {
+                continue;
+            }
+            $attribute_style[$taxonomie_slug] = sanitize_text_field($type);
+        }
+        update_option($this::PRODUCT_ATTRIBUTES_META_KEY, $attribute_style);
+        $this->product_attributes = $attribute_style;
+    }
+
+    /**
+     * add the color picker, use for edit and add term forms
+     * 
+     * @param string $color saved color value
+     * 
+     * @author Itai Dotan
+     */
+    private function add_attribute_color_picker($color = '')
+    {
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
+    ?>
+        <input class="lukio_attribute_color_picker" name="<?php echo $this::COLOR_META_KEY ?>" type="text" value="<?php echo $color; ?>" autocomplete="off">
+        <script>
+            jQuery(function($) {
+                $('.lukio_attribute_color_picker').wpColorPicker();
+            });
+        </script>
+    <?php
+    }
+
+    /**
+     * save the color after a term been saved
+     * 
+     * @param Int $term_id term ID
+     * 
+     * @author Itai Dotan
+     */
+    public function save_attribute_color($term_id)
+    {
+        if (isset($_POST[$this::COLOR_META_KEY])) {
+            $color = sanitize_hex_color($_POST[$this::COLOR_META_KEY]);
+            update_term_meta($term_id, $this::COLOR_META_KEY, $color);
+        } else {
+            delete_term_meta($term_id, $this::COLOR_META_KEY);
+        }
+    }
+
+    /**
+     * get text for the term page color
+     * 
+     * @return array text to use in the page
+     * 
+     * @author Itai Dotan
+     */
+    private function get_term_page_text()
+    {
+        return array(
+            'label' => __('Color', 'lukio-theme'),
+            'description' => __('Color to use for the product variation button', 'lukio-theme'),
+        );
+    }
+
+    /**
+     * setup to add color to edit term form
+     * 
+     * @param WP_Term $term current taxonomy term object
+     * 
+     * @author Itai Dotan
+     */
+    public function attribute_edit_filed($term)
+    {
+        $text = $this->get_term_page_text();
+    ?>
+        <tr class="form-field term-<?php echo $this::COLOR_META_KEY; ?>-wrap">
+            <th scope="row">
+                <label for="<?php echo $this::COLOR_META_KEY; ?>"><?php echo $text['label']; ?></label>
+            </th>
+            <td>
+                <?php
+                $this->add_attribute_color_picker(get_term_meta($term->term_id, $this::COLOR_META_KEY, true));
+                ?>
+                <p class="description" id="<?php echo $this::COLOR_META_KEY; ?>-description"><?php echo $text['description']; ?></p>
+            </td>
+        </tr>
+    <?php
+    }
+
+    /**
+     * setup to add color to add term form
+     * 
+     * @author Itai Dotan
+     */
+    public function attribute_add_field()
+    {
+        $text = $this->get_term_page_text();
+    ?>
+        <div class="form-field term-<?php echo $this::COLOR_META_KEY; ?>-wrap">
+            <label for="<?php echo $this::COLOR_META_KEY; ?>"><?php echo $text['label']; ?></label>
+            <?php
+            $this->add_attribute_color_picker();
+            ?>
+            <p id="<?php echo $this::COLOR_META_KEY; ?>-description"><?php echo $text['description']; ?></p>
+        </div>
+    <?php
+    }
+
+    /**
+     * init the product attributes var and hooks one per run
+     * 
+     * @author Itai Dotan
+     */
+    public function maybe_init_product_attributes()
+    {
+        if (!is_null($this->product_attributes)) {
+            return;
+        }
+        $this->product_attributes = get_option($this::PRODUCT_ATTRIBUTES_META_KEY, array());
+        foreach ($this->product_attributes as $attribute_slug => $type) {
+            if ($type == $this::ATTRIBUTE_STYLE_COLORS) {
+                add_action("{$attribute_slug}_add_form_fields", array($this, 'attribute_add_field'));
+                add_action("{$attribute_slug}_edit_form_fields", array($this, 'attribute_edit_filed'));
+                add_action("saved_{$attribute_slug}", array($this, 'save_attribute_color'));
+            }
+        }
+    }
+
+    /**
+     * change the default select to ul select
+     * 
+     * @param string $html default select from `wc_dropdown_variation_attribute_options`
+     * @param array $args data from 'wc_dropdown_variation_attribute_options'
+     * @return string edited select html
+     * 
+     * @author Itai Dotan 
+     */
+    public function product_ul_select($html, $args)
+    {
+        $this->maybe_init_product_attributes();
+
+        $attribute_select = false;
+        $is_dropdown = false;
+        $is_color = false;
+        $class = 'buttons';
+        if (isset($this->product_attributes[$args['attribute']])) {
+            switch ($this->product_attributes[$args['attribute']]) {
+                case $this::ATTRIBUTE_STYLE_SELECT:
+                    $attribute_select = true;
+                    break;
+                case $this::ATTRIBUTE_STYLE_DROPDOWN:
+                    $is_dropdown = true;
+                    $class = 'dropdown';
+                    break;
+                case $this::ATTRIBUTE_STYLE_COLORS:
+                    $is_color = true;
+                    $class = 'colors';
+                    break;
+            }
+        }
+        // hook to use the default select
+        if (apply_filters('lukio_product_variation_select_' . $args['attribute'], $attribute_select)) {
+            return $html;
+        }
+
+        $esc_attr_name = esc_attr(sanitize_title($args['attribute']));
+        ob_start();
+    ?>
+        <div class="lukio_woocommerce_product_variations_wrapper">
+
+            <?php
+            if ($is_dropdown) {
+                // add dropdown wrapper and a selected display
+                /* TRANSLATORS: use woocommerce translation. does not need translation */
+                $placeholder = esc_html(apply_filters('lukio_woocommerce_product_variation_placeholder_' . $args['attribute'], __('Choose an option', 'woocommerce'), $args['product']));
+            ?>
+                <div class="lukio_woocommerce_product_variations_dropdown hide_no_js no_js">
+                    <span class="lukio_woocommerce_product_variations_dropdown_display" data-placeholder="<?php echo $placeholder; ?>"><?php echo $placeholder; ?></span>
+                <?php
+            }
+                ?>
+
+                <ul class="lukio_woocommerce_product_variations_ul <?php echo $class; ?> hide_no_js no_js" data-attr="<?php echo $esc_attr_name; ?>">
+                    <?php
+                    if (!empty($args['options'])) {
+                        if ($args['product'] && taxonomy_exists($args['attribute'])) {
+                            // Get terms if this is a taxonomy - ordered. We need the names too.
+                            $terms = wc_get_product_terms(
+                                $args['product']->get_id(),
+                                $args['attribute'],
+                                array(
+                                    'fields' => 'all',
+                                )
+                            );
+                            foreach ($terms as $term) {
+                                if (in_array($term->slug, $args['options'], true)) {
+                                    // add background color for a color button
+                                    $style = $is_color ? 'style="background-color:' . get_term_meta($term->term_id, 'lukio_color', true) . ';"' : '';
+                    ?>
+                                    <li class="lukio_woocommerce_product_variations_li <?php echo $class;
+                                                                                        echo sanitize_title($args['selected']) == $term->slug ? ' selected' : ''; ?>" data-value="<?php echo esc_attr($term->slug); ?>" data-attr="<?php echo $esc_attr_name; ?>" <?php echo $style; ?>><?php echo esc_html(apply_filters('lukio_product_variation_li_' . $args['attribute'], $term->name, $term, $args['product'])); ?></li>
+                                <?php
+                                }
+                            }
+                        } else {
+                            foreach ($args['options'] as $option) {
+                                // This handles < 2.4.0 bw compatibility where text attributes were not sanitized.
+                                $selected = sanitize_title($args['selected']) === $args['selected'] ? ($args['selected'] == sanitize_title($option) ? ' selected' : '') : ($args['selected'] == $option ? ' selected' : '');
+                                ?>
+                                <li class="lukio_woocommerce_product_variations_li <?php echo $class . $selected; ?>" data-value="<?php echo esc_attr($option); ?>" data-attr="<?php echo $esc_attr_name; ?>"><?php echo esc_html(apply_filters('lukio_product_variation_li_' . $args['attribute'], $option, null, $args['product'])); ?></li>
+                    <?php
+                            }
+                        }
+                    }
+                    ?>
+                </ul>
+
+                <?php
+                if ($is_dropdown) {
+                    // close the dropdown wrapper
+                ?>
+                </div>
+            <?php
+                }
+            ?>
+
+            <div class="hide_js no_js">
+                <?php echo $html; ?>
+            </div>
+        </div>
+<?php
+        return ob_get_clean();
     }
 }
 new Lukio_Woocommerce_Setup();

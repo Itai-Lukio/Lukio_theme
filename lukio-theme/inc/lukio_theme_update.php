@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 /**
  * lukio theme update class
@@ -102,18 +103,8 @@ class Lukio_Theme_Update
     public function check_upgrade_completed($upgrader_object, $options)
     {
         if ($options['action'] == 'update' && $options['type'] == 'theme' && in_array(get_template(), $options['themes'])) {
-            wp_schedule_single_event(time() + 300, Lukio_Theme_Update::trigger_upgrade_completed_hooks());
+            wp_schedule_single_event(time(), 'lukio_theme_updated');
         }
-    }
-
-    /**
-     * scheduled task to run after theme update. trigger all actions hooked to 'lukio_theme_updated'
-     * 
-     * @author Itai Dotan
-     */
-    public static function trigger_upgrade_completed_hooks()
-    {
-        do_action('lukio_theme_updated');
     }
 
     /**

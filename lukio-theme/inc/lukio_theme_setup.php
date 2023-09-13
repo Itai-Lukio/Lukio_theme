@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 /**
  * lukio theme main setup
@@ -178,7 +179,7 @@ class Lukio_Theme_setup
         $admin_capabilities['delete_plugins'] = false;
         $admin_capabilities['update_core'] = false;
 
-        foreach ($admin_capabilities as $cap => $grant) {
+        foreach (apply_filters('lukio_theme_site_manager_capabilities', $admin_capabilities) as $cap => $grant) {
             $site_manager->add_cap($cap, $grant);
         }
     }

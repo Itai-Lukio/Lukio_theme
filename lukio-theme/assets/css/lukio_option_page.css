@@ -153,6 +153,20 @@ input.lukio_theme_option_css_name {
     margin-bottom: 10px;
 }
 
+.lukio_theme_variations_style_wrapper {
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lukio_theme_variation_style {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
 @media screen and (min-width:1024px) {
     .lukio_theme_option_form {
         max-width: 1200px;

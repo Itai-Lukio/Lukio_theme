@@ -176,22 +176,56 @@ const lukio_helpers = (function ($) {
 
 // functions to run on ready
 (function ($) {
-    $(document).ready(function () {
-        /**
-         * update the css var with the real 100vw of the page
-         */
-        function lukio_body_width_var() {
-            document.documentElement.style.setProperty('--lukio-100vw', $('body').css('width'));
-        }
+    // remove the no js class indicator
+    $('.no_js').removeClass('no_js');
 
-        // onload run
-        lukio_body_width_var();
+    /**
+    * update the css var with the real 100vw of the page
+    */
+    function lukio_body_width_var() {
+        document.documentElement.style.setProperty('--lukio-100vw', $('body').css('width'));
+    }
+    lukio_body_width_var();
 
-        // rerun on resize of the body to update even when using 'overflow: hidden;' on the body
-        const lukio_resize_observer = new ResizeObserver(lukio_body_width_var);
-        lukio_resize_observer.observe($('body')[0]);
-    })
+    // rerun on resize of the body to update even when using 'overflow: hidden;' on the body
+    const lukio_resize_observer = new ResizeObserver(lukio_body_width_var);
+    lukio_resize_observer.observe($('body')[0]);
 
+    $(document)
+        // open the dropdown and setup it closing
+        .on('click', '.lukio_dropdown_display', function () {
+            let selector = $(this),
+                ul = selector.find('.lukio_dropdown_display_options_wrapper');
+            selector.addClass('open');
+            $('body').one('click.lukio_dropdown_clicked', function () {
+                ul.addClass('closing');
+                selector.removeClass('open');
+                setTimeout(() => {
+                    ul.removeClass('closing');
+                }, 400);
+            });
+        })
+        // update the dropdown select and close the dropdown
+        .on('click', '.lukio_dropdown_display_option', function (e) {
+            e.stopPropagation();
+            let li = $(this);
+            if (li.hasClass('selected')) {
+                return;
+            }
+
+            let value = li.data('value'),
+                wrapper = li.closest('.lukio_dropdown'),
+                display = wrapper.find('.lukio_dropdown_display_text');
+
+            wrapper.find('.lukio_dropdown_display_option.selected').removeClass('selected');
+            li.addClass('selected');
+            wrapper.find(`select`).val(value).trigger('change');
+
+            display.text(li.text());
+            $('body').trigger('click.lukio_dropdown_clicked');
+        });
+
+    // use to add drag scroll to elements
     $.fn.lukioDragScroll = function () {
         this.each(function () {
             let el = $(this),

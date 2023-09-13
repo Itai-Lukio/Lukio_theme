@@ -40,3 +40,14 @@ Lukio woocommerce JS guide:
 
             $('body').on('lukio_cart_num_refresh', function(e, fragment){});
                 fragment = jQuery object
+
+        lukio_gallery_display_updated
+            target: body
+            trigger when the gallery was updated.
+            allow to add extra actions at the end of the update
+
+            $('body').on('lukio_gallery_display_updated', function(e, gallery, thumbs_ol, active_thumb, index){});
+                gallery = jQuery object
+                thumbs_ol = jQuery object
+                active_thumb = jQuery object
+                index = int

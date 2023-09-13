@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
     /**
