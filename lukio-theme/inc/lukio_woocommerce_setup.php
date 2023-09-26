@@ -13,6 +13,12 @@ class Lukio_Woocommerce_Setup
     const COLOR_META_KEY = 'lukio_color';
 
     /**
+     * meta key of the product attribute second color
+     * @var string meta key
+     */
+    const SECOND_COLOR_META_KEY = 'lukio_second_color';
+
+    /**
      * meta key of the product attribute color
      * @var string meta key
      */
@@ -76,6 +82,13 @@ class Lukio_Woocommerce_Setup
         add_action('admin_init', array($this, 'maybe_init_product_attributes'));
         add_action('woocommerce_product_thumbnails', array($this, 'add_gallery_arrows'));
         add_filter('woocommerce_dropdown_variation_attribute_options_html', array($this, 'product_ul_select'), 10, 2);
+
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue'));
+        add_filter('woocommerce_product_data_tabs', array($this, 'add_bulk_variations_tab'));
+        add_action('woocommerce_product_data_panels', array($this, 'bulk_variations_tab_content'));
+        add_action('wp_ajax_lukio_product_bulk_variations_image_preview', array($this, 'bulk_variations_image_preview'));
+        add_action('wp_ajax_lukio_product_bulk_variations_image_set', array($this, 'bulk_variations_image_set'));
+        add_action('wp_ajax_lukio_product_bulk_variations_reload', array($this, 'reload_bulk_variations_tab_content'));
     }
 
     /**
@@ -310,7 +323,7 @@ class Lukio_Woocommerce_Setup
             }
             ?>
         </div>
-    <?php
+        <?php
     }
 
     /**
@@ -334,22 +347,28 @@ class Lukio_Woocommerce_Setup
     /**
      * add the color picker, use for edit and add term forms
      * 
+     * @param bool $enqueue true to enqueue script, used to not double print scripts
+     * @param string $name meta key name for the input
      * @param string $color saved color value
      * 
      * @author Itai Dotan
      */
-    private function add_attribute_color_picker($color = '')
+    private function add_attribute_color_picker($enqueue, $name, $color = '')
     {
-        wp_enqueue_style('wp-color-picker');
-        wp_enqueue_script('wp-color-picker');
-    ?>
-        <input class="lukio_attribute_color_picker" name="<?php echo $this::COLOR_META_KEY ?>" type="text" value="<?php echo $color; ?>" autocomplete="off">
-        <script>
-            jQuery(function($) {
-                $('.lukio_attribute_color_picker').wpColorPicker();
-            });
-        </script>
-    <?php
+        if ($enqueue) {
+            wp_enqueue_style('wp-color-picker');
+            wp_enqueue_script('wp-color-picker');
+        ?>
+            <script>
+                jQuery(function($) {
+                    $('.lukio_attribute_color_picker').wpColorPicker();
+                });
+            </script>
+        <?php
+        }
+        ?>
+        <input class="lukio_attribute_color_picker" name="<?php echo $name ?>" type="text" value="<?php echo $color; ?>" autocomplete="off">
+        <?php
     }
 
     /**
@@ -361,26 +380,34 @@ class Lukio_Woocommerce_Setup
      */
     public function save_attribute_color($term_id)
     {
-        if (isset($_POST[$this::COLOR_META_KEY])) {
-            $color = sanitize_hex_color($_POST[$this::COLOR_META_KEY]);
-            update_term_meta($term_id, $this::COLOR_META_KEY, $color);
-        } else {
-            delete_term_meta($term_id, $this::COLOR_META_KEY);
+        foreach ([$this::COLOR_META_KEY, $this::SECOND_COLOR_META_KEY] as $meta_key) {
+            if (isset($_POST[$meta_key])) {
+                $color = sanitize_hex_color($_POST[$meta_key]);
+                update_term_meta($term_id, $meta_key, $color);
+            } else {
+                delete_term_meta($term_id, $meta_key);
+            }
         }
     }
 
     /**
      * get text for the term page color
      * 
-     * @return array text to use in the page
+     * @return array text to use in the page indexed by meta key
      * 
      * @author Itai Dotan
      */
     private function get_term_page_text()
     {
         return array(
-            'label' => __('Color', 'lukio-theme'),
-            'description' => __('Color to use for the product variation button', 'lukio-theme'),
+            $this::COLOR_META_KEY => array(
+                'label' => __('Color', 'lukio-theme'),
+                'description' => __('Color to use for the product variation button', 'lukio-theme'),
+            ),
+            $this::SECOND_COLOR_META_KEY => array(
+                'label' => __('Second color', 'lukio-theme'),
+                'description' => __('Second color to use for the product variation button', 'lukio-theme'),
+            )
         );
     }
 
@@ -393,20 +420,24 @@ class Lukio_Woocommerce_Setup
      */
     public function attribute_edit_filed($term)
     {
-        $text = $this->get_term_page_text();
-    ?>
-        <tr class="form-field term-<?php echo $this::COLOR_META_KEY; ?>-wrap">
-            <th scope="row">
-                <label for="<?php echo $this::COLOR_META_KEY; ?>"><?php echo $text['label']; ?></label>
-            </th>
-            <td>
-                <?php
-                $this->add_attribute_color_picker(get_term_meta($term->term_id, $this::COLOR_META_KEY, true));
-                ?>
-                <p class="description" id="<?php echo $this::COLOR_META_KEY; ?>-description"><?php echo $text['description']; ?></p>
-            </td>
-        </tr>
-    <?php
+        $texts = $this->get_term_page_text();
+        $enqueue = true;
+        foreach ($texts as $meta_key => $text_array) {
+        ?>
+            <tr class="form-field term-<?php echo $meta_key; ?>-wrap">
+                <th scope="row">
+                    <label for="<?php echo $meta_key; ?>"><?php echo $text_array['label']; ?></label>
+                </th>
+                <td>
+                    <?php
+                    $this->add_attribute_color_picker($enqueue, $meta_key, get_term_meta($term->term_id, $meta_key, true));
+                    ?>
+                    <p class="description" id="<?php echo $meta_key; ?>-description"><?php echo $text_array['description']; ?></p>
+                </td>
+            </tr>
+        <?php
+            $enqueue = false;
+        }
     }
 
     /**
@@ -416,16 +447,20 @@ class Lukio_Woocommerce_Setup
      */
     public function attribute_add_field()
     {
-        $text = $this->get_term_page_text();
-    ?>
-        <div class="form-field term-<?php echo $this::COLOR_META_KEY; ?>-wrap">
-            <label for="<?php echo $this::COLOR_META_KEY; ?>"><?php echo $text['label']; ?></label>
-            <?php
-            $this->add_attribute_color_picker();
-            ?>
-            <p id="<?php echo $this::COLOR_META_KEY; ?>-description"><?php echo $text['description']; ?></p>
-        </div>
-    <?php
+        $texts = $this->get_term_page_text();
+        $enqueue = true;
+        foreach ($texts as $meta_key => $text_array) {
+        ?>
+            <div class="form-field term-<?php echo $meta_key; ?>-wrap">
+                <label for="<?php echo $meta_key; ?>"><?php echo $text_array['label']; ?></label>
+                <?php
+                $this->add_attribute_color_picker($enqueue, $meta_key);
+                ?>
+                <p id="<?php echo $meta_key; ?>-description"><?php echo $text_array['description']; ?></p>
+            </div>
+        <?php
+            $enqueue = false;
+        }
     }
 
     /**
@@ -487,7 +522,7 @@ class Lukio_Woocommerce_Setup
 
         $esc_attr_name = esc_attr(sanitize_title($args['attribute']));
         ob_start();
-    ?>
+        ?>
         <div class="lukio_woocommerce_product_variations_wrapper">
 
             <?php
@@ -517,7 +552,16 @@ class Lukio_Woocommerce_Setup
                             foreach ($terms as $term) {
                                 if (in_array($term->slug, $args['options'], true)) {
                                     // add background color for a color button
-                                    $style = $is_color ? 'style="background-color:' . get_term_meta($term->term_id, 'lukio_color', true) . ';"' : '';
+                                    $style = '';
+                                    if ($is_color) {
+                                        $color = get_term_meta($term->term_id, $this::COLOR_META_KEY, true);
+                                        $second = get_term_meta($term->term_id, $this::SECOND_COLOR_META_KEY, true);
+                                        if (empty($second)) {
+                                            $style = 'style="background-color:' . $color . ';"';
+                                        } else {
+                                            $style = 'style="background: linear-gradient(135deg, ' . $color . ' 51%, ' . $second . ' 50% 100%);"';
+                                        }
+                                    }
                     ?>
                                     <li class="lukio_woocommerce_product_variations_li <?php echo $class;
                                                                                         echo sanitize_title($args['selected']) == $term->slug ? ' selected' : ''; ?>" data-value="<?php echo esc_attr($term->slug); ?>" data-attr="<?php echo $esc_attr_name; ?>" <?php echo $style; ?>><?php echo esc_html(apply_filters('lukio_product_variation_li_' . $args['attribute'], $term->name, $term, $args['product'])); ?></li>
@@ -550,8 +594,206 @@ class Lukio_Woocommerce_Setup
                 <?php echo $html; ?>
             </div>
         </div>
-<?php
+    <?php
         return ob_get_clean();
+    }
+
+    /**
+     * enqueue for wp admin
+     * 
+     * @author Itai Dotan
+     */
+    public function admin_enqueue()
+    {
+        $screen = get_current_screen();
+
+        if ($screen->base === 'post' && $screen->post_type === 'product') {
+            // enqueue needed for product page
+            lukio_enqueue('/assets/js/product_admin.js', 'lukio_theme_product_admin', ['jquery'], ['parent' => true]);
+            lukio_enqueue('/assets/css/product_admin.css', 'lukio_theme_product_admin', [], ['parent' => true]);
+        }
+    }
+
+    /**
+     * add bulk variations tab to wc product data tabs
+     * 
+     * @author Itai Dotan
+     */
+    public function add_bulk_variations_tab($tabs)
+    {
+        $tabs['lukio_bulk_img'] = array(
+            'label'    => __('Bulk Variation Image', 'lukio-theme'),
+            'target'   => 'lukio_product_bulk_variations_image',
+            'class'    => array('show_if_variable'),
+            'priority' => 65,
+        );
+        return $tabs;
+    }
+
+    /**
+     * print the content of the bulk variations image tab
+     * 
+     * @author Itai Dotan
+     */
+    public function bulk_variations_tab_content()
+    {
+        global $product_object;
+        $nonce = wp_create_nonce('lukio_bulk_variation_img');
+        $attributes = array_filter($product_object->get_attributes(), function ($attribute) {
+            return true === $attribute->get_variation();
+        });
+    ?>
+        <div id="lukio_product_bulk_variations_image" class="panel woocommerce_options_panel hidden">
+            <?php
+            if (empty($attributes)) {
+            ?>
+                <p class="lukio_product_bulk_variations_image_empty"><?php echo __('Before you can add a variation image you need to add some variation attributes on the <strong>Attributes</strong> tab.', 'lukio-theme'); ?></p>
+            <?php
+            } else {
+            ?>
+                <div class="lukio_product_bulk_variations_image_img_wrapper">
+                    <img class="lukio_product_bulk_variations_image_img" src="" alt="">
+                    <input type="hidden" id="lukio_product_bulk_variations_image_input" name="lukio_product_bulk_variations_image_input">
+                    <button class="button lukio_product_bulk_variations_image_picker" type="button"><?php echo __('Pick image', 'lukio-theme') ?></button>
+                </div>
+
+                <div class="lukio_product_bulk_variations_image_filters">
+                    <?php
+                    foreach ($attributes as  $attribute) {
+                        $esc_attr_name = esc_attr(sanitize_title($attribute->get_name()));
+                        $id = 'lukio_product_bulk_variations_image_select_' . $esc_attr_name;
+                    ?>
+                        <div class="lukio_product_bulk_variations_image_select_wrapper">
+                            <label for="<?php echo $id ?>"><?php echo wc_attribute_label($attribute->get_name()); ?></label>
+                            <select name="lukio_product_bulk_variations_image_select[<?php echo $esc_attr_name; ?>]" id="<?php echo $id; ?>">
+                                <option value=""><?php echo __('Don\'t filter', 'lukio-theme'); ?></option>
+                                <?php
+                                if ($attribute->is_taxonomy()) {
+                                    foreach ($attribute->get_terms() as $option) {
+                                ?>
+                                        <option value="<?php echo esc_attr($option->slug); ?>"><?php echo esc_html(apply_filters('woocommerce_variation_option_name', $option->name, $option, $attribute->get_name(), $product_object)); ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                    <?php } else {
+                                    foreach ($attribute->get_options() as $option) {
+                                    ?>
+                                        <option value="<?php echo esc_attr($option); ?>"><?php echo esc_html(apply_filters('woocommerce_variation_option_name', $option, null, $attribute->get_name(), $product_object)); ?></option>
+                                <?php }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    <?php
+                    }
+
+                    ?>
+                </div>
+                <div class="lukio_product_bulk_variations_image_btns_wrapper">
+                    <button class="button button-primary lukio_product_bulk_variations_image_btn" type="button" data-action="set"><?php echo __('Set image', 'lukio-theme') ?></button>
+                    <button class="button lukio_product_bulk_variations_image_btn" type="button" data-action="remove"><?php echo __('Remove image', 'lukio-theme') ?></button>
+                </div>
+            <?php
+            }
+            ?>
+            <input type="hidden" id="lukio_product_bulk_variations_image_nonce" name="lukio_product_bulk_variations_image_nonce" value="<?php echo $nonce; ?>">
+        </div>
+<?php
+    }
+
+    /**
+     * ajax reload image for the bulk variations preview
+     * 
+     * @author Itai Dotan
+     */
+    public function bulk_variations_image_preview()
+    {
+        $image_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        if ($image_id) {
+            $image_src = wp_get_attachment_image_src($image_id, 'thumbnail');
+            $data = array(
+                'success' => true,
+                'image_src' => $image_src ? $image_src[0] : '',
+            );
+        } else {
+            $data = array(
+                'success' => false,
+            );
+        }
+        echo json_encode($data);
+        die;
+    }
+
+    /**
+     * bulk set variations image by the selected filters
+     * 
+     * @author Itai Dotan
+     */
+    public function bulk_variations_image_set()
+    {
+        if (!wp_verify_nonce($_POST['nonce'], 'lukio_bulk_variation_img')) {
+            die;
+        }
+
+        $args = array(
+            'post_type' => 'product_variation',
+            'posts_per_page' => -1,
+            'post_parent' => (int)$_POST['post_id'],
+            'fields' => 'ids',
+        );
+        parse_str($_POST['filters_str'], $filters);
+        foreach ($filters['lukio_product_bulk_variations_image_select'] as $attr => $value) {
+            // $value = sanitize_text_field($value);
+            if ($value == '') {
+                continue;
+            }
+            if (isset($args['meta_query']) && !isset($args['meta_query']['relation'])) {
+                $args['meta_query']['relation'] = 'AND';
+            }
+
+            $args['meta_query'][] = array(
+                'key' => 'attribute_' . $attr,
+                'value' => $value
+            );
+        }
+
+        $query = new WP_Query($args);
+
+        $img_id = (int)$_POST['image_id'];
+        foreach ($query->posts as $post_id) {
+            $action = sanitize_text_field($_POST['type']);
+            if ($img_id === 0 || $action === 'remove') {
+                delete_post_meta($post_id, '_thumbnail_id');
+            } else {
+                update_post_meta($post_id, '_thumbnail_id', $img_id);
+            }
+        }
+
+        echo json_encode(array('success' => true));
+        die;
+    }
+
+    /**
+     * ajax reload of bulk variations image tab
+     * 
+     * @author Itai Dotan
+     */
+    public function reload_bulk_variations_tab_content()
+    {
+        if (!wp_verify_nonce($_GET['nonce'], 'lukio_bulk_variation_img')) {
+            die;
+        }
+
+        global $product_object;
+        $product_object = wc_get_product((int)$_GET['post_id']);
+        ob_start();
+        $this->bulk_variations_tab_content();
+        $fragment = ob_get_clean();
+
+        echo json_encode(array(
+            'fragment' => $fragment
+        ));
+        die;
     }
 }
 new Lukio_Woocommerce_Setup();
