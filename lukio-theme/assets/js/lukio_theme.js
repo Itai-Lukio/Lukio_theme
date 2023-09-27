@@ -221,7 +221,7 @@ const lukio_helpers = (function ($) {
             li.addClass('selected');
             wrapper.find(`select`).val(value).trigger('change');
 
-            display.text(li.text());
+            display.html(li.html());
             $('body').trigger('click.lukio_dropdown_clicked');
         });
 
