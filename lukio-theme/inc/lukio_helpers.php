@@ -124,7 +124,7 @@ if (!function_exists('lukio_footer_credit')) {
     {
         $link = 'https://lukio.pro';
         if ($eng) {
-            $text = 'powerd by';
+            $text = 'Developed & Powered by';
             $direction = 'ltr';
         } else {
             $text = 'פותח ומתוחזק ע״י';
@@ -352,8 +352,7 @@ if (!function_exists('lukio_dropdown')) {
                         $options_html .= '</li>';
                     } else {
                         $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
-                    }
-                }
+                    }                }
                 ?>
             </select>
             <div class="lukio_dropdown_display<?php echo $class; ?> hide_no_js no_js">
