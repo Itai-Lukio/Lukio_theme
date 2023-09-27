@@ -124,7 +124,7 @@ if (!function_exists('lukio_footer_credit')) {
     {
         $link = 'https://lukio.pro';
         if ($eng) {
-            $text = 'Developed & Powered by';
+            $text = 'powerd by';
             $direction = 'ltr';
         } else {
             $text = 'פותח ומתוחזק ע״י';
@@ -310,10 +310,12 @@ if (!function_exists('lukio_dropdown')) {
     /**
      * print dropdown to use instead of the normal select element
      * 
-     * @param array $options option array of arrays. array(
-     *                                                      array('name'=>'option_display_name1', 'value' => 'option_value1'),
-     *                                                      array('name'=>'option_display_name2', 'value' => 'option_value2')                                                 
-     *                                                      )
+     * @param array $options option array of arrays. 
+     * optional to pass image for additional image before option name; when passed, pass according to wp_get_attachment_image parameters;
+     * array(
+     *      array('name'=>'option_display_name1', 'value' => 'option_value1'),
+     *      array('name'=>'option_display_name2', 'value' => 'option_value2')                                                 
+     *     )
      * @param string $name name of the input
      * @param string $id id for of the input, default `` and will be the same as $name
      * @param string $class class to add to all the css editable elements, default ``
@@ -344,7 +346,13 @@ if (!function_exists('lukio_dropdown')) {
                         $display = $option_name;
                     }
                     echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
-                    $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
+                    if ( isset( $options_data['image'] ) ) {
+                        $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name;
+                        $options_html .= wp_get_attachment_image($option_data['image']['id'], $option_data['image']['size'], $option_data['image']['icon'], $option_data['image']['attr']);
+                        $options_html .= '</li>';
+                    } else {
+                        $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
+                    }
                 }
                 ?>
             </select>
