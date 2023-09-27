@@ -311,7 +311,6 @@ if (!function_exists('lukio_dropdown')) {
      * print dropdown to use instead of the normal select element
      * 
      * @param array $options option array of arrays. 
-     * optional to pass image for additional image before option name; when passed, pass according to wp_get_attachment_image parameters;
      * array(
      *      array('name'=>'option_display_name1', 'value' => 'option_value1'),
      *      array('name'=>'option_display_name2', 'value' => 'option_value2')                                                 
@@ -338,7 +337,7 @@ if (!function_exists('lukio_dropdown')) {
                 <?php
                 $options_html = '';
                 foreach ($options as $option_data) {
-                    $option_name = esc_html($option_data['name']);
+                    $option_name = $option_data['name'];
                     $option_value = esc_attr(sanitize_title($option_data['value']));
                     $selected = '';
                     if ($selected_value && $selected_value == $option_data['value']) {
@@ -346,14 +345,8 @@ if (!function_exists('lukio_dropdown')) {
                         $display = $option_name;
                     }
                     echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
-                    if ( isset( $options_data['image'] ) ) {
-                        $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">';
-                        $options_html .= wp_get_attachment_image($option_data['image']['id'], $option_data['image']['size'], $option_data['image']['icon'], $option_data['image']['attr']);
-                        $options_html .= $option_name;
-                        $options_html .= '</li>';
-                    } else {
-                        $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
-                    }                }
+                    $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
+                }
                 ?>
             </select>
             <div class="lukio_dropdown_display<?php echo $class; ?> hide_no_js no_js">
