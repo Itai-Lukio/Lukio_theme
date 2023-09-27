@@ -347,8 +347,9 @@ if (!function_exists('lukio_dropdown')) {
                     }
                     echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
                     if ( isset( $options_data['image'] ) ) {
-                        $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name;
+                        $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">';
                         $options_html .= wp_get_attachment_image($option_data['image']['id'], $option_data['image']['size'], $option_data['image']['icon'], $option_data['image']['attr']);
+                        $options_html .= $option_name;
                         $options_html .= '</li>';
                     } else {
                         $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
