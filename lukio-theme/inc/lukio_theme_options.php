@@ -125,7 +125,9 @@ class Lukio_Theme_Options
     private function print_admin_pixels()
     {
     ?>
+        <h4><?php echo __('Head Pixels', 'lukio-theme'); ?></h4>
         <textarea class="lukio_theme_option_pixels_textarea" name="lukio_pixels_head" cols="30" rows="10"><?php echo get_option('lukio_pixels_head'); ?></textarea>
+        <h4><?php echo __('Body Pixels', 'lukio-theme'); ?></h4>
         <textarea class="lukio_theme_option_pixels_textarea" name="lukio_pixels_body" cols="30" rows="10"><?php echo get_option('lukio_pixels_body'); ?></textarea>
     <?php
     }

@@ -76,5 +76,8 @@ jQuery(document).ready(function ($) {
             $(`.lukio_theme_option_tab[data-tab="${new_tab_index}"], .lukio_theme_option_tab_content[data-tab="${new_tab_index}"]`).addClass('active');
 
             window.history.replaceState({}, "", window.location.pathname + replace_query_param('tab', new_tab_index, window.location.search));
+        })
+        .on('click', '.lukio_theme_option_submit', function () {
+            $('.lukio_theme_option_form').addClass('loading');
         });
 });
