@@ -59,6 +59,10 @@ class Lukio_Woocommerce_Setup
         add_action('wp_enqueue_scripts', array($this, 'enqueues'), PHP_INT_MAX);
         add_action('admin_bar_menu', array($this, 'admin_bar_guides'), 50);
 
+        // remove wc page wrappers as we already have them
+        remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
+        remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
+
         add_shortcode('lukio_woocommerce_mini_cart', array($this, 'mini_cart'));
 
         add_action('wp_ajax_lukio_woocommerce_refresh_mini_cart', array($this, 'refresh_mini_cart'));
