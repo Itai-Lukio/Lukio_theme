@@ -46,9 +46,10 @@
             };
 
             track_update() {
-                let percent1 = ((this.min_slider.val() - this.min_val) * 100) / this.track_divider;
-                let percent2 = ((this.max_slider.val() - this.min_val) * 100) / this.track_divider;
-                this.track.css('background', `linear-gradient(to right, ${this.outer_color} ${percent1}% , ${this.inner_color} ${percent1}% , ${this.inner_color} ${percent2}%, ${this.outer_color} ${percent2}%)`);
+                let percent1 = ((this.min_slider.val() - this.min_val) * 100) / this.track_divider,
+                    percent2 = ((this.max_slider.val() - this.min_val) * 100) / this.track_divider,
+                    direction = this.track.css('direction') == 'rtl' ? 'left' : 'right';
+                this.track.css('background', `linear-gradient(to ${direction}, ${this.outer_color} ${percent1}% , ${this.inner_color} ${percent1}% , ${this.inner_color} ${percent2}%, ${this.outer_color} ${percent2}%)`);
             }
         };
 
