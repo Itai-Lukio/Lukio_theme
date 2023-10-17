@@ -173,7 +173,7 @@ class Lukio_Theme_setup
         $admin_capabilities['edit_themes'] = false;
         $admin_capabilities['install_themes'] = false;
         // $admin_capabilities['activate_plugins'] = false;
-        // $admin_capabilities['edit_plugins'] = false;
+        $admin_capabilities['edit_plugins'] = false;
         $admin_capabilities['install_plugins'] = false;
         $admin_capabilities['update_plugins'] = false;
         $admin_capabilities['delete_plugins'] = false;
