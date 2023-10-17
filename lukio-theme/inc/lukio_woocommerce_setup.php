@@ -568,7 +568,7 @@ class Lukio_Woocommerce_Setup
                                     }
                     ?>
                                     <li class="lukio_woocommerce_product_variations_li <?php echo $class;
-                                                                                        echo sanitize_title($args['selected']) == $term->slug ? ' selected' : ''; ?>" data-value="<?php echo esc_attr($term->slug); ?>" data-attr="<?php echo $esc_attr_name; ?>" <?php echo $style; ?>><?php echo apply_filters('lukio_product_variation_li_' . $args['attribute'], esc_html($term->name), $term, $args['product']); ?></li>
+                                                                                        echo sanitize_title($args['selected']) == $term->slug ? ' selected' : ''; ?>" data-value="<?php echo esc_attr($term->slug); ?>" data-attr="<?php echo $esc_attr_name; ?>" <?php echo $style; ?> tabindex="0"><?php echo apply_filters('lukio_product_variation_li_' . $args['attribute'], esc_html($term->name), $term, $args['product']); ?></li>
                                 <?php
                                 }
                             }
@@ -577,7 +577,7 @@ class Lukio_Woocommerce_Setup
                                 // This handles < 2.4.0 bw compatibility where text attributes were not sanitized.
                                 $selected = sanitize_title($args['selected']) === $args['selected'] ? ($args['selected'] == sanitize_title($option) ? ' selected' : '') : ($args['selected'] == $option ? ' selected' : '');
                                 ?>
-                                <li class="lukio_woocommerce_product_variations_li <?php echo $class . $selected; ?>" data-value="<?php echo esc_attr($option); ?>" data-attr="<?php echo $esc_attr_name; ?>"><?php echo apply_filters('lukio_product_variation_li_' . $args['attribute'], esc_html($option), null, $args['product']); ?></li>
+                                <li class="lukio_woocommerce_product_variations_li <?php echo $class . $selected; ?>" data-value="<?php echo esc_attr($option); ?>" data-attr="<?php echo $esc_attr_name; ?>" tabindex="0"><?php echo apply_filters('lukio_product_variation_li_' . $args['attribute'], esc_html($option), null, $args['product']); ?></li>
                     <?php
                             }
                         }
