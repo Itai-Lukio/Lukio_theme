@@ -253,10 +253,11 @@ if (!function_exists('lukio_range_min_max')) {
      * @param Number $max [requierd] max value fot the inputs
      * @param String $thumb_color [requierd] color of the range thumb
      * @param String $format [optional] format for the display string, default `%d`
+     * @param Bool $use_input [optional] true to use input as the display, default `false` to use span
      * 
      * @author Itai Dotan
      */
-    function lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thumb_color, $format = '%d')
+    function lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thumb_color, $format = '%d', $use_input = false)
     {
         get_template_part('/template-parts/partials/lukio_range_min_max', '', array(
             'target_class' => $target_class,
@@ -267,6 +268,7 @@ if (!function_exists('lukio_range_min_max')) {
             'max' => $max,
             'thumb_color' => $thumb_color,
             'format' => $format,
+            'use_input' => $use_input,
         ));
     }
 }

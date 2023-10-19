@@ -65,6 +65,7 @@ Lukio PHP guide:
             @param Number $max [requierd] max value fot the inputs
             @param String $thumb_color [requierd] color of the range thumb
             @param String $format [optional] format for the display string, default '%d'
+            @param Bool $use_input [optional] true to use input as the display, default `false` to use span
     
         lukio_bold_text($text)
             Remove curly braces = {{}}, from given string, and replace with <b> tag

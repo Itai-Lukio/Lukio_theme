@@ -10,7 +10,8 @@
  * @param Number $args['min'] min value for the inputs
  * @param Number $args['max'] max value fot the inputs
  * @param String $args['thumb_color'] color of the range thumb
- * @param String $format [optional] format for the display string, default '%d'
+ * @param String $args['format'] [optional] format for the display string, default '%d'
+ * @param Bool $args['use_input'] [optional] true to use input as the display, default `false` to use span
  * 
  * @author Itai Dotan
  */
@@ -35,8 +36,19 @@ $input_name = substr($args['name'], -2) == '[]' ? $args['name'] : $args['name'] 
         <input class="lukio_range_min_max_input max<?php echo $target_class; ?>" title="max" type="range" name="<?php echo $input_name; ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" value="<?php echo $args['max'] ?>">
     </div>
     <div class="lukio_range_min_max_display_wrapper<?php echo $target_class; ?>">
-        <span class="lukio_range_min_max_display min<?php echo $target_class; ?>"><?php echo sprintf($args['format'], $args['min']); ?></span>
-        <span class="lukio_range_min_max_display max<?php echo $target_class; ?>"><?php echo sprintf($args['format'], $args['max']); ?></span>
+        <?php
+        if ($args['use_input']) {
+        ?>
+            <input type="text" class="lukio_range_min_max_display min<?php echo $target_class; ?>" value="<?php echo sprintf($args['format'], $args['min']); ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>">
+            <input type="text" class="lukio_range_min_max_display max<?php echo $target_class; ?>" value="<?php echo sprintf($args['format'], $args['max']); ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>">
+        <?php
+        } else {
+        ?>
+            <span class="lukio_range_min_max_display min<?php echo $target_class; ?>"><?php echo sprintf($args['format'], $args['min']); ?></span>
+            <span class="lukio_range_min_max_display max<?php echo $target_class; ?>"><?php echo sprintf($args['format'], $args['max']); ?></span>
+        <?php
+        }
+        ?>
     </div>
 </div>
 
