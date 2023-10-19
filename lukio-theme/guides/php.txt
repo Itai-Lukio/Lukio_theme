@@ -54,7 +54,7 @@ Lukio PHP guide:
             @param String $image_url [requierd] url to the image to add to the pin
             @return String generated pinterest link
 
-        lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thum_color, $format = '%d')
+        lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thum_color, $format = '%d'', $use_input = false)
             Lukio number range input min and max.
 
             @param String $target_class [requierd] class to add the all items
