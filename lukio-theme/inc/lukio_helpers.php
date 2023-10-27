@@ -347,7 +347,7 @@ if (!function_exists('lukio_dropdown')) {
                         $display = $option_name;
                     }
                     echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
-                    $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '">' . $option_name . '</li>';
+                    $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '" tabindex="0">' . $option_name . '</li>';
                 }
                 ?>
             </select>

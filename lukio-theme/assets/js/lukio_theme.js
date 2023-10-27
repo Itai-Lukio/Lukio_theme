@@ -223,6 +223,22 @@ const lukio_helpers = (function ($) {
 
             display.html(li.html());
             $('body').trigger('click.lukio_dropdown_clicked');
+        })
+        // add accessabilty action to the dropdown li
+        .on('keydown', '.lukio_dropdown_display_option', function (e) {
+            if (!e.key || !(e.key.toLocaleLowerCase() == 'enter' || e.key == ' ')) {
+                return;
+            }
+            e.preventDefault();
+            $(this).trigger('click');
+        })
+        // open the dropdown on focus
+        .on('focus', '.lukio_dropdown_display_option', function () {
+            $(this).closest('.lukio_dropdown_display').trigger('click');
+        })
+        // close the dropdown on blur
+        .on('blur', '.lukio_dropdown_display_option', function () {
+            $('body').trigger('click.lukio_dropdown_clicked');
         });
 
     // use to add drag scroll to elements

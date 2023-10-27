@@ -494,6 +494,6 @@ jQuery(document).ready(function ($) {
         })
         // close the dropdown on blur
         .on('blur', '.lukio_woocommerce_product_variations_li.dropdown', function () {
-            $('body').trigger('click.lukio_woocommerce_product_variation_clicked')
+            $('body').trigger('click.lukio_woocommerce_product_variation_clicked');
         });
 });
