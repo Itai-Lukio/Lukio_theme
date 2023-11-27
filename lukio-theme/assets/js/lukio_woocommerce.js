@@ -381,12 +381,17 @@ jQuery(document).ready(function ($) {
         })
         // update gallery pagination and arrows when clicking a thumbnail
         .on('click', '.woocommerce-product-gallery ol.flex-control-nav.flex-control-thumbs li', function (e) {
-            let clicked_li = $(this),
-                ol = clicked_li.closest('.flex-control-nav.flex-control-thumbs'),
-                gallery = ol.closest('.woocommerce-product-gallery'),
-                new_index = clicked_li.index();
+            let clicked_li = $(this);
 
-            update_gallery_display_by_index(gallery, new_index);
+            if (e.target.tagName == 'LI') {
+                // when the target is the li the after play icon was clicked, so needed to trigger a click on the img
+                clicked_li.find('img').trigger('click');
+            } else {
+                let ol = clicked_li.closest('.flex-control-nav.flex-control-thumbs'),
+                    gallery = ol.closest('.woocommerce-product-gallery'),
+                    new_index = clicked_li.index();
+                update_gallery_display_by_index(gallery, new_index);
+            }
         })
         // change the product gallery image when clicking the arrows 
         .on('click', '.lukio_product_gallery_arrow', function (e) {
@@ -496,4 +501,87 @@ jQuery(document).ready(function ($) {
         .on('blur', '.lukio_woocommerce_product_variations_li.dropdown', function () {
             $('body').trigger('click.lukio_woocommerce_product_variation_clicked');
         });
+
+    /**
+    * handle needed tweaks to have videos in photoswipe
+    * 
+    * @author Itai Dotan
+    */
+    function photoswipe_gallery_videos() {
+        /**
+         * set video on init, mute videos slide on change, make sure the video is used insted of the replaced img on slide change
+         * 
+         * due to photoswipe useing only 3 slides in the DOM, there is a need to track and reset the video slide
+         * 
+         * @author Itai Dotan
+         */
+        function photoswipe_slides_change() {
+            $('.lukio_wc_gallery_video').each(function () {
+                this.muted = true;
+            });
+            let pswp = $('div.pswp'),
+                active_images = pswp.find('.pswp__item img'),
+                videos = [],
+                need_resize = false;
+
+            $('.lukio_wc_gallery_video_wrapper .lukio_wc_gallery_video').each(function () {
+                videos.push({
+                    img_src: $(this).data('img_src'),
+                    video_html: this.outerHTML
+                });
+            });
+            active_images.each(function () {
+                let img = $(this),
+                    img_src = img.attr('src');
+                videos.forEach(vid_el => {
+                    if (vid_el.img_src !== img_src) {
+                        return;
+                    }
+                    img.replaceWith(vid_el.video_html);
+                    need_resize = true;
+                });
+            });
+
+            if (need_resize) {
+                // trigger window resize for pswp to resize the slides
+                window.dispatchEvent(new Event('resize'));
+            }
+        }
+
+        // add video indicator class to the thumbnail li
+        $('.lukio_wc_gallery_video_wrapper').each(function () {
+            $(`.lukio_product_gallery_thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
+        });
+
+        let pswp_observer = new MutationObserver(function (mutations) {
+            let pswp = $(mutations[0].target);
+            if (pswp.hasClass('pswp--open')) {
+                photoswipe_slides_change();
+            } else {
+                $('div.pswp .lukio_wc_gallery_video').each(function () {
+                    this.pause();
+                });
+            }
+        });
+
+        pswp_observer.observe($('div.pswp')[0], {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        // if there are no more then 3 images no need to fix photoswipe 3 DOM elements limit
+        if ($('.woocommerce-product-gallery__image').length <= 3) {
+            return;
+        }
+
+        // as there are stopPropagation in the way, need to target directly
+        $('.pswp__button--arrow--right, .pswp__button--arrow--left').on('click', photoswipe_slides_change);
+        $(window).on('keydown', function (e) {
+            // update only when photoswipe is open and one of the arrow key are used
+            if ($('div.pswp.pswp--open').length && (e.keyCode === 37 || e.keyCode === 39)) {
+                photoswipe_slides_change();
+            }
+        });
+    };
+    photoswipe_gallery_videos();
 });

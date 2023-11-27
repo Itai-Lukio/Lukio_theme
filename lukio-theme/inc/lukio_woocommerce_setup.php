@@ -43,6 +43,12 @@ class Lukio_Woocommerce_Setup
     const ATTRIBUTE_STYLE_SELECT = 'select';
 
     /**
+     * meta key of the product video gallery replacement
+     * @var string meta kry
+     */
+    const GALLERY_VIDEO_META = 'lukio_product_video_gallery';
+
+    /**
      * 
      * @var null|array null before init, array of attributes and their display option 
      */
@@ -88,11 +94,13 @@ class Lukio_Woocommerce_Setup
         add_filter('woocommerce_dropdown_variation_attribute_options_html', array($this, 'product_ul_select'), 10, 2);
 
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue'));
-        add_filter('woocommerce_product_data_tabs', array($this, 'add_bulk_variations_tab'));
-        add_action('woocommerce_product_data_panels', array($this, 'bulk_variations_tab_content'));
-        add_action('wp_ajax_lukio_product_bulk_variations_image_preview', array($this, 'bulk_variations_image_preview'));
+        add_filter('woocommerce_product_data_tabs', array($this, 'add_product_data_tabs'));
+        add_action('woocommerce_product_data_panels', array($this, 'print_tabs_content'));
         add_action('wp_ajax_lukio_product_bulk_variations_image_set', array($this, 'bulk_variations_image_set'));
         add_action('wp_ajax_lukio_product_bulk_variations_reload', array($this, 'reload_bulk_variations_tab_content'));
+
+        add_filter('woocommerce_single_product_image_thumbnail_html', array($this, 'gallery_video_front_page_output'), 10, 2);
+        add_action('woocommerce_process_product_meta', array($this, 'save_custom_product_meta'), 10, 2);
     }
 
     /**
@@ -239,12 +247,12 @@ class Lukio_Woocommerce_Setup
      */
     public function add_gallery_arrows()
     {
+        global $product;
         // allow to filter to not print the arrows
-        if (apply_filters('lukio_theme_skip_product_thumbnails_arrows', false)) {
+        if (apply_filters('lukio_theme_skip_product_thumbnails_arrows', !$product->get_image_id())) {
             return;
         }
 
-        global $product;
         $attachment_ids = $product->get_gallery_image_ids();
 
         // check if there is a gallery
@@ -619,19 +627,37 @@ class Lukio_Woocommerce_Setup
     }
 
     /**
-     * add bulk variations tab to wc product data tabs
+     * add custom tabs to wc product data tabs
      * 
      * @author Itai Dotan
      */
-    public function add_bulk_variations_tab($tabs)
+    public function add_product_data_tabs($tabs)
     {
         $tabs['lukio_bulk_img'] = array(
             'label'    => __('Bulk Variation Image', 'lukio-theme'),
             'target'   => 'lukio_product_bulk_variations_image',
             'class'    => array('show_if_variable'),
-            'priority' => 65,
+            'priority' => 61,
+        );
+
+        $tabs['lukio_gallery_video'] = array(
+            'label'    => __('Gallery video', 'lukio-theme'),
+            'target'   => 'lukio_product_gallery_video',
+            'class'    => array(),
+            'priority' => 62,
         );
         return $tabs;
+    }
+
+    /**
+     * print custom tabs content
+     * 
+     * @author Itai Dotan
+     */
+    public function print_tabs_content()
+    {
+        $this->bulk_variations_tab_content();
+        $this->gallery_video_content();
     }
 
     /**
@@ -702,30 +728,7 @@ class Lukio_Woocommerce_Setup
             ?>
             <input type="hidden" id="lukio_product_bulk_variations_image_nonce" name="lukio_product_bulk_variations_image_nonce" value="<?php echo $nonce; ?>">
         </div>
-<?php
-    }
-
-    /**
-     * ajax reload image for the bulk variations preview
-     * 
-     * @author Itai Dotan
-     */
-    public function bulk_variations_image_preview()
-    {
-        $image_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-        if ($image_id) {
-            $image_src = wp_get_attachment_image_src($image_id, 'thumbnail');
-            $data = array(
-                'success' => true,
-                'image_src' => $image_src ? $image_src[0] : '',
-            );
-        } else {
-            $data = array(
-                'success' => false,
-            );
-        }
-        echo json_encode($data);
-        die;
+    <?php
     }
 
     /**
@@ -798,6 +801,142 @@ class Lukio_Woocommerce_Setup
             'fragment' => $fragment
         ));
         die;
+    }
+
+    /**
+     * add the video html to the thumbnail_html when there is one
+     * 
+     * @param string $html html string created by wc
+     * @param int $post_thumbnail_id the ID to check if needs to add the video html
+     * @return string edited html when needed
+     * 
+     * @author Itai Dotan
+     */
+    public function gallery_video_front_page_output($html, $post_thumbnail_id)
+    {
+        global $product;
+        $product_id = $product->get_id();
+
+        // check if needs to pull and store new product settings
+        if (!isset($this->product_vidoe_data) || $this->product_vidoe_data['product_id'] !== $product_id) {
+            $this->product_vidoe_data = array(
+                'product_id' => $product_id,
+                'data' => get_post_meta($product_id, $this::GALLERY_VIDEO_META, true),
+            );
+        }
+
+        // when no video data is saved
+        if (empty($this->product_vidoe_data['data']) || !isset($this->product_vidoe_data['data'][$post_thumbnail_id]['video_id'])) {
+            return $html;
+        }
+
+        $video_url = wp_get_attachment_url($this->product_vidoe_data['data'][$post_thumbnail_id]['video_id']);
+
+        // when the set video dont exist
+        if (!$video_url) {
+            return $html;
+        }
+
+        $video_img = wp_get_attachment_url($post_thumbnail_id);
+        $video_str = '<video class="lukio_wc_gallery_video" src="' . $video_url . '" poster="' . $video_img . '" data-img_src="' . $video_img . '" muted autoplay playsinline loop controls>Your browser does not support HTML video.</video>';
+
+        // need to keep the img after the video so the fancybox will count it as a slide
+        return preg_replace(['/(<img[^>]*>)/', '/(class="woocommerce-product-gallery__image)/'], [$video_str . '$1', '$1 lukio_wc_gallery_video_wrapper'], $html);
+    }
+
+    /**
+     * print the content of the gallery video tab
+     *
+     * @author Itai Dotan
+     */
+    public function gallery_video_content()
+    {
+        global $product_object;
+        $post_id = $product_object->get_id();
+
+        $product_image_gallery = $product_object->get_gallery_image_ids('edit');
+        $product_images = array_merge([get_post_thumbnail_id($post_id)], $product_image_gallery);
+        $product_images = array_filter($product_images);
+
+        $update_meta = false;
+        $saved_meta = get_post_meta($post_id, $this::GALLERY_VIDEO_META, true);
+        $saved_meta = empty($saved_meta) ? array() : $saved_meta;
+
+    ?>
+        <div id="lukio_product_gallery_video" class="panel woocommerce_options_panel hidden<?php echo count($product_images) ? '' : ' empty'; ?>">
+            <p class="lukio_product_gallery_video_empty_msg"><?php echo __('No main and gallery images picked', 'lukio-theme') ?></p>
+            <?php
+            // add "id" 0 to be used a a template
+            foreach (array_merge([0], $product_images) as $img_id) {
+                $img_data = $img_id === 0 ? array('') : wp_get_attachment_image_src($img_id, 'thumbnail');
+
+                if (empty($img_data)) {
+                    unset($saved_meta[$img_id]);
+                    $update_meta = true;
+                    continue;
+                }
+
+                $video_url = '';
+                $video_id = '';
+                if (isset($saved_meta[$img_id]['video_id'])) {
+                    $video_url = wp_get_attachment_url($saved_meta[$img_id]['video_id']);
+
+                    // when the set video dont exist
+                    if (!$video_url) {
+                        unset($saved_meta[$img_id]);
+                        $update_meta = true;
+                    } else {
+                        $video_url = $video_url;
+                        $video_id = $saved_meta[$img_id]['video_id'];
+                    }
+                }
+            ?>
+                <div class="lukio_gallery_video_row_wrapper<?php echo $img_id === 0 ? ' template' : ''; ?>" data-id="<?php echo $img_id; ?>">
+                    <img class="lukio_gallery_video_row_img" src="<?php echo esc_attr($img_data[0]); ?>" alt="">
+                    <div class="lukio_gallery_video_row_video_wrapper">
+                        <video class="lukio_gallery_video_row_video" src="<?php echo esc_attr($video_url); ?>" controls muted>Your browser does not support HTML video.</video>
+                        <a href="#" class="lukio_gallery_video_row_video_remove" data-tip="<?php esc_attr_e('Remove video', 'lukio-theme'); ?>"><?php esc_html_e('Remove', 'lukio-theme'); ?></a>
+                    </div>
+                    <button class="lukio_gallery_video_row_button button" type="button"><?php esc_attr_e('Pick video', 'lukio-theme'); ?></button>
+                    <input class="lukio_gallery_video_row_input" type="hidden" name="lukio_gallery_video[<?php echo $img_id; ?>]" value="<?php echo $video_id; ?>">
+                </div>
+            <?php
+            }
+            ?>
+            <input type="hidden" name="lukio_gallery_video_nonce" value="<?php echo wp_create_nonce('lukio_gallery_video'); ?>">
+        </div>
+<?php
+        if ($update_meta) {
+            update_post_meta($post_id, $this::GALLERY_VIDEO_META, $saved_meta);
+        }
+    }
+
+    /**
+     * save custom product meta 
+     *
+     * @param int $post_id ID of the post
+     * @param WP_Post $post post object
+     * 
+     * @author Itai Dotan
+     */
+    public function save_custom_product_meta($post_id, $post)
+    {
+        if (!wp_verify_nonce($_POST['lukio_gallery_video_nonce'], 'lukio_gallery_video')) {
+            return;
+        }
+
+        $save_data = array();
+
+        foreach ($_POST['lukio_gallery_video'] as $img_id => $vid_id) {
+            $img_id = (int)$img_id;
+            $vid_id = (int)$vid_id;
+            if ($img_id === 0 || $vid_id === 0) {
+                continue;
+            }
+
+            $save_data[$img_id] = array('video_id' => $vid_id);
+        }
+        update_post_meta($post_id, $this::GALLERY_VIDEO_META, $save_data);
     }
 }
 new Lukio_Woocommerce_Setup();

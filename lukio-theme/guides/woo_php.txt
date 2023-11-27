@@ -59,7 +59,7 @@ Lukio woocommerce PHP guide:
 
         lukio_theme_skip_product_thumbnails_arrows
             filter to disable product thumbnails arrows
-            return true to not print the arrows, by default the arrows are printed
+            return true to not print the arrows, by default the arrows are printed when applicable
 
         lukio_product_gallery_arrow_{$button_action}
             $button_action = prev||next
