@@ -136,7 +136,7 @@ jQuery(document).ready(function ($) {
      * 
      * @author Itai Dotan
      */
-    function reposition_gallery_pagination(pagination, continer) {
+    async function reposition_gallery_pagination(pagination, continer) {
         let outer = pagination[0].outerHTML;
         pagination.remove();
         continer.append(outer);
@@ -202,7 +202,7 @@ jQuery(document).ready(function ($) {
      * 
      * @author Itai Dotan
      */
-    function setup_product_gallery() {
+    async function setup_product_gallery() {
         clearTimeout(gallert_timeout);
         let arrows = $('.lukio_product_gallery_arrow'),
             pagination = $('.lukio_product_gallery_pagination'),
@@ -221,10 +221,11 @@ jQuery(document).ready(function ($) {
         reposition_gallery_arrows(arrows, continer);
 
         if (pagination.length != 0) {
-            reposition_gallery_pagination(pagination, continer);
+            await reposition_gallery_pagination(pagination, continer);
         }
 
         update_gallery_display_by_index(gallery, 0);
+        photoswipe_gallery_videos();
     }
 
     /**
@@ -313,7 +314,6 @@ jQuery(document).ready(function ($) {
             }
         });
     };
-    photoswipe_gallery_videos();
 
     body
         // refresh the mini cart in to lukio_mini_cart_wrapper from the shortcode
