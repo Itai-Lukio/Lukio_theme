@@ -9,7 +9,13 @@ jQuery(document).ready(function ($) {
         cart_or_checkout = page == lukio_woo.cart_url || is_checkout,
         supports_html5_storage = true,
         checkout_storage_refresh = false,
-        thumb_active_class = 'lukio_active_thumb';
+        thumb_active_class = 'lukio_active_thumb'
+    gallert_timeout = null;
+
+    // due to wc version differences use timeout to make sure the gallery setup will run
+    gallert_timeout = setTimeout(() => {
+        setup_product_gallery();
+    }, 5000);
 
     // update the refresh events to the type of page
     switch (page) {
@@ -197,6 +203,7 @@ jQuery(document).ready(function ($) {
      * @author Itai Dotan
      */
     function setup_product_gallery() {
+        clearTimeout(gallert_timeout);
         let arrows = $('.lukio_product_gallery_arrow'),
             pagination = $('.lukio_product_gallery_pagination'),
             continer = arrows.closest('.flex-viewport'),
@@ -219,7 +226,89 @@ jQuery(document).ready(function ($) {
 
         update_gallery_display_by_index(gallery, 0);
     }
-    setup_product_gallery();
+
+    /**
+     * handle needed tweaks to have videos in photoswipe
+     * 
+     * @author Itai Dotan
+     */
+    function photoswipe_gallery_videos() {
+        /**
+         * set video on init, mute videos slide on change, make sure the video is used insted of the replaced img on slide change
+         * 
+         * due to photoswipe useing only 3 slides in the DOM, there is a need to track and reset the video slide
+         * 
+         * @author Itai Dotan
+         */
+        function photoswipe_slides_change() {
+            $('.lukio_wc_gallery_video').each(function () {
+                this.muted = true;
+            });
+            let pswp = $('div.pswp'),
+                active_images = pswp.find('.pswp__item img'),
+                videos = [],
+                need_resize = false;
+
+            $('.lukio_wc_gallery_video_wrapper .lukio_wc_gallery_video').each(function () {
+                videos.push({
+                    img_src: $(this).data('img_src'),
+                    video_html: this.outerHTML
+                });
+            });
+            active_images.each(function () {
+                let img = $(this),
+                    img_src = img.attr('src');
+                videos.forEach(vid_el => {
+                    if (vid_el.img_src !== img_src) {
+                        return;
+                    }
+                    img.replaceWith(vid_el.video_html);
+                    need_resize = true;
+                });
+            });
+
+            if (need_resize) {
+                // trigger window resize for pswp to resize the slides
+                window.dispatchEvent(new Event('resize'));
+            }
+        }
+
+        // add video indicator class to the thumbnail li
+        $('.lukio_wc_gallery_video_wrapper').each(function () {
+            $(`.lukio_product_gallery_thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
+        });
+
+        let pswp_observer = new MutationObserver(function (mutations) {
+            let pswp = $(mutations[0].target);
+            if (pswp.hasClass('pswp--open')) {
+                photoswipe_slides_change();
+            } else {
+                $('div.pswp .lukio_wc_gallery_video').each(function () {
+                    this.pause();
+                });
+            }
+        });
+
+        pswp_observer.observe($('div.pswp')[0], {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        // if there are no more then 3 images no need to fix photoswipe 3 DOM elements limit
+        if ($('.woocommerce-product-gallery__image').length <= 3) {
+            return;
+        }
+
+        // as there are stopPropagation in the way, need to target directly
+        $('.pswp__button--arrow--right, .pswp__button--arrow--left').on('click', photoswipe_slides_change);
+        $(window).on('keydown', function (e) {
+            // update only when photoswipe is open and one of the arrow key are used
+            if ($('div.pswp.pswp--open').length && (e.keyCode === 37 || e.keyCode === 39)) {
+                photoswipe_slides_change();
+            }
+        });
+    };
+    photoswipe_gallery_videos();
 
     body
         // refresh the mini cart in to lukio_mini_cart_wrapper from the shortcode
@@ -500,88 +589,8 @@ jQuery(document).ready(function ($) {
         // close the dropdown on blur
         .on('blur', '.lukio_woocommerce_product_variations_li.dropdown', function () {
             $('body').trigger('click.lukio_woocommerce_product_variation_clicked');
+        })
+        .on('wc-product-gallery-after-init', '.woocommerce-product-gallery', function () {
+            setup_product_gallery();
         });
-
-    /**
-    * handle needed tweaks to have videos in photoswipe
-    * 
-    * @author Itai Dotan
-    */
-    function photoswipe_gallery_videos() {
-        /**
-         * set video on init, mute videos slide on change, make sure the video is used insted of the replaced img on slide change
-         * 
-         * due to photoswipe useing only 3 slides in the DOM, there is a need to track and reset the video slide
-         * 
-         * @author Itai Dotan
-         */
-        function photoswipe_slides_change() {
-            $('.lukio_wc_gallery_video').each(function () {
-                this.muted = true;
-            });
-            let pswp = $('div.pswp'),
-                active_images = pswp.find('.pswp__item img'),
-                videos = [],
-                need_resize = false;
-
-            $('.lukio_wc_gallery_video_wrapper .lukio_wc_gallery_video').each(function () {
-                videos.push({
-                    img_src: $(this).data('img_src'),
-                    video_html: this.outerHTML
-                });
-            });
-            active_images.each(function () {
-                let img = $(this),
-                    img_src = img.attr('src');
-                videos.forEach(vid_el => {
-                    if (vid_el.img_src !== img_src) {
-                        return;
-                    }
-                    img.replaceWith(vid_el.video_html);
-                    need_resize = true;
-                });
-            });
-
-            if (need_resize) {
-                // trigger window resize for pswp to resize the slides
-                window.dispatchEvent(new Event('resize'));
-            }
-        }
-
-        // add video indicator class to the thumbnail li
-        $('.lukio_wc_gallery_video_wrapper').each(function () {
-            $(`.lukio_product_gallery_thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
-        });
-
-        let pswp_observer = new MutationObserver(function (mutations) {
-            let pswp = $(mutations[0].target);
-            if (pswp.hasClass('pswp--open')) {
-                photoswipe_slides_change();
-            } else {
-                $('div.pswp .lukio_wc_gallery_video').each(function () {
-                    this.pause();
-                });
-            }
-        });
-
-        pswp_observer.observe($('div.pswp')[0], {
-            attributes: true,
-            attributeFilter: ['class']
-        });
-
-        // if there are no more then 3 images no need to fix photoswipe 3 DOM elements limit
-        if ($('.woocommerce-product-gallery__image').length <= 3) {
-            return;
-        }
-
-        // as there are stopPropagation in the way, need to target directly
-        $('.pswp__button--arrow--right, .pswp__button--arrow--left').on('click', photoswipe_slides_change);
-        $(window).on('keydown', function (e) {
-            // update only when photoswipe is open and one of the arrow key are used
-            if ($('div.pswp.pswp--open').length && (e.keyCode === 37 || e.keyCode === 39)) {
-                photoswipe_slides_change();
-            }
-        });
-    };
-    photoswipe_gallery_videos();
 });
