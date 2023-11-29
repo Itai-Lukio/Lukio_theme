@@ -12,7 +12,7 @@ jQuery(document).ready(function ($) {
         thumb_active_class = 'lukio_active_thumb'
     gallert_timeout = null;
 
-    // due to wc version differences use timeout to make sure the gallery setup will run
+    // for backward compatibility use timeout to make sure the gallery setup will run once
     gallert_timeout = setTimeout(() => {
         setup_product_gallery();
     }, 5000);
