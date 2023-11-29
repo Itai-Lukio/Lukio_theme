@@ -272,9 +272,14 @@ jQuery(document).ready(function ($) {
                 window.dispatchEvent(new Event('resize'));
             }
         }
+        let gallery_video_wrappers = $('.lukio_wc_gallery_video_wrapper');
+
+        if (gallery_video_wrappers.length == 0) {
+            return;
+        }
 
         // add video indicator class to the thumbnail li
-        $('.lukio_wc_gallery_video_wrapper').each(function () {
+        gallery_video_wrappers.each(function () {
             $(`.lukio_product_gallery_thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
         });
 
