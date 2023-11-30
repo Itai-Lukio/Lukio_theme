@@ -252,3 +252,7 @@ body.rtl .lukio_woocommerce_product_variations_dropdown::after {
 .woocommerce div.product div.images .flex-control-thumbs li.lukio_wc_gallery_video_thumb:hover img {
     opacity: 1;
 }
+
+.pswp__zoom-wrap {
+    direction: ltr;
+}

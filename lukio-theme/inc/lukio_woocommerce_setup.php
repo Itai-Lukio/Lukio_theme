@@ -895,7 +895,7 @@ class Lukio_Woocommerce_Setup
                     <img class="lukio_gallery_video_row_img" src="<?php echo esc_attr($img_data[0]); ?>" alt="">
                     <div class="lukio_gallery_video_row_video_wrapper">
                         <video class="lukio_gallery_video_row_video" src="<?php echo esc_attr($video_url); ?>" controls muted>Your browser does not support HTML video.</video>
-                        <a href="#" class="lukio_gallery_video_row_video_remove" data-tip="<?php esc_attr_e('Remove video', 'lukio-theme'); ?>"><?php esc_html_e('Remove', 'lukio-theme'); ?></a>
+                        <a href="#" class="lukio_gallery_video_row_video_remove" title="<?php esc_attr_e('Remove video', 'lukio-theme'); ?>"><?php esc_html_e('Remove', 'lukio-theme'); ?></a>
                     </div>
                     <button class="lukio_gallery_video_row_button button" type="button"><?php esc_attr_e('Pick video', 'lukio-theme'); ?></button>
                     <input class="lukio_gallery_video_row_input" type="hidden" name="lukio_gallery_video[<?php echo $img_id; ?>]" value="<?php echo $video_id; ?>">
