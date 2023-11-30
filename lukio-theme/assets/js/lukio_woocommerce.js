@@ -210,30 +210,29 @@ jQuery(document).ready(function ($) {
             gallery = arrows.closest('.woocommerce-product-gallery'),
             thumbs_ol = gallery.find('ol.flex-control-nav.flex-control-thumbs');
 
-        if (arrows.length == 0) {
-            return;
+        if (arrows.length !== 0) {
+            // setup thumbs css and grab and drag
+            thumbs_ol.addClass('lukio_product_gallery_thumbs');
+            thumbs_ol.lukioDragScroll();
+
+            reposition_gallery_arrows(arrows, continer);
+
+            if (pagination.length != 0) {
+                await reposition_gallery_pagination(pagination, continer);
+            }
+
+            update_gallery_display_by_index(gallery, 0);
         }
 
-        // setup thumbs css and grab and drag
-        thumbs_ol.addClass('lukio_product_gallery_thumbs');
-        thumbs_ol.lukioDragScroll();
-
-        reposition_gallery_arrows(arrows, continer);
-
-        if (pagination.length != 0) {
-            await reposition_gallery_pagination(pagination, continer);
-        }
-
-        update_gallery_display_by_index(gallery, 0);
-        photoswipe_gallery_videos();
+        setup_gallery_videos();
     }
 
     /**
-     * handle needed tweaks to have videos in photoswipe
+     * handle needed tweaks to have videos in gallery
      * 
      * @author Itai Dotan
      */
-    function photoswipe_gallery_videos() {
+    function setup_gallery_videos() {
         /**
          * set video on init, mute videos slide on change, make sure the video is used insted of the replaced img on slide change
          * 
@@ -281,7 +280,7 @@ jQuery(document).ready(function ($) {
 
         // add video indicator class to the thumbnail li
         gallery_video_wrappers.each(function () {
-            $(`.lukio_product_gallery_thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
+            $(`.woocommerce-product-gallery .flex-control-nav.flex-control-thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
         });
 
         let pswp_observer = new MutationObserver(function (mutations) {

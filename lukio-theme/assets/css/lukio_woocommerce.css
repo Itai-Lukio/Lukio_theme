@@ -226,6 +226,10 @@ body.rtl .lukio_woocommerce_product_variations_dropdown::after {
     display: none !important;
 }
 
+.lukio_wc_gallery_video_thumb {
+    position: relative;
+}
+
 .lukio_wc_gallery_video_thumb::after {
     content: '';
     position: absolute;
