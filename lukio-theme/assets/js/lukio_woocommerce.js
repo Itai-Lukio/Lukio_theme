@@ -9,8 +9,8 @@ jQuery(document).ready(function ($) {
         cart_or_checkout = page == lukio_woo.cart_url || is_checkout,
         supports_html5_storage = true,
         checkout_storage_refresh = false,
-        thumb_active_class = 'lukio_active_thumb'
-    gallert_timeout = null;
+        thumb_active_class = 'lukio_active_thumb',
+        gallert_timeout = null;
 
     // for backward compatibility use timeout to make sure the gallery setup will run once
     gallert_timeout = setTimeout(() => {
