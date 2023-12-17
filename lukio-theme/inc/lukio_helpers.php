@@ -314,8 +314,8 @@ if (!function_exists('lukio_dropdown')) {
      * 
      * @param array $options option array of arrays. 
      * array(
-     *      array('name'=>'option_display_name1', 'value' => 'option_value1'),
-     *      array('name'=>'option_display_name2', 'value' => 'option_value2')                                                 
+     *      array('name'=>'option_display_name1', 'value' => 'option_value1', 'add_data1' => array( 'attribute_name' => 'attribute_value) ),
+     *      array('name'=>'option_display_name2', 'value' => 'option_value2', 'add_data2' => array( 'attribute_name' => 'attribute_value) ),
      *     )
      * @param string $name name of the input
      * @param string $id id for of the input, default `` and will be the same as $name
