@@ -347,13 +347,23 @@ if (!function_exists('lukio_dropdown')) {
                         $display = $option_name;
                     }
                     echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
+
                     $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '" tabindex="0"';
+                    
                     if ( isset($option_data['add_attr']) ) {
                         foreach ( $option_data['add_attr'] as $ind => $value ) {
                             $options_html .= ' ' . $ind . '="' . $value . '"';
                         }
+                        $options_html .= '>';
+                    } else {
+                        $options_html .= '>';
                     }
-                    $options_html .= '>' . $option_name . '</li>';         
+
+                    if ( isset( $option_data['image'] ) ) {
+                        $options_html .= wp_get_attachment_image($option_data['image']['id'], $option_data['image']['size'], $option_data['image']['icon'], $option_data['image']['attr']);
+                    } 
+                    
+                    $options_html .= $option_name . '</li>';       
                 }
                 ?>
             </select>
