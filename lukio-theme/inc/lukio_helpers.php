@@ -314,8 +314,8 @@ if (!function_exists('lukio_dropdown')) {
      * 
      * @param array $options option array of arrays. 
      * array(
-     *      array('name'=>'option_display_name1', 'value' => 'option_value1', 'add_data1' => array( 'attribute_name' => 'attribute_value) ),
-     *      array('name'=>'option_display_name2', 'value' => 'option_value2', 'add_data2' => array( 'attribute_name' => 'attribute_value) ),
+     *      array('name'=>'option_display_name1', 'value' => 'option_value1', 'add_attr1' => array( 'attribute_name' => 'attribute_value) ),
+     *      array('name'=>'option_display_name2', 'value' => 'option_value2', 'add_attr2' => array( 'attribute_name' => 'attribute_value) ),
      *     )
      * @param string $name name of the input
      * @param string $id id for of the input, default `` and will be the same as $name
@@ -348,8 +348,8 @@ if (!function_exists('lukio_dropdown')) {
                     }
                     echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
                     $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '" tabindex="0"';
-                    if ( isset($option_data['add_data']) ) {
-                        foreach ( $option_data['add_data'] as $ind => $value ) {
+                    if ( isset($option_data['add_attr']) ) {
+                        foreach ( $option_data['add_attr'] as $ind => $value ) {
                             $options_html .= ' ' . $ind . '="' . $value . '"';
                         }
                     }
