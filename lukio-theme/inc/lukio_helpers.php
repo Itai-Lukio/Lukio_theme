@@ -340,7 +340,7 @@ if (!function_exists('lukio_dropdown')) {
                 $options_html = '';
                 foreach ($options as $option_data) {
                     $option_name = $option_data['name'];
-                    $option_value = esc_attr(sanitize_title($option_data['value']));
+                    $option_value = esc_attr($option_data['value']);
                     $selected = '';
                     if ($selected_value && $selected_value == $option_data['value']) {
                         $selected = ' selected';
