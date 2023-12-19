@@ -124,7 +124,6 @@ body.rtl .lukio_dropdown_display::after {
     border: inherit;
     border-radius: inherit;
     opacity: 0;
-    transition: opacity 0.4s ease-in-out;
     z-index: -1;
 }
 
