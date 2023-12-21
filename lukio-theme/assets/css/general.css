@@ -141,12 +141,3 @@ body.rtl .lukio_dropdown_display::after {
 .lukio_dropdown_display_option {
     padding: var(--padding);
 }
-
-.lukio_dropdown_display_option:hover {
-    background-color: #4aa89641;
-    background-color: color-mix(in srgb, var(--lukio_green) 25%, transparent);
-}
-
-.lukio_dropdown_display_option.selected {
-    background-color: var(--lukio_green);
-}
