@@ -138,6 +138,7 @@ body.rtl .lukio_dropdown_display::after {
 .lukio_dropdown_display_options_wrapper.closing {
     height: auto;
     z-index: 10;
+    overflow-y: auto;
 }
 
 .lukio_dropdown_display_option {

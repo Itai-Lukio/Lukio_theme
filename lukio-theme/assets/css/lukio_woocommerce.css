@@ -181,12 +181,12 @@ body.rtl .lukio_woocommerce_product_variations_dropdown::after {
     left: calc((-1) * var(--border-width));
     width: calc(100% + (2 * var(--border-width)));
     height: 0;
+    max-height: 300px;
     overflow: hidden;
     background-color: #ffffff;
     border: inherit;
     border-radius: inherit;
     opacity: 0;
-    transition: opacity 0.4s ease-in-out;
     z-index: -1;
 }
 
@@ -194,11 +194,13 @@ body.rtl .lukio_woocommerce_product_variations_dropdown::after {
     height: auto;
     opacity: 1;
     z-index: 10;
+    overflow-y: auto;
 }
 
 .lukio_woocommerce_product_variations_ul.dropdown.closing {
     height: auto;
     z-index: 10;
+    overflow-y: auto;
 }
 
 .lukio_woocommerce_product_variations_li.dropdown {
