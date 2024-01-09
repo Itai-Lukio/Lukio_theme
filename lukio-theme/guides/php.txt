@@ -81,7 +81,7 @@ Lukio PHP guide:
             @param String $text text to turn in to float
             @return Float currect number
 
-        lukio_dropdown($options, $name, $id = '', $class = '', $placeholder = '', $selected_value = false)
+        lukio_dropdown($options, $name, $id = '', $class = '', $placeholder = '', $selected_value = false, $allow_search = false)
                 print dropdown to use instead of the normal select element
                  
                 @param array $options option array of arrays. array(
@@ -93,6 +93,7 @@ Lukio PHP guide:
                 @param string $class class to add to all the css editable elements, default ``
                 @param string $placeholder placeholder for the empty value, default ``
                 @param string $selected_value value to start as selected, default `false` for no selected option
+                @param string $allow_search bool, whether or not to allow manual search in the field
 
     Filters:
         lukio_admin_guides_roles

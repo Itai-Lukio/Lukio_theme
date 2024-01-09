@@ -322,10 +322,11 @@ if (!function_exists('lukio_dropdown')) {
      * @param string $class class to add to all the css editable elements, default ``
      * @param string $placeholder placeholder for the empty value, default ``
      * @param string $selected_value value to start as selected, default `false` for no selected option
+     * @param string $allow_search bool, whether or not to allow manual search in the field
      * 
      * @author Itai Dotan
      */
-    function lukio_dropdown($options, $name, $id = '', $class = '', $placeholder = '', $selected_value = false)
+    function lukio_dropdown($options, $name, $id = '', $class = '', $placeholder = '', $selected_value = false, $allow_search = false)
     {
         $name = esc_attr($name);
         $id = $id ? esc_attr($id) : $name;
@@ -360,6 +361,7 @@ if (!function_exists('lukio_dropdown')) {
             <div class="lukio_dropdown_display<?php echo $class; ?> hide_no_js no_js">
                 <span class="lukio_dropdown_display_text<?php echo $class; ?>"><?php echo $display; ?></span>
                 <ul class="lukio_dropdown_display_options_wrapper<?php echo $class; ?>">
+                    <?php echo $allow_search ? '<input type="text" name="search_option">' : ''; ?>
                     <?php
                     echo $options_html;
                     ?>

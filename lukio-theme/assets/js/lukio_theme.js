@@ -239,6 +239,15 @@ const lukio_helpers = (function ($) {
         // close the dropdown on blur
         .on('blur', '.lukio_dropdown_display_option', function () {
             $('body').trigger('click.lukio_dropdown_clicked');
+        })
+        .on('keyup','.lukio_dropdown_display_options_wrapper.allow-search input[name="search_option"]', function() {
+            let input = $('.lukio_dropdown_display_options_wrapper.allow-search input[name="search_option"]').val()
+            let options = $('.branch-name-wrapper');
+            $('.lukio_dropdown_display_option').addClass('option-hide');
+            options.each( function() {
+                if ( $(this).find('strong').text().includes(input) || $(this).find('span').text().includes(input) )
+                    $(this).parent().removeClass('option-hide');
+            });
         });
 
     // use to add drag scroll to elements

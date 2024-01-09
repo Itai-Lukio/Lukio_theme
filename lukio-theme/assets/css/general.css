@@ -152,3 +152,19 @@ body.rtl .lukio_dropdown_display::after {
 .lukio_dropdown_display_option:hover {
     background-color: #5897fb;
 }
+
+.lukio_dropdown_display_options_wrapper.allow-search {
+    padding-top: 35px;
+}
+
+.lukio_dropdown_display_options_wrapper.allow-search input[name="search_option"] {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 35px;
+}
+
+.lukio_dropdown_display_options_wrapper.allow-search .option-hide {
+    display: none;
+}
