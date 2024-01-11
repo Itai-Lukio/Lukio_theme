@@ -331,6 +331,7 @@ if (!function_exists('lukio_dropdown')) {
         $name = esc_attr($name);
         $id = $id ? esc_attr($id) : $name;
         $class = $class ? ' ' . trim($class) : '';
+        $class .= $allow_search ? ' allow-search' : '';
         $placeholder = esc_html($placeholder);
         $display = $placeholder;
 ?>
