@@ -195,8 +195,13 @@ const lukio_helpers = (function ($) {
         // open the dropdown and setup it closing
         .on('click', '.lukio_dropdown_display', function () {
             let selector = $(this),
-                ul = selector.find('.lukio_dropdown_display_options_wrapper');
+                ul = selector.find('.lukio_dropdown_display_options_wrapper'),
+                search = selector.find('.lukio_dropdown_search');
             selector.addClass('open');
+            // when dropdown got a search and no dropdown focusable elm in focus, set the search in focus
+            if (search.length !== 0 && $('.lukio_dropdown_search:focus,.lukio_dropdown_display_option:focus').length == 0) {
+                search.focus();
+            }
             $('body').one('click.lukio_dropdown_clicked', function () {
                 ul.addClass('closing');
                 selector.removeClass('open');
