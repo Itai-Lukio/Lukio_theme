@@ -322,7 +322,7 @@ if (!function_exists('lukio_dropdown')) {
      * @param string $class class to add to all the css editable elements, default ``
      * @param string $placeholder placeholder for the empty value, default ``
      * @param string $selected_value value to start as selected, default `false` for no selected option
-     * @param string $allow_search bool, whether or not to allow manual search in the field
+     * @param bool $allow_search whether or not to allow manual search in the field
      * 
      * @author Itai Dotan
      */
