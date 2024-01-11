@@ -241,12 +241,12 @@ const lukio_helpers = (function ($) {
             $('body').trigger('click.lukio_dropdown_clicked');
         })
         .on('keyup','.lukio_dropdown_display_options_wrapper.allow-search input[name="search_option"]', function() {
-            let input = $('.lukio_dropdown_display_options_wrapper.allow-search input[name="search_option"]').val()
-            let options = $('.branch-name-wrapper');
-            $('.lukio_dropdown_display_option').addClass('option-hide');
+            let input = $(this).val()
+            let options = $(this).siblings('.lukio_dropdown_display_option');
+            $(options).addClass('option-hide');
             options.each( function() {
-                if ( $(this).find('strong').text().includes(input) || $(this).find('span').text().includes(input) )
-                    $(this).parent().removeClass('option-hide');
+                if ( $(this).html().includes(input) )
+                    $(this).removeClass('option-hide');
             });
         });
 
