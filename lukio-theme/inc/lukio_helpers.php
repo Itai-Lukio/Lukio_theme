@@ -338,7 +338,8 @@ if (!function_exists('lukio_dropdown')) {
             <select class="lukio_dropdown_select<?php echo $class; ?> hide_js no_js" name="<?php echo $name; ?>" id="<?php echo $id; ?>">
                 <option value=""><?php echo $placeholder; ?></option>
                 <?php
-                $options_html = '';
+                // when $allow_search start with the input otherwise with an empty string
+                $options_html = $allow_search ? '<input class="lukio_dropdown_search' . $class . '" type="text" name="search_option">' : '';
                 foreach ($options as $option_data) {
                     $option_name = $option_data['name'];
                     $option_value = esc_attr($option_data['value']);
@@ -360,9 +361,8 @@ if (!function_exists('lukio_dropdown')) {
             </select>
             <div class="lukio_dropdown_display<?php echo $class; ?> hide_no_js no_js">
                 <span class="lukio_dropdown_display_text<?php echo $class; ?>"><?php echo $display; ?></span>
-                <ul class="lukio_dropdown_display_options_wrapper<?php echo $class . $allow_search ? ' allow-search' : ''; ?>">
+                <ul class="lukio_dropdown_display_options_wrapper<?php echo $class . ($allow_search ? ' allow-search' : ''); ?>">
                     <?php
-                    echo $allow_search ? '<input class="lukio_dropdown_search" type="text" name="search_option">' : '';
                     echo $options_html;
                     ?>
                 </ul>
