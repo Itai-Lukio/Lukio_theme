@@ -251,7 +251,7 @@ const lukio_helpers = (function ($) {
                 options = $(this).siblings('.lukio_dropdown_display_option');
             options.each(function () {
                 let option = $(this);
-                option[option.html().includes(input) ? 'removeClass' : 'addClass']('option-hide');
+                option[option.text().includes(input) ? 'removeClass' : 'addClass']('option-hide');
             });
         });
 
