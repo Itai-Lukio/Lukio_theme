@@ -149,7 +149,8 @@ body.rtl .lukio_dropdown_display::after {
     background-color: #ddd;
 }
 
-.lukio_dropdown_display_option:hover {
+.lukio_dropdown_display_option:hover,
+.lukio_dropdown_display_option:focus {
     background-color: #5897fb;
 }
 
@@ -157,7 +158,7 @@ body.rtl .lukio_dropdown_display::after {
     padding-top: 35px;
 }
 
-.lukio_dropdown_display_options_wrapper.allow-search input[name="search_option"] {
+.lukio_dropdown_search {
     width: 100%;
     position: absolute;
     right: 0;
@@ -165,6 +166,6 @@ body.rtl .lukio_dropdown_display::after {
     height: 35px;
 }
 
-.lukio_dropdown_display_options_wrapper.allow-search .option-hide {
+.lukio_dropdown_display_option.option-hide {
     display: none;
 }

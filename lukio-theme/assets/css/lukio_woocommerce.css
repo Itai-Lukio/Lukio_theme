@@ -207,12 +207,13 @@ body.rtl .lukio_woocommerce_product_variations_dropdown::after {
     padding: var(--padding);
 }
 
-.lukio_woocommerce_product_variations_li.dropdown:hover {
-    background-color: #e0dcdc;
+.lukio_woocommerce_product_variations_li.dropdown.selected {
+    background-color: #ddd;
 }
 
-.lukio_woocommerce_product_variations_li.dropdown.selected {
-    background-color: #c8c4c4;
+.lukio_woocommerce_product_variations_li.dropdown:hover,
+.lukio_woocommerce_product_variations_li.dropdown:focus {
+    background-color: #5897fb;
 }
 
 .lukio_wc_gallery_video {

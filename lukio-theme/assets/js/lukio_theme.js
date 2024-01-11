@@ -233,20 +233,20 @@ const lukio_helpers = (function ($) {
             $(this).trigger('click');
         })
         // open the dropdown on focus
-        .on('focus', '.lukio_dropdown_display_option', function () {
+        .on('focus', '.lukio_dropdown_display_option, .lukio_dropdown_search', function () {
             $(this).closest('.lukio_dropdown_display').trigger('click');
         })
         // close the dropdown on blur
-        .on('blur', '.lukio_dropdown_display_option', function () {
+        .on('blur', '.lukio_dropdown_display_option, .lukio_dropdown_search', function () {
             $('body').trigger('click.lukio_dropdown_clicked');
         })
-        .on('keyup','.lukio_dropdown_display_options_wrapper.allow-search input[name="search_option"]', function() {
-            let input = $(this).val()
-            let options = $(this).siblings('.lukio_dropdown_display_option');
-            $(options).addClass('option-hide');
-            options.each( function() {
-                if ( $(this).html().includes(input) )
-                    $(this).removeClass('option-hide');
+        // dropdown search functionality
+        .on('keyup', '.lukio_dropdown_search', function () {
+            let input = $(this).val(),
+                options = $(this).siblings('.lukio_dropdown_display_option');
+            options.each(function () {
+                let option = $(this);
+                option[option.html().includes(input) ? 'removeClass' : 'addClass']('option-hide');
             });
         });
 

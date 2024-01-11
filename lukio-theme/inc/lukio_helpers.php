@@ -331,7 +331,6 @@ if (!function_exists('lukio_dropdown')) {
         $name = esc_attr($name);
         $id = $id ? esc_attr($id) : $name;
         $class = $class ? ' ' . trim($class) : '';
-        $class .= $allow_search ? ' allow-search' : '';
         $placeholder = esc_html($placeholder);
         $display = $placeholder;
 ?>
@@ -350,20 +349,20 @@ if (!function_exists('lukio_dropdown')) {
                     }
                     echo '<option value="' . $option_value . '"' . $selected . '>' . $option_name . '</option>';
                     $options_html .= '<li class="lukio_dropdown_display_option' . $class . $selected . '" data-value="' . $option_value . '" tabindex="0"';
-                    if ( isset($option_data['add_attr']) ) {
-                        foreach ( $option_data['add_attr'] as $ind => $value ) {
+                    if (isset($option_data['add_attr'])) {
+                        foreach ($option_data['add_attr'] as $ind => $value) {
                             $options_html .= ' ' . $ind . '="' . $value . '"';
                         }
                     }
-                    $options_html .= '>' . $option_name . '</li>';         
+                    $options_html .= '>' . $option_name . '</li>';
                 }
                 ?>
             </select>
             <div class="lukio_dropdown_display<?php echo $class; ?> hide_no_js no_js">
                 <span class="lukio_dropdown_display_text<?php echo $class; ?>"><?php echo $display; ?></span>
-                <ul class="lukio_dropdown_display_options_wrapper<?php echo $class; ?>">
-                    <?php echo $allow_search ? '<input type="text" name="search_option">' : ''; ?>
+                <ul class="lukio_dropdown_display_options_wrapper<?php echo $class . $allow_search ? ' allow-search' : ''; ?>">
                     <?php
+                    echo $allow_search ? '<input class="lukio_dropdown_search" type="text" name="search_option">' : '';
                     echo $options_html;
                     ?>
                 </ul>
