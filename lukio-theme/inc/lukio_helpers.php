@@ -339,7 +339,7 @@ if (!function_exists('lukio_dropdown')) {
                 <option value=""><?php echo $placeholder; ?></option>
                 <?php
                 // when $allow_search start with the input otherwise with an empty string
-                $options_html = $allow_search ? '<input class="lukio_dropdown_search' . $class . '" type="text" name="search_option" autocomplete="off">' : '';
+                $options_html = $allow_search ? '<input class="lukio_dropdown_search' . $class . '" type="text" name="lukio_dropdown_search" autocomplete="off">' : '';
                 foreach ($options as $option_data) {
                     $option_name = $option_data['name'];
                     $option_value = esc_attr($option_data['value']);
