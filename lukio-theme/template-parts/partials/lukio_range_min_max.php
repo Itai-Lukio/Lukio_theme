@@ -32,15 +32,15 @@ $input_name = substr($args['name'], -2) == '[]' ? $args['name'] : $args['name'] 
 <div class="lukio_range_min_max<?php echo $target_class; ?>" data-count="<?php echo $lukio_range_min_max_counter; ?>" inner_color="<?php echo $args['inner_color']; ?>" outer_color="<?php echo $args['outer_color']; ?>" format="<?php echo $args['format']; ?>">
     <div class="lukio_range_min_max_track_wrapper<?php echo $target_class; ?>">
         <div class="lukio_range_min_max_track<?php echo $target_class; ?>"></div>
-        <input class="lukio_range_min_max_input min<?php echo $target_class; ?>" title="min" type="range" name="<?php echo $input_name; ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" value="<?php echo $args['min'] ?>">
-        <input class="lukio_range_min_max_input max<?php echo $target_class; ?>" title="max" type="range" name="<?php echo $input_name; ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" value="<?php echo $args['max'] ?>">
+        <input class="lukio_range_min_max_input min<?php echo $target_class; ?>" title="min" type="range" name="<?php echo $input_name; ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" value="<?php echo $args['min'] ?>" autocomplete="off">
+        <input class="lukio_range_min_max_input max<?php echo $target_class; ?>" title="max" type="range" name="<?php echo $input_name; ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" value="<?php echo $args['max'] ?>" autocomplete="off">
     </div>
     <div class="lukio_range_min_max_display_wrapper<?php echo $target_class; ?>">
         <?php
         if ($args['use_input']) {
         ?>
-            <input type="text" class="lukio_range_min_max_display min<?php echo $target_class; ?>" value="<?php echo sprintf($args['format'], $args['min']); ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>">
-            <input type="text" class="lukio_range_min_max_display max<?php echo $target_class; ?>" value="<?php echo sprintf($args['format'], $args['max']); ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>">
+            <input type="text" class="lukio_range_min_max_display min<?php echo $target_class; ?>" value="<?php echo sprintf($args['format'], $args['min']); ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" autocomplete="off">
+            <input type="text" class="lukio_range_min_max_display max<?php echo $target_class; ?>" value="<?php echo sprintf($args['format'], $args['max']); ?>" min="<?php echo $args['min'] ?>" max="<?php echo $args['max'] ?>" autocomplete="off">
         <?php
         } else {
         ?>
