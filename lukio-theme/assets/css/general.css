@@ -169,3 +169,17 @@ body.rtl .lukio_dropdown_display::after {
 .lukio_dropdown_display_option.option-hide {
     display: none;
 }
+
+/****** base_single ******/
+#base_single h1,
+#base_single h2,
+#base_single h3,
+#base_single h4,
+#base_single h5,
+#base_single h6 {
+    margin: 0.6em auto 0.6em;
+}
+
+#base_single p {
+    margin: 1em auto;
+}
