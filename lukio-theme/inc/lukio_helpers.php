@@ -335,7 +335,7 @@ if (!function_exists('lukio_dropdown')) {
         $display = $placeholder;
 ?>
         <div class="lukio_dropdown<?php echo $class; ?>">
-            <select class="lukio_dropdown_select<?php echo $class; ?> hide_js no_js" name="<?php echo $name; ?>" id="<?php echo $id; ?>">
+            <select class="lukio_dropdown_select<?php echo $class; ?> hide_js no_js" name="<?php echo $name; ?>" id="<?php echo $id; ?>" autocomplete="off">
                 <option value=""><?php echo $placeholder; ?></option>
                 <?php
                 // when $allow_search start with the input otherwise with an empty string
