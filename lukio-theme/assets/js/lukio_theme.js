@@ -91,7 +91,7 @@ const lukio_helpers = (function ($) {
          * @author Itai Dotan
          */
         get_css_numeric_value(el, css) {
-            return parseFloat(el.css(css).replace('px', ''));
+            return parseFloat(el.css(css).replace(/[^0-9\.]/g, ''));
         }
 
         /**
