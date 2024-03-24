@@ -192,15 +192,15 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
         <div class="lukio_cart_product_quantity<?php if ($cart_item['quantity'] == $product_max_quantity) {
                                                     echo ' plus_disabled';
                                                 } ?><?php echo $position_class; ?>" data-key="<?php echo $cart_item_key; ?>">
-            <div class="lukio_cart_product_quantity_btn minus<?php echo $position_class; ?>">
+            <button type="button" class="lukio_cart_product_quantity_btn minus<?php echo $position_class; ?>">
                 <?php echo $minus_markup; ?>
-            </div>
+            </button>
 
             <span class="lukio_cart_product_quantity_display<?php echo $position_class; ?>" max="<?php echo $product_max_quantity; ?>"><?php echo $cart_item['quantity']; ?></span>
 
-            <div class="lukio_cart_product_quantity_btn plus<?php echo $position_class; ?>">
+            <button type="button" class="lukio_cart_product_quantity_btn plus<?php echo $position_class; ?>">
                 <?php echo $pluse_markup; ?>
-            </div>
+            </button>
         </div>
 <?php
     }

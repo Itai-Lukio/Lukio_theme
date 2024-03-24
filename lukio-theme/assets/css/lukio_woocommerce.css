@@ -21,6 +21,7 @@
 .lukio_cart_product_quantity_btn {
     width: 28px;
     height: 28px;
+    border: none;
     border-radius: 50%;
     background-color: var(--lukio_black);
     cursor: pointer;
