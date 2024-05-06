@@ -6,6 +6,7 @@ const lukio_helpers = (function ($) {
     class class_lukio_helpers {
         /**
          * Scroll horizontally to the element with in its continer
+         * 
          * the continer need to be positioned.
          * @param {jQuery} el element to scroll to
          * @param {jQuery} continer continer to scroll
@@ -38,6 +39,7 @@ const lukio_helpers = (function ($) {
 
         /**
          * animate a given element for a nice open and close effect
+         * 
          * @param {jQuery} el jq element to trigger 'animate' on
          * @param {String} direction size direction to animate (width || height)
          * @param {Number} size final size the direction will get to
@@ -64,6 +66,7 @@ const lukio_helpers = (function ($) {
 
         /**
          * get the size of an element
+         * 
          * @param {jQuery} el jq element to get the size of
          * @param {String} direction size value to get width or height. default 'width'
          * @param {String} open_size open css size to measure. default 'auto'
@@ -72,9 +75,10 @@ const lukio_helpers = (function ($) {
          * @author Itai Dotan
          */
         get_size(el, direction = 'width', open_size = 'auto') {
+            let current_setting = el.css(direction);
             el.css(direction, open_size);
             let size = this.get_css_numeric_value(el, direction);
-            el.css(direction, '');
+            el.css(direction, current_setting);
             return size;
         }
 
