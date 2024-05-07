@@ -34,6 +34,8 @@ jQuery(function ($) {
                 current_max = parseInt(inputs.max.val()),
                 display = wrapper.find(`.lukio_range_min_max_display.${indicator_class}`);
 
+            // make sure the gap is minimum 1
+            gap = gap > 1 ? gap : 1;
             if (current_max - current_min <= gap) {
                 input.val(indicator_class == 'min' ? parseInt(inputs.max.val()) - gap : parseInt(inputs.min.val()) + gap);
             }
