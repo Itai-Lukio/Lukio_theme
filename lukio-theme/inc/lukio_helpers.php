@@ -259,6 +259,7 @@ if (!function_exists('lukio_range_min_max')) {
      */
     function lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thumb_color, $format = '%d', $use_input = false)
     {
+        $max = $min == $max ? $max + 1 : $max;
         get_template_part('/template-parts/partials/lukio_range_min_max', '', array(
             'target_class' => $target_class,
             'inner_color' => $inner_color,
