@@ -75,10 +75,15 @@ const lukio_helpers = (function ($) {
          * @author Itai Dotan
          */
         get_size(el, direction = 'width', open_size = 'auto') {
-            let current_setting = el.css(direction);
+            let original_setting = el.css(direction);
             el.css(direction, open_size);
             let size = this.get_css_numeric_value(el, direction);
-            el.css(direction, current_setting);
+            el.css(direction, '');
+
+            // set inline css back only when needed
+            if (el.css(direction) !== original_setting) {
+                el.css(direction, original_setting);
+            }
             return size;
         }
 
