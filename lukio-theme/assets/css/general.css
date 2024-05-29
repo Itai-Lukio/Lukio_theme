@@ -89,6 +89,7 @@ ul {
     --border-width: 1px;
     --padding: 5px;
     padding: var(--padding);
+    padding-inline-end: calc(var(--padding) + 16px);
     min-height: 2em;
     position: relative;
     border: solid var(--border-width) var(--lukio_black);
