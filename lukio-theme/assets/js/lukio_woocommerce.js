@@ -379,6 +379,15 @@ jQuery(document).ready(function ($) {
                 if (product_id.length == 1) {
                     btn.attr('data-product_id', product_id.val());
                 }
+
+                // add attributes to btn data to be sent and use to fix ajax add to cart with 'any' attribute
+                let attributes = {};
+                if (wrapper.length == 1) {
+                    wrapper.find('select[name^=attribute').each(function () {
+                        attributes[$(this).attr('name')] = this.value;
+                    });
+                }
+                btn.data('lukio_attributes', JSON.stringify(attributes));
             }
         })
         // event to trigger when needing to refresh woocommerce parts
