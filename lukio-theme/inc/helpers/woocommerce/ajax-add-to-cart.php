@@ -36,12 +36,10 @@ class Ajax_add_To_cart
     {
         self::$product_id = $product_id;
         $product = wc_get_product($product_id);
-        if (!$product || $product->get_type() !== 'variation') {
-            return $product_id;
+        if ($product && $product->get_type() === 'variation') {
+            add_filter('get_post_metadata', array(__CLASS__, 'edit_product_attributes'), 10, 3);
+            add_filter('woocommerce_add_to_cart_validation', array(__CLASS__, 'remove_fix'));
         }
-
-        add_filter('get_post_metadata', array(__CLASS__, 'edit_product_attributes'), 10, 3);
-        add_filter('woocommerce_add_to_cart_validation', array(__CLASS__, 'remove_fix'));
 
         return $product_id;
     }
@@ -58,7 +56,7 @@ class Ajax_add_To_cart
             $posted = json_decode(wp_unslash($_REQUEST['lukio_attributes']), true);
 
             foreach ($all_meta as $name => $value) {
-                // Only look at valid attribute meta, and also compare variation level attributes and remove any which do not exist at parent level.
+                // only look at valid attribute meta
                 if (0 !== strpos($name, 'attribute_') || !isset($posted[$name])) {
                     continue;
                 }
@@ -113,4 +111,4 @@ class Ajax_add_To_cart
     }
 }
 
-add_filter('woocommerce_add_to_cart_product_id', 'Lukio_Theme\Helpers\Woocommerce\Ajax_add_To_cart::start_fix');
+add_filter('woocommerce_add_to_cart_product_id', __NAMESPACE__ . '\Ajax_add_To_cart::start_fix');
