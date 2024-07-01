@@ -36,7 +36,10 @@ class Ajax_add_To_cart
     {
         self::$product_id = $product_id;
         $product = wc_get_product($product_id);
-        if ($product && $product->get_type() === 'variation') {
+        if (
+            $product && $product->get_type() === 'variation' && isset($_REQUEST['wc-ajax'])
+            && $_REQUEST['wc-ajax'] === 'add_to_cart' && isset($_REQUEST['lukio_attributes'])
+        ) {
             add_filter('get_post_metadata', array(__CLASS__, 'edit_product_attributes'), 10, 3);
             add_filter('woocommerce_add_to_cart_validation', array(__CLASS__, 'remove_fix'));
         }
@@ -81,10 +84,7 @@ class Ajax_add_To_cart
      */
     public static function edit_product_attributes($value, $object_id, $meta_key)
     {
-        if (
-            self::$rewrite_meta && $meta_key == '' && $object_id == self::$product_id && isset($_REQUEST['wc-ajax'])
-            && $_REQUEST['wc-ajax'] === 'add_to_cart' && isset($_REQUEST['lukio_attributes'])
-        ) {
+        if (self::$rewrite_meta && $meta_key == '' && $object_id == self::$product_id) {
             // set to false to get the base meta form the DB
             self::$rewrite_meta = false;
             $value = self::get_fixed_attributes();
