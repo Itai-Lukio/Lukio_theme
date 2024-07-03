@@ -32,6 +32,7 @@ class Lukio_Theme_setup
         add_action('lukio_theme_updated', array($this, 'updated'));
         add_filter('acf/settings/capability', array($this, 'acf_custom_fields_tab_restriction'));
         add_action('upload_mimes', array($this, 'add_mimes'));
+        add_filter('editable_roles', array($this, 'editable_roles'));
 
         /**
          * add 'lukio' class to the body
@@ -358,6 +359,25 @@ class Lukio_Theme_setup
     {
         $file_types['json'] = 'application/json';
         return $file_types;
+    }
+
+    /**
+     * remove 'administrator' role from editable roles for any user not an administrator
+     * 
+     * @param array $all_roles array of arrays containing role information.
+     * @return array edited $all_roles
+     * 
+     * @author Itai Dotan
+     */
+    public function editable_roles($all_roles)
+    {
+        $user_roles = wp_get_current_user()->roles;
+
+        if (count(array_intersect(array('administrator'), $user_roles)) == 0) {
+            unset($all_roles['administrator']);
+        }
+
+        return $all_roles;
     }
 
     /**
