@@ -33,6 +33,7 @@ class Lukio_Theme_setup
         add_filter('acf/settings/capability', array($this, 'acf_custom_fields_tab_restriction'));
         add_action('upload_mimes', array($this, 'add_mimes'));
         add_filter('editable_roles', array($this, 'editable_roles'));
+        add_filter('map_meta_cap', array($this, 'map_meta_cap'), 10, 4);
 
         /**
          * add 'lukio' class to the body
@@ -378,6 +379,40 @@ class Lukio_Theme_setup
         }
 
         return $all_roles;
+    }
+
+    /**
+     * modify capabilities to prevent non-admin users editing admin users. base on `wc_modify_map_meta_cap`
+     * 
+     * @param  array  $caps array of caps.
+     * @param  string $cap name of the cap we are checking.
+     * @param  int    $user_id ID of the user being checked against.
+     * @param  array  $args arguments.
+     * @return array
+     * 
+     * @author Itai Dotan
+     */
+    public function map_meta_cap($caps, $cap, $user_id, $args)
+    {
+        if (is_multisite() && is_super_admin()) {
+            return $caps;
+        }
+
+        switch ($cap) {
+            case 'edit_user':
+            case 'remove_user':
+            case 'promote_user':
+            case 'delete_user':
+                if (
+                    isset($args[0]) && $args[0] !== $user_id &&
+                    !in_array('administrator', wp_get_current_user()->roles) && in_array('administrator', get_userdata($args[0])->roles)
+                ) {
+                    $caps[] = 'do_not_allow';
+                }
+                break;
+        }
+
+        return $caps;
     }
 
     /**
