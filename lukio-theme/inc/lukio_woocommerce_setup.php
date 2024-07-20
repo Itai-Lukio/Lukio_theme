@@ -565,6 +565,7 @@ class Lukio_Woocommerce_Setup
                                 if (in_array($term->slug, $args['options'], true)) {
                                     // add background color for a color button
                                     $style = '';
+                                    $title = '';
                                     if ($is_color) {
                                         $color = get_term_meta($term->term_id, $this::COLOR_META_KEY, true);
                                         $second = get_term_meta($term->term_id, $this::SECOND_COLOR_META_KEY, true);
@@ -573,10 +574,12 @@ class Lukio_Woocommerce_Setup
                                         } else {
                                             $style = 'style="background: linear-gradient(135deg, ' . $color . ' 51%, ' . $second . ' 50% 100%);"';
                                         }
+
+                                        $title = ' title="' . esc_attr($term->name) . '"';
                                     }
                     ?>
                                     <li class="lukio_woocommerce_product_variations_li <?php echo $class;
-                                                                                        echo sanitize_title($args['selected']) == $term->slug ? ' selected' : ''; ?>" data-value="<?php echo esc_attr($term->slug); ?>" data-attr="<?php echo $esc_attr_name; ?>" <?php echo $style; ?> tabindex="0"><?php echo apply_filters('lukio_product_variation_li_' . $args['attribute'], esc_html($term->name), $term, $args['product']); ?></li>
+                                                                                        echo sanitize_title($args['selected']) == $term->slug ? ' selected' : ''; ?>" data-value="<?php echo esc_attr($term->slug); ?>" data-attr="<?php echo $esc_attr_name; ?>" <?php echo $style . $title; ?> tabindex="0"><?php echo apply_filters('lukio_product_variation_li_' . $args['attribute'], esc_html($term->name), $term, $args['product']); ?></li>
                                 <?php
                                 }
                             }
