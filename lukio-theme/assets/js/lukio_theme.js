@@ -177,6 +177,53 @@ const lukio_helpers = (function ($) {
 
             observer.observe(elm);
         }
+
+        /**
+         * sanitize string to use in regex
+         * 
+         * @param   {String} param parameter to sanitize
+         * @returns {String} sanitized parameter
+         */
+        sanitize_regex_param(param) {
+            return param.replace(/(?<!\\)([#-.]|[\[\]\^?|{}])|(?<!\\)\\(?![#-.]|[\[\]\^\\?|{}])/g, '\\$&');
+        }
+
+        /**
+         * add or update the url query with the new param and value
+         * 
+         * @param   {string}      query  url query
+         * @param   {string|bool} param  url param to update, `false` to only remove
+         * @param   {string}      newval param new value
+         * @returns {string}             updated url query
+         * 
+         * @author Itai Dotan
+         */
+        replace_query_param(query, param, newval) {
+            let regex = new RegExp("([?;&])(" + this.sanitize_regex_param(param) + "[^&;]*[;&]?)", 'g');
+            query = query.replace(regex, "$1").replace(/[?&]$/, '');
+
+            return query + (newval !== false ? (query.length > 0 ? "&" : "?") + param + "=" + newval : '');
+        }
+
+        /**
+         * add or update the url query with the new param and value, used for multi params as params with []
+         * 
+         * @param   {string}      query      url query
+         * @param   {string|bool} param      url param to update, `false` to only remove
+         * @param   {string}      newval     param new value
+         * @param   {string|bool} clear_old  old url param to remove, `false` to only add. default `false`
+         * @returns {string} updated url query
+         * 
+         * @author Itai Dotan
+         */
+        replace_query_param_multi(query, param, newval, clear_old = false) {
+            if (clear_old !== false) {
+                let clear_regex = new RegExp("([?;&])(" + this.sanitize_regex_param(param + "=" + clear_old) + "[;&]?)", 'g');
+                query = query.replace(clear_regex, "$1").replace(/[?&]$/, '');
+            }
+
+            return query + (newval !== false ? (query.length > 0 ? "&" : "?") + param + "=" + newval : '');
+        }
     }
 
     // return the class object to be stored in the const
