@@ -199,7 +199,7 @@ const lukio_helpers = (function ($) {
          * @author Itai Dotan
          */
         replace_query_param(query, param, newval) {
-            let regex = new RegExp("([?;&])(" + this.sanitize_regex_param(param) + "[^&;]*[;&]?)", 'g');
+            let regex = new RegExp("([?;&])?(" + this.sanitize_regex_param(param) + "[^&;]*[;&]?)", 'g');
             query = query.replace(regex, "$1").replace(/[?&]$/, '');
 
             return query + (newval !== false ? (query.length > 0 ? "&" : "?") + param + "=" + newval : '');
