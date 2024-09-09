@@ -8,165 +8,164 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-30 18:34+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2024-09-09 09:55+0200\n"
+"PO-Revision-Date: 2024-09-09 09:55+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Eazy Po 1.0.0.0\n"
 
-#: lukio-theme/inc/lukio_theme_options.php:33
-#: lukio-theme/inc/lukio_theme_options.php:34
+#: inc/lukio_helpers.php:136
+msgid "Developed & Powered by"
+msgstr ""
+
+#: inc/lukio_theme_options.php:33 inc/lukio_theme_options.php:34
 msgid "Site options"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:75
-#: lukio-theme/inc/lukio_theme_options.php:101
+#: inc/lukio_theme_options.php:75 inc/lukio_theme_options.php:101
 msgid "Remove row"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:111
+#: inc/lukio_theme_options.php:111
 msgid "Add row"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:128
+#: inc/lukio_theme_options.php:128
 msgid "Head Pixels"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:130
+#: inc/lukio_theme_options.php:130
 msgid "Body Pixels"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:159
+#: inc/lukio_theme_options.php:159
 msgid "Disable enqueue min files"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:170
+#: inc/lukio_theme_options.php:170
 msgid "Site colors"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:174
+#: inc/lukio_theme_options.php:174
 msgid "Pixels"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_options.php:210
+#: inc/lukio_theme_options.php:210
 msgid "Save options"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_setup.php:108
+#: inc/lukio_theme_setup.php:110
 msgid "Header menu"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_setup.php:109
+#: inc/lukio_theme_setup.php:111
 msgid "Footer menu"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_setup.php:164
+#: inc/lukio_theme_setup.php:166
 msgid "Site manager"
 msgstr ""
 
-#: lukio-theme/inc/lukio_theme_setup.php:276
-#: lukio-theme/inc/lukio_theme_setup.php:281
-#: lukio-theme/inc/lukio_theme_setup.php:291
-#: lukio-theme/inc/lukio_woocommerce_setup.php:155
-#: lukio-theme/inc/lukio_woocommerce_setup.php:161
-#: lukio-theme/inc/lukio_woocommerce_setup.php:171
+#: inc/lukio_theme_setup.php:278 inc/lukio_theme_setup.php:283
+#: inc/lukio_theme_setup.php:293 inc/lukio_woocommerce_setup.php:155
+#: inc/lukio_woocommerce_setup.php:161 inc/lukio_woocommerce_setup.php:171
 msgid "guide"
 msgid_plural "guides"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lukio-theme/inc/lukio_theme_setup.php:315
-#: lukio-theme/inc/lukio_theme_setup.php:316
+#: inc/lukio_theme_setup.php:317 inc/lukio_theme_setup.php:318
 msgid "Theme Setup"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:294
+#: inc/lukio_woocommerce_setup.php:294
 msgid "Product variations style"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:317
+#: inc/lukio_woocommerce_setup.php:317
 msgid "Buttons"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:320
+#: inc/lukio_woocommerce_setup.php:320
 msgid "Colors"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:321
+#: inc/lukio_woocommerce_setup.php:321
 msgid "Dropdown"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:322
+#: inc/lukio_woocommerce_setup.php:322
 msgid "Select"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:416
+#: inc/lukio_woocommerce_setup.php:416
 msgid "Color"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:417
+#: inc/lukio_woocommerce_setup.php:417
 msgid "Color to use for the product variation button"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:420
+#: inc/lukio_woocommerce_setup.php:420
 msgid "Second color"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:421
+#: inc/lukio_woocommerce_setup.php:421
 msgid "Second color to use for the product variation button"
 msgstr ""
 
-#. TRANSLATORS: use woocommerce translation. does not need translation
-#: lukio-theme/inc/lukio_woocommerce_setup.php:544
+#.  TRANSLATORS: use woocommerce translation. does not need translation
+#: inc/lukio_woocommerce_setup.php:544
 msgid "Choose an option"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:637
+#: inc/lukio_woocommerce_setup.php:640
 msgid "Bulk Variation Image"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:644
+#: inc/lukio_woocommerce_setup.php:647
 msgid "Gallery video"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:680
+#: inc/lukio_woocommerce_setup.php:683
 msgid ""
 "Before you can add a variation image you need to add some variation "
 "attributes on the <strong>Attributes</strong> tab."
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:687
+#: inc/lukio_woocommerce_setup.php:690
 msgid "Pick image"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:699
+#: inc/lukio_woocommerce_setup.php:702
 msgid "Don't filter"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:723
+#: inc/lukio_woocommerce_setup.php:726
 msgid "Set image"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:724
+#: inc/lukio_woocommerce_setup.php:727
 msgid "Remove image"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:867
+#: inc/lukio_woocommerce_setup.php:870
 msgid "No main and gallery images picked"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:898
+#: inc/lukio_woocommerce_setup.php:901
 msgid "Remove video"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:898
+#: inc/lukio_woocommerce_setup.php:901
 msgid "Remove"
 msgstr ""
 
-#: lukio-theme/inc/lukio_woocommerce_setup.php:900
+#: inc/lukio_woocommerce_setup.php:903
 msgid "Pick video"
 msgstr ""

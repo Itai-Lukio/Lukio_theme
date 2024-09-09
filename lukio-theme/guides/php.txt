@@ -25,7 +25,7 @@ Lukio PHP guide:
             echo the lukio credit.
             
             @param Bool $dark_mode - [optional] to use dark mode. default false
-            @param Bool $eng - [optional] to use english text. default false
+            @param Bool $eng - deprecated. text is base on site language
 
         lukio_get_cf7_form($form_id)
             Get and clean <p> and <br> tags from a CF7 contact form
