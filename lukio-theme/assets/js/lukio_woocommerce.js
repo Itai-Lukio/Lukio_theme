@@ -193,6 +193,11 @@ jQuery(document).ready(function ($) {
         gallery.find('.lukio_product_gallery_pagination_dot.active').removeClass('active');
         gallery.find(`.lukio_product_gallery_pagination_dot:nth-of-type(${nth_index})`).addClass('active');
 
+        // mute all gallery videos
+        $('.lukio_wc_gallery_video').each(function () {
+            this.muted = true;
+        });
+
         // allow to add extra actions at the end of the update 
         body.trigger('lukio_gallery_display_updated', [gallery, thumbs_ol, active_thumb, index]);
     }
@@ -208,7 +213,8 @@ jQuery(document).ready(function ($) {
             pagination = $('.lukio_product_gallery_pagination'),
             continer = arrows.closest('.flex-viewport'),
             gallery = arrows.closest('.woocommerce-product-gallery'),
-            thumbs_ol = gallery.find('ol.flex-control-nav.flex-control-thumbs');
+            thumbs_ol = gallery.find('ol.flex-control-nav.flex-control-thumbs'),
+            gallery_video_wrappers = $('.lukio_wc_gallery_video_wrapper');
 
         if (arrows.length !== 0) {
             // setup thumbs css and grab and drag
@@ -224,7 +230,21 @@ jQuery(document).ready(function ($) {
             update_gallery_display_by_index(gallery, 0);
         }
 
-        setup_gallery_videos();
+        if (gallery_video_wrappers.length == 0) {
+            return;
+        }
+
+        // add video indicator class to the thumbnail li
+        gallery_video_wrappers.each(function () {
+            $(`.woocommerce-product-gallery .flex-control-nav.flex-control-thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
+        });
+
+        /**
+         * disable due to:
+         *      video player block the gallery functionality, mainly swiping, making it hrad to change slide
+         *      when ui is hidden in mobile changes dont track
+         */
+        // setup_gallery_videos();
     }
 
     /**
@@ -241,9 +261,6 @@ jQuery(document).ready(function ($) {
          * @author Itai Dotan
          */
         function photoswipe_slides_change() {
-            $('.lukio_wc_gallery_video').each(function () {
-                this.muted = true;
-            });
             let pswp = $('div.pswp'),
                 active_images = pswp.find('.pswp__item img'),
                 videos = [],
@@ -272,19 +289,9 @@ jQuery(document).ready(function ($) {
                 window.dispatchEvent(new Event('resize'));
             }
         }
-        let gallery_video_wrappers = $('.lukio_wc_gallery_video_wrapper');
-
-        if (gallery_video_wrappers.length == 0) {
-            return;
-        }
-
-        // add video indicator class to the thumbnail li
-        gallery_video_wrappers.each(function () {
-            $(`.woocommerce-product-gallery .flex-control-nav.flex-control-thumbs li:nth-of-type(${$(this).index() + 1})`).addClass('lukio_wc_gallery_video_thumb');
-        });
 
         let pswp_observer = new MutationObserver(function (mutations) {
-            let pswp = $(mutations[0].target);
+            let pswp = $('div.pswp');
             if (pswp.hasClass('pswp--open')) {
                 photoswipe_slides_change();
             } else {
@@ -294,23 +301,9 @@ jQuery(document).ready(function ($) {
             }
         });
 
-        pswp_observer.observe($('div.pswp')[0], {
-            attributes: true,
-            attributeFilter: ['class']
-        });
-
-        // if there are no more then 3 images no need to fix photoswipe 3 DOM elements limit
-        if ($('.woocommerce-product-gallery__image').length <= 3) {
-            return;
-        }
-
-        // as there are stopPropagation in the way, need to target directly
-        $('.pswp__button--arrow--right, .pswp__button--arrow--left').on('click', photoswipe_slides_change);
-        $(window).on('keydown', function (e) {
-            // update only when photoswipe is open and one of the arrow key are used
-            if ($('div.pswp.pswp--open').length && (e.keyCode === 37 || e.keyCode === 39)) {
-                photoswipe_slides_change();
-            }
+        pswp_observer.observe($('.pswp__ui .pswp__counter')[0], {
+            childList: true,
+            characterData: true
         });
     };
 
@@ -603,6 +596,7 @@ jQuery(document).ready(function ($) {
         .on('blur', '.lukio_woocommerce_product_variations_li.dropdown', function () {
             $('body').trigger('click.lukio_woocommerce_product_variation_clicked');
         })
+        // init product gallery
         .on('wc-product-gallery-after-init', '.woocommerce-product-gallery', function () {
             setup_product_gallery();
         });
