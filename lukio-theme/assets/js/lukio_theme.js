@@ -192,9 +192,9 @@ const lukio_helpers = (function ($) {
          * add or update the url query with the new param and value
          * 
          * @param   {string}      query  url query
-         * @param   {string|bool} param  url param to update
-         * @param   {string}      newval param new value, `false` to only remove. default `false`
-         * @returns {string}             updated url query
+         * @param   {string}      param  url param to update
+         * @param   {string|bool} newval param new value, `false` to only remove. default `false`
+         * @returns {string} updated url query
          * 
          * @author Itai Dotan
          */
@@ -210,13 +210,13 @@ const lukio_helpers = (function ($) {
          * 
          * @param   {string}      query      url query
          * @param   {string|bool} param      url param to update
-         * @param   {string}      newval     param new value, `false` to only remove. default `false`
-         * @param   {string|bool} clear_old  old url param to remove, `false` to only add. default `false`
+         * @param   {string}      newval     param new value, `false` with set `clear_old` to only remove
+         * @param   {string|bool} clear_old  old url param value to remove, `false` to only add. default `false`
          * @returns {string} updated url query
          * 
          * @author Itai Dotan
          */
-        replace_query_param_multi(query, param, newval = false, clear_old = false) {
+        replace_query_param_multi(query, param, newval, clear_old = false) {
             if (clear_old !== false) {
                 let clear_regex = new RegExp("([?;&])(" + this.sanitize_regex_param(param + "=" + clear_old) + "[;&]?)", 'g');
                 query = query.replace(clear_regex, "$1").replace(/[?&]$/, '');
