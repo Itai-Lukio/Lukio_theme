@@ -192,13 +192,13 @@ const lukio_helpers = (function ($) {
          * add or update the url query with the new param and value
          * 
          * @param   {string}      query  url query
-         * @param   {string|bool} param  url param to update, `false` to only remove
-         * @param   {string}      newval param new value
+         * @param   {string|bool} param  url param to update
+         * @param   {string}      newval param new value, `false` to only remove. default `false`
          * @returns {string}             updated url query
          * 
          * @author Itai Dotan
          */
-        replace_query_param(query, param, newval) {
+        replace_query_param(query, param, newval = false) {
             let regex = new RegExp("([?;&])?(" + this.sanitize_regex_param(param) + "[^&;]*[;&]?)", 'g');
             query = query.replace(regex, "$1").replace(/[?&]$/, '');
 
@@ -209,14 +209,14 @@ const lukio_helpers = (function ($) {
          * add or update the url query with the new param and value, used for multi params as params with []
          * 
          * @param   {string}      query      url query
-         * @param   {string|bool} param      url param to update, `false` to only remove
-         * @param   {string}      newval     param new value
+         * @param   {string|bool} param      url param to update
+         * @param   {string}      newval     param new value, `false` to only remove. default `false`
          * @param   {string|bool} clear_old  old url param to remove, `false` to only add. default `false`
          * @returns {string} updated url query
          * 
          * @author Itai Dotan
          */
-        replace_query_param_multi(query, param, newval, clear_old = false) {
+        replace_query_param_multi(query, param, newval = false, clear_old = false) {
             if (clear_old !== false) {
                 let clear_regex = new RegExp("([?;&])(" + this.sanitize_regex_param(param + "=" + clear_old) + "[;&]?)", 'g');
                 query = query.replace(clear_regex, "$1").replace(/[?&]$/, '');
