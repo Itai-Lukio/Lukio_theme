@@ -152,3 +152,9 @@ body.rtl .lukio_dropdown_display::after {
 #base_single p {
     margin: 1em auto;
 }
+
+#base_single ul,
+#base_single ol {
+    margin: 1em 0;
+    padding-inline-start: 2em;
+}
