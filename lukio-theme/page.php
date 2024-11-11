@@ -12,8 +12,12 @@ defined('ABSPATH') || exit;
 
 do_action('wp_enqueue_scripts');
 
+ob_start();
+the_content();
+$the_content = ob_get_clean();
+
 get_header();
 
-the_content();
+echo $the_content;
 
 get_footer();
