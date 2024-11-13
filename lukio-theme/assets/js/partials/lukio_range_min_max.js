@@ -1,4 +1,5 @@
 jQuery(function ($) {
+    let display_timeout;
     $(document)
         .on('lukio_range_min_max_track_update', '.lukio_range_min_max', function () {
             let wrapper = $(this),
@@ -44,14 +45,17 @@ jQuery(function ($) {
             wrapper.trigger('lukio_range_min_max_track_update')
         })
         .on('input', '.lukio_range_min_max_display', function () {
-            let input = $(this),
-                format = input.closest('.lukio_range_min_max').attr('format'),
-                value = input.val().replace(/[^0-9]/g, ''),
-                min = input.attr('min'),
-                max = input.attr('max')
-            value = value == '' ? 0 : parseInt(value);
-            value = value < min ? min : (value > max ? max : value);
-            input.val(format.replace('%d', value));
+            clearTimeout(display_timeout);
+            display_timeout = setTimeout(() => {
+                let input = $(this),
+                    format = input.closest('.lukio_range_min_max').attr('format'),
+                    value = input.val().replace(/[^0-9]/g, ''),
+                    min = input.attr('min'),
+                    max = input.attr('max')
+                value = value == '' ? 0 : parseInt(value);
+                value = value < min ? min : (value > max ? max : value);
+                input.val(format.replace('%d', value));
+            }, 1000);
         })
         .on('change', '.lukio_range_min_max_display', function () {
             let input = $(this),
