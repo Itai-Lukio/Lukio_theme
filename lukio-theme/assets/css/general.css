@@ -157,4 +157,5 @@ body.rtl .lukio_dropdown_display::after {
 #base_single ol {
     margin: 1em 0;
     padding-inline-start: 2em;
+    list-style: initial;
 }
