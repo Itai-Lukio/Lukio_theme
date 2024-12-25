@@ -9,10 +9,10 @@ if (!function_exists('lukio_woocommerce_add_to_cart_button')) {
      * templates/single-product/add-to-cart/filename.php
      * 
      * @param WC_Product $product [requierd] product the button is for
-     * @param String $class_str [optional] class string to add to the button, default `''`
-     * @param String $btn_add_text [optional] text when the item is purchasable and in stock, default `''`
-     * @param String $btn_no_stock [optional] text when the item cant be purchased or our of stock, default `''`
-     * @param String $html_tag [optional] html tag for the button output, default `a`
+     * @param string $class_str [optional] class string to add to the button, default `''`
+     * @param string $btn_add_text [optional] text when the item is purchasable and in stock, default `''`
+     * @param string $btn_no_stock [optional] text when the item cant be purchased or our of stock, default `''`
+     * @param string $html_tag [optional] html tag for the button output, default `a`
      * 
      * @author Itai Dotan
      */
@@ -72,7 +72,7 @@ if (!function_exists('lukio_woocommerce_get_user_ip')) {
     /**
      * get client ip
      * 
-     * @return String client ip
+     * @return string client ip
      * 
      * @author Itai Dotan
      */
@@ -92,7 +92,7 @@ if (!function_exists('lukio_woocommerce_get_user_country_code')) {
     /**
      * get the user country code
      * 
-     * @return String country code
+     * @return string country code
      * 
      * @author Itai Dotan
      */
@@ -117,7 +117,7 @@ if (!function_exists('lukio_woocommerce_free_shipping_threshold')) {
     /**
      * Check if the cart is eligible for free shipping
      * 
-     * @return Bool|Number false when free shipping not available, true when eligible for free shipping or missing amount to free shipping
+     * @return bool|int false when free shipping not available, true when eligible for free shipping or missing amount to free shipping
      * 
      * @author Itai Dotan
      */
@@ -166,15 +166,16 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
      * echo item quantity plus minus control buttons for woocommerce cart and minicart
      * 
      * @param WC_Product $product [requierd] product object
-     * @param String $cart_item_key [requierd] cart item key from the cart loop
-     * @param Array $cart_item [requierd] cart item from the cart loop
-     * @param String $class_str [optional] class string to add to all parts, default `''`
-     * @param String $minus_content [optional] markup to use in the minus button, default `pre set svg`
-     * @param String $plus_content [optional] markup to use in the plus button, default `pre set svg`
+     * @param string     $cart_item_key [requierd] cart item key from the cart loop
+     * @param array      $cart_item [requierd] cart item from the cart loop
+     * @param string     $class_str [optional] class string to add to all parts, default `''`
+     * @param string     $minus_content [optional] markup to use in the minus button, default `pre set svg`
+     * @param string     $plus_content [optional] markup to use in the plus button, default `pre set svg`
+     * @param bool       $use_input `true` to use an input as the quantity display, default `false`
      * 
      * @author Itai Dotan
      */
-    function lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $class_str = '', $minus_content = null, $plus_content = null)
+    function lukio_woocommerce_cart_product_quantity_markup($product, $cart_item_key, $cart_item, $class_str = '', $minus_content = null, $plus_content = null, $use_input = false)
     {
         $default_minus = '<svg class="lukio_cart_product_quantity_btn_svg" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8.1011 13.9995H19.8906" stroke="#ffffff" stroke-linecap="square" />
@@ -186,6 +187,7 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
         $product_max_quantity = $product->get_max_purchase_quantity();
 
         $position_class = $class_str != '' ? ' ' . trim($class_str) : '';
+        $position_class = ($use_input ? ' use_input' : '') . $position_class;
         $minus_markup = is_null($minus_content) ? $default_minus : $minus_content;
         $pluse_markup = is_null($plus_content) ? $default_plus : $plus_content;
 ?>
@@ -196,6 +198,7 @@ if (!function_exists('lukio_woocommerce_cart_product_quantity')) {
                 <?php echo $minus_markup; ?>
             </button>
 
+            <input type="text" class="lukio_cart_product_quantity_input<?php echo $position_class; ?>" value="<?php echo $cart_item['quantity']; ?>" inputmode="decimal" max="<?php echo $product_max_quantity; ?>">
             <span class="lukio_cart_product_quantity_display<?php echo $position_class; ?>" max="<?php echo $product_max_quantity; ?>"><?php echo $cart_item['quantity']; ?></span>
 
             <button type="button" class="lukio_cart_product_quantity_btn plus<?php echo $position_class; ?>">

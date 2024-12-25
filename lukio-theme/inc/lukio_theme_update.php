@@ -95,8 +95,8 @@ class Lukio_Theme_Update
     /**
      * run when an update process is complete and when its for the update of the theme, do all action of the hook
      * 
-     * @param Array $upgrader_object WP_Upgrader instance
-     * @param Array $options array of bulk item update data
+     * @param array $upgrader_object WP_Upgrader instance
+     * @param array $options array of bulk item update data
      * 
      * @author Itai Dotan
      */

@@ -217,8 +217,8 @@ class Lukio_Theme_Options
      * 
      * modify $colors_options according to the posted data
      * 
-     * @param Array $colors_options lukio_site_colors option
-     * @param Bool $full_access_bool true when the form is with full access, false otherwise
+     * @param array $colors_options lukio_site_colors option
+     * @param bool $full_access_bool true when the form is with full access, false otherwise
      * 
      * @author Itai Dotan
      */
@@ -282,7 +282,7 @@ class Lukio_Theme_Options
     /**
      * create update or delete site_colors.css 
      * 
-     * @param Array $colors_options lukio_site_colors option
+     * @param array $colors_options lukio_site_colors option
      * 
      * @author Itai Dotan
      */

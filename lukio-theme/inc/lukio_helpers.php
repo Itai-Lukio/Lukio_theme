@@ -5,10 +5,10 @@ if (!function_exists('lukio_enqueue')) {
     /**
      * enqueue the given loacl script and stylesheet files or url. normal file for admin and min file for any one eles if exists.
      *
-     * @param String $path [requierd] full file path inside the theme folder.
-     * @param String $name [optional] name to use in the enqueue, default `null` to use $path.
-     * @param Array $deps [optional] an array of registered dependents, default `array()`
-     * @param Array $user_extras [optional] 'parent' => for parent theme enqueue, default `false`.
+     * @param string $path [requierd] full file path inside the theme folder.
+     * @param string $name [optional] name to use in the enqueue, default `null` to use $path.
+     * @param array $deps [optional] an array of registered dependents, default `array()`
+     * @param array $user_extras [optional] 'parent' => for parent theme enqueue, default `false`.
      *                                      'in_footer' => for script enqueue in the footer, default `true`. 
      *                                      'media' => for style enqueue media type, default `all`.
      * 
@@ -115,8 +115,8 @@ if (!function_exists('lukio_footer_credit')) {
     /**
      * echo the lukio credit.
      * 
-     * @param Bool $dark_mode [optional] to use dark mode. default `false`
-     * @param Bool $eng deprecated. text is base on site language
+     * @param bool $dark_mode [optional] to use dark mode. default `false`
+     * @param bool $eng deprecated. text is base on site language
      * 
      * @author Itai Dotan
      */
@@ -136,8 +136,8 @@ if (!function_exists('lukio_remove_p_tags')) {
     /**
      * Remove <p> tags from string
      * 
-     * @param String $string [requierd] string to remove tags from
-     * @return String cleared string
+     * @param string $string [requierd] string to remove tags from
+     * @return string cleared string
      * 
      * @author Itai Dotan
      */
@@ -151,8 +151,8 @@ if (!function_exists('lukio_remove_br_tags')) {
     /**
      * Remove <br> tags from string
      * 
-     * @param String $string [requierd] string to remove tags from
-     * @return String cleared string
+     * @param string $string [requierd] string to remove tags from
+     * @return string cleared string
      * 
      * @author Itai Dotan
      */
@@ -167,7 +167,7 @@ if (!function_exists('lukio_get_cf7_form')) {
      * Get and clean <p> and <br> tags from a CF7 contact form
      * 
      * @param Number $form_id [requierd] form id to get
-     * @return String clean cf7 form string
+     * @return string clean cf7 form string
      * 
      * @author Itai Dotan
      */
@@ -182,8 +182,8 @@ if (!function_exists('lukio_create_whatsapp_link_url')) {
      * Create a url for a whatsapp link
      * 
      * @param Number|String $number [optional] international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
-     * @param String $text [optional] default text for the whatsapp message. default `''` for no message
-     * @return String whatsapp link uri
+     * @param string $text [optional] default text for the whatsapp message. default `''` for no message
+     * @return string whatsapp link uri
      * 
      * @author Itai Dotan
      */
@@ -201,9 +201,9 @@ if (!function_exists('lukio_create_socialmedia_link_url')) {
     /**
      * Create a social media share url
      * 
-     * @param String $url [requierd] to share
-     * @param String $site [requierd] social media to create link to. 'facebook', 'linkedin', 'twitter'
-     * @return String generated share link
+     * @param string $url [requierd] to share
+     * @param string $site [requierd] social media to create link to. 'facebook', 'linkedin', 'twitter'
+     * @return string generated share link
      */
     function lukio_create_socialmedia_link_url($url, $site)
     {
@@ -226,9 +226,9 @@ if (!function_exists('lukio_create_pinterest_share_link')) {
     /**
      * Create a pinterest share link
      * 
-     * @param String $link [requierd] url to link to
-     * @param String $image_url [requierd] url to the image to add to the pin
-     * @return String generated pinterest link
+     * @param string $link [requierd] url to link to
+     * @param string $image_url [requierd] url to the image to add to the pin
+     * @return string generated pinterest link
      */
     function lukio_create_pinterest_share_link($link, $image_url)
     {
@@ -240,15 +240,15 @@ if (!function_exists('lukio_range_min_max')) {
     /**
      * Lukio number range input min and max.
      * 
-     * @param String $target_class [requierd] class to add the all items
-     * @param String $inner_color [requierd] color to use in side the range
-     * @param String $outer_color [requierd] color to use put of the range
-     * @param String $name [requierd] name for the inputs to be grouped under
+     * @param string $target_class [requierd] class to add the all items
+     * @param string $inner_color [requierd] color to use in side the range
+     * @param string $outer_color [requierd] color to use put of the range
+     * @param string $name [requierd] name for the inputs to be grouped under
      * @param Number $min [requierd] min value for the inputs
      * @param Number $max [requierd] max value fot the inputs
-     * @param String $thumb_color [requierd] color of the range thumb
-     * @param String $format [optional] format for the display string, default `%d`
-     * @param Bool $use_input [optional] true to use input as the display, default `false` to use span
+     * @param string $thumb_color [requierd] color of the range thumb
+     * @param string $format [optional] format for the display string, default `%d`
+     * @param bool $use_input [optional] true to use input as the display, default `false` to use span
      * 
      * @author Itai Dotan
      */
@@ -273,8 +273,8 @@ if (!function_exists('lukio_bold_text')) {
     /**
      * Remove curly braces = {{}}, from given string, and replace with <b> tag
      * 
-     * @param String $text [required] text to replace braces for
-     * @return String new string after braces change
+     * @param string $text [required] text to replace braces for
+     * @return string new string after braces change
      */
     function lukio_bold_text($text)
     {
@@ -288,8 +288,8 @@ if (!function_exists('lukio_floatval')) {
      * 
      * use the last comma or dot (if any) as the decimal separator to create a clean float
      * 
-     * @param String $text text to turn in to float
-     * @return Float currect number
+     * @param string $text text to turn in to float
+     * @return float currect number
      * 
      * @author Itai Dotan 
      */

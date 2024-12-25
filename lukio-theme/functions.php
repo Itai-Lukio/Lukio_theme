@@ -18,6 +18,7 @@ if (function_exists('is_plugin_active')) {
 
         // helpers
         require_once __DIR__ . '/inc/helpers/woocommerce/ajax-add-to-cart.php';
+        require_once __DIR__ . '/inc/helpers/woocommerce/class-lu-coupon-duplication.php';
     }
 }
 

@@ -399,22 +399,48 @@ jQuery(document).ready(function ($) {
         });
 
     $(document)
-        // functionality to lukio quantity, update the product quantity and refresh wc and minicart
+        // functionality to lukio quantity buttons
         .on('click', '.lukio_cart_product_quantity_btn', function () {
             let clicked = $(this),
                 group = clicked.parent(),
-                item_li = clicked.closest('li');
+                input = group.find('.lukio_cart_product_quantity_input');
 
             if (group.hasClass('working') || (clicked.hasClass('plus') && group.hasClass('plus_disabled'))) {
                 return;
             }
 
-            let product_quantity = parseInt(group.find('.lukio_cart_product_quantity_display').text());
+            let product_quantity = parseInt(input.val());
             if (clicked.hasClass('minus')) {
                 product_quantity--;
             } else if (clicked.hasClass('plus')) {
                 product_quantity++;
             }
+            input.val(product_quantity).trigger('change');
+        })
+        // make sure to have only empty string  or numbers in the quantity, and the number is not more then the max
+        .on('input', '.lukio_cart_product_quantity_input', function () {
+            let input = $(this),
+                value = input.val(),
+                max = parseInt(input.attr('max'));
+            value = value.replaceAll(/[^0-9]/g, '');
+            value = value != '' ? parseInt(value) : '';
+            input.val((value != '' && max != -1 && value > max ? max : value));
+        })
+        // when useing enter on the input make sure to not trigger the cart form and only the input change event
+        .on('keypress', '.lukio_cart_product_quantity_input', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                $(this).trigger('change');
+            }
+        })
+        // update the product quantity and refresh wc and minicart
+        .on('change', '.lukio_cart_product_quantity_input', function () {
+            let input = $(this),
+                group = input.parent(),
+                item_li = input.closest('li'),
+                product_quantity = input.val();
+
+            product_quantity = product_quantity === '' ? 0 : product_quantity;
             group.addClass('working');
 
             $.ajax({

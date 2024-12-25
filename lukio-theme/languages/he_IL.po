@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-09 09:55+0200\n"
-"PO-Revision-Date: 2024-09-09 10:02+0300\n"
+"POT-Creation-Date: 2024-12-25 12:08+0200\n"
+"PO-Revision-Date: 2024-12-25 12:10+0200\n"
 "Last-Translator: Itai Dotan <itai@lukio.pro>\n"
 "Language-Team: \n"
 "Language: he_IL\n"
@@ -19,7 +19,7 @@ msgstr ""
 "2 : 3);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: inc/lukio_helpers.php:136
+#: inc/lukio_helpers.php:131
 msgid "Developed & Powered by"
 msgstr "פותח ומתוחזק ע״י"
 
@@ -173,6 +173,26 @@ msgstr "הסרה"
 #: inc/lukio_woocommerce_setup.php:903
 msgid "Pick video"
 msgstr "בחר וידאו"
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:49
+msgid "Duplicate"
+msgstr "שכפול"
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:68
+msgid "Duplicate coupon"
+msgstr "שכפול קופון"
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:69
+msgid ""
+"When checked the coupon will be duplicated by the given amount.<br>Coupon "
+"code will be used as a prefix, if given, added by a random string."
+msgstr ""
+"כאשר מסומן הקופון ישוכפל כמספר הפעמים שנבחר.<br>קוד הקופון ישמש כקידומת, "
+"כשיש קוד, בצרוף קוד רנדומאלי."
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:77
+msgid "Amount of times to duplicate the coupon"
+msgstr "מספר הפעמים לשכפל את הקופון"
 
 #~ msgid "Lukio options"
 #~ msgstr "אפשרויות אתר"

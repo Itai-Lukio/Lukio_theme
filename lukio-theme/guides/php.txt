@@ -12,10 +12,10 @@ Lukio PHP guide:
         lukio_enqueue($path, $name = null, $deps = array(), $user_extras = array())
             enqueue the given loacl script and stylesheet files or url. normal file for admin and min file for any one eles if exists.
             
-            @param String $path [requierd] full file path inside the theme folder.
-            @param String $name [optional] name to use in the enqueue, default null to use $path.
-            @param Array $deps [optional] an array of registered dependents.
-            @param Array $user_extras [optional] [
+            @param string $path [requierd] full file path inside the theme folder.
+            @param string $name [optional] name to use in the enqueue, default null to use $path.
+            @param array $deps [optional] an array of registered dependents.
+            @param array $user_extras [optional] [
                                         'parent' => for parent theme enqueue, default false.
                                         'in_footer' => for script enqueue in the footer, default true.
                                         'media' => for style enqueue media type, default 'all'.
@@ -24,62 +24,62 @@ Lukio PHP guide:
         lukio_footer_credit($dark_mode = false, $eng = false)
             echo the lukio credit.
             
-            @param Bool $dark_mode - [optional] to use dark mode. default false
-            @param Bool $eng - deprecated. text is base on site language
+            @param bool $dark_mode - [optional] to use dark mode. default false
+            @param bool $eng - deprecated. text is base on site language
 
         lukio_get_cf7_form($form_id)
             Get and clean <p> and <br> tags from a CF7 contact form
  
             @param Number $form_id [requierd] form id to get
-            @return String clean cf7 form string
+            @return string clean cf7 form string
 
         lukio_create_whatsapp_link_url($number, $text = '')
             Create a url for a whatsapp link
 
             @param Number|String $number [optional] international phone number format. Omit any brackets, dashes, plus signs, and leading zeros
-            @param String $text [optional] default text for the whatsapp message. default '' for no message
-            @return String whatsapp link uri
+            @param string $text [optional] default text for the whatsapp message. default '' for no message
+            @return string whatsapp link uri
 
         lukio_create_socialmedia_link_url($url, $site)
             Create a social media share url
 
-            @param String $url [requierd] to share
-            @param String $site [requierd] social media to create link to. 'facebook', 'linkedin', 'twitter'
-            @return String generated share link
+            @param string $url [requierd] to share
+            @param string $site [requierd] social media to create link to. 'facebook', 'linkedin', 'twitter'
+            @return string generated share link
 
         lukio_create_pinterest_share_link($link, $image_url)
             Create a pinterest share link
             
-            @param String $link [requierd] url to link to
-            @param String $image_url [requierd] url to the image to add to the pin
-            @return String generated pinterest link
+            @param string $link [requierd] url to link to
+            @param string $image_url [requierd] url to the image to add to the pin
+            @return string generated pinterest link
 
         lukio_range_min_max($target_class, $inner_color, $outer_color, $name, $min, $max, $thum_color, $format = '%d', $use_input = false)
             Lukio number range input min and max.
 
-            @param String $target_class [requierd] class to add the all items
-            @param String $inner_color [requierd] color to use in side the range
-            @param String $outer_color [requierd] color to use put of the range
-            @param String $name [requierd] name for the inputs to be grouped under
+            @param string $target_class [requierd] class to add the all items
+            @param string $inner_color [requierd] color to use in side the range
+            @param string $outer_color [requierd] color to use put of the range
+            @param string $name [requierd] name for the inputs to be grouped under
             @param Number $min [requierd] min value for the inputs
             @param Number $max [requierd] max value fot the inputs
-            @param String $thumb_color [requierd] color of the range thumb
-            @param String $format [optional] format for the display string, default '%d'
-            @param Bool $use_input [optional] true to use input as the display, default `false` to use span
+            @param string $thumb_color [requierd] color of the range thumb
+            @param string $format [optional] format for the display string, default '%d'
+            @param bool $use_input [optional] true to use input as the display, default `false` to use span
     
         lukio_bold_text($text)
             Remove curly braces = {{}}, from given string, and replace with <b> tag
             
-            @param String $text [required] text to replace braces for
-            @return String new string after braces change
+            @param string $text [required] text to replace braces for
+            @return string new string after braces change
 
         lukio_floatval($text)
             unformat numbers and return a float
 
             use the last comma or dot (if any) as the decimal separator to create a clean float
 
-            @param String $text text to turn in to float
-            @return Float currect number
+            @param string $text text to turn in to float
+            @return float currect number
 
         lukio_dropdown($options, $name, $id = '', $class = '', $placeholder = '', $selected_value = false, $allow_search = false)
                 print dropdown to use instead of the normal select element
@@ -99,7 +99,7 @@ Lukio PHP guide:
         lukio_admin_guides_roles
             allows to edit the user roles the guides are visable for.
 
-            @param Array array of user roles name
+            @param array array of user roles name
 
         lukio_no_branding_to_none_admin
             disable the branding to none admins.
@@ -114,5 +114,5 @@ Lukio PHP guide:
         lukio_theme_options_full_access_roles
             allows to edit the user roles who have full access in lukio option page.
 
-            @param Array user roles name array
+            @param array user roles name array
  

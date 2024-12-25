@@ -87,9 +87,9 @@ class Lukio_SVG_Support
     /**
      * fix mime type when missing
      * 
-     * @param Array $data values for the extension, mime type, and corrected filename
-     * @param String $file full path to the file
-     * @param String $filename name of the file
+     * @param array $data values for the extension, mime type, and corrected filename
+     * @param string $file full path to the file
+     * @param string $filename name of the file
      * @return Array fixed file data
      * 
      * @author Itai Dotan
@@ -125,7 +125,7 @@ class Lukio_SVG_Support
     /**
      * sanitize and upload svg files
      * 
-     * @param Array $file An array of data for a single file
+     * @param array $file An array of data for a single file
      * @return Array sanitized file data
      * 
      * @author Itai Dotan

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-09 09:55+0200\n"
-"PO-Revision-Date: 2024-09-09 09:55+0200\n"
+"POT-Creation-Date: 2024-12-25 12:08+0200\n"
+"PO-Revision-Date: 2024-12-25 12:08+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: Eazy Po 1.0.0.0\n"
 
-#: inc/lukio_helpers.php:136
+#: inc/lukio_helpers.php:131
 msgid "Developed & Powered by"
 msgstr ""
 
@@ -168,4 +168,22 @@ msgstr ""
 
 #: inc/lukio_woocommerce_setup.php:903
 msgid "Pick video"
+msgstr ""
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:49
+msgid "Duplicate"
+msgstr ""
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:68
+msgid "Duplicate coupon"
+msgstr ""
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:69
+msgid ""
+"When checked the coupon will be duplicated by the given amount.<br>Coupon "
+"code will be used as a prefix, if given, added by a random string."
+msgstr ""
+
+#: inc/helpers/woocommerce/class-lu-coupon-duplication.php:77
+msgid "Amount of times to duplicate the coupon"
 msgstr ""

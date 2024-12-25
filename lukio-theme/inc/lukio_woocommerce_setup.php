@@ -183,7 +183,7 @@ class Lukio_Woocommerce_Setup
      * 
      * uses woocommerce/cart/mini-cart.php as the inside of the cart
      * 
-     * @return String mini cart markup
+     * @return string mini cart markup
      * 
      * @author Itai Dotan
      */
@@ -283,8 +283,8 @@ class Lukio_Woocommerce_Setup
     /**
      * add woocommerce option tabs to the theme options
      * 
-     * @param Array $array tabs array
-     * @return Array updated tabs array
+     * @param array $array tabs array
+     * @return array updated tabs array
      * 
      * @author Itai Dotan
      */

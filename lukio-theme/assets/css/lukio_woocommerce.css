@@ -6,6 +6,20 @@
     gap: 10px;
 }
 
+.lukio_cart_product_quantity.use_input .lukio_cart_product_quantity_display {
+    display: none;
+}
+
+.lukio_cart_product_quantity:not(.use_input) .lukio_cart_product_quantity_input {
+    display: none;
+}
+
+.lukio_cart_product_quantity_input {
+    width: 100%;
+    max-width: 4ch;
+    text-align: center;
+}
+
 .lukio_cart_product_quantity.working::after {
     content: '';
     position: absolute;

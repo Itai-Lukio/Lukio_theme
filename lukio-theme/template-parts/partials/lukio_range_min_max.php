@@ -3,15 +3,15 @@
 /**
  * Lukio number range input min and max template part.
  * 
- * @param String $args['target_class'] class to add the all items
- * @param String $args['inner_color'] color to use in side the range
- * @param String $args['outer_color'] color to use put of the range
- * @param String $args['name'] name for the inputs to be grouped under
- * @param Number $args['min'] min value for the inputs
- * @param Number $args['max'] max value fot the inputs
- * @param String $args['thumb_color'] color of the range thumb
- * @param String $args['format'] [optional] format for the display string, default '%d'
- * @param Bool $args['use_input'] [optional] true to use input as the display, default `false` to use span
+ * @param string $args['target_class'] class to add the all items
+ * @param string $args['inner_color'] color to use in side the range
+ * @param string $args['outer_color'] color to use put of the range
+ * @param string $args['name'] name for the inputs to be grouped under
+ * @param int $args['min'] min value for the inputs
+ * @param int $args['max'] max value fot the inputs
+ * @param string $args['thumb_color'] color of the range thumb
+ * @param string $args['format'] [optional] format for the display string, default '%d'
+ * @param bool $args['use_input'] [optional] true to use input as the display, default `false` to use span
  * 
  * @author Itai Dotan
  */
