@@ -159,3 +159,7 @@ body.rtl .lukio_dropdown_display::after {
     padding-inline-start: 2em;
     list-style: initial;
 }
+
+#base_single ol {
+    list-style: decimal;
+}
