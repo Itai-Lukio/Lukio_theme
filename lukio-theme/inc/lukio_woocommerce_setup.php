@@ -55,6 +55,12 @@ class Lukio_Woocommerce_Setup
     private $product_attributes = null;
 
     /**
+     * 
+     * @var null|array null before init, array of product video data
+     */
+    protected $product_vidoe_data = null;
+
+    /**
      * construct action to run when creating a new instance
      * 
      * @author Itai Dotan
